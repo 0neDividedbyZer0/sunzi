@@ -1,0 +1,24 @@
+{
+  "name": "xiangqi",
+  "version": "1.0.0",
+  "description": "Xiangqi gameboard",
+  "main": "main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "ts": "ts-node main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0neDividedbyZer0/xiangqi.git"
+  },
+  "author": "Maverick Zhang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/0neDividedbyZer0/xiangqi/issues"
+  },
+  "homepage": "https://github.com/0neDividedbyZer0/xiangqi#readme",
+  "devDependencies": {
+    "electron": "^10.1.3"
+  }
+}
