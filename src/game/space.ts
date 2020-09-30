@@ -1,6 +1,6 @@
 export const name = 'square'
 
-class Square {
+export class Square {
     private file: number;
     private rank: number;
     
