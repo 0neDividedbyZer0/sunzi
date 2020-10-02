@@ -1,6 +1,7 @@
 export const name = 'board'
 
-import {Square} from './space'
+import {Color} from './pieces/piece'
+import {Space} from './space'
 
 /**
  * The board's absolute position is based on
@@ -8,20 +9,37 @@ import {Square} from './space'
  * right to left, from 1-9, ranks are numbered
  * down to up. The perspective is from red, so
  * the right-corner in red is F:1 R:1
+ * (In implementation, they are labeled from 0)
  */
 
 const FILES: number = 9;
 const RANKS: number = 10;
 
+//What file is each side's section of the river
+export const RIVER = {
+    RED: 4,
+    BLACK: 5
+};
+
+export const R_RIVER: number = 4;
+//Black's side of the river
+export const B_RIVER: number = 5;
+
 class Board {
-    private board: Square[];
+    private board: Space[];
     
     constructor() {
-        for (let i = 0; i < FILES; i++) {
-            for (let j = 0; j < RANKS; j++) {
-                this.board.push(new Square(i, j));
+        for (let i = 0; i < RANKS; i++) {
+            for (let j = 0; j < FILES; j++) {
+                this.board.push(new Space(j, i));
             }
         }
     }
+
+    get(file: number, rank: number): Space {
+        return this.board[rank * FILES + file];
+    }
+
+
 
 }
