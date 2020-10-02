@@ -25,7 +25,7 @@ export const R_RIVER: number = 4;
 //Black's side of the river
 export const B_RIVER: number = 5;
 
-class Board {
+export class Board {
     private board: Space[];
     
     constructor() {
@@ -37,9 +37,18 @@ class Board {
     }
 
     get(file: number, rank: number): Space {
+        if (file < 0 || file >= FILES) {
+            return null;
+        }
+        if (rank < 0 || rank >= RANKS) {
+            return null;
+        }
         return this.board[rank * FILES + file];
     }
 
+    get_rel(curr: Space, files_to_add: number, ranks_to_add: number): Space {
+        return this.get(curr.f() + files_to_add, curr.r() + ranks_to_add);
+    }
 
 
 }

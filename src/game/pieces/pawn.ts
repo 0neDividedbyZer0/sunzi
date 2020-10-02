@@ -1,8 +1,10 @@
 export const name = 'pawn'
 
-import {RIVER} from '../board'
+import {RIVER, Board} from '../board'
 import {Color, Piece} from './piece'
 import {Space} from '../space'
+
+const MOVE: number = 1; 
 
 export class Pawn extends Piece {
 
@@ -20,11 +22,23 @@ export class Pawn extends Piece {
     /**
      * Returns a list of valid moves
      */
-    moves(): Space[] {
-        lst: Space[];
-        if (this.crossed_river()) {
-            
+    moves(board: Board): Space[] {
+        let arr: Space[] = [];
+        let mv: Space = board.get_rel(this.get_sp(), 0, 1);
+        if (mv) {
+            arr.push(mv);
         }
+        if (this.crossed_river()) {
+            mv = board.get_rel(this.get_sp(), 1, 0);
+            if (mv) {
+                arr.push(mv);
+            }
+            mv = board.get_rel(this.get_sp(), -1, 0);
+            if (mv) {
+                arr.push(mv);
+            }
+        }
+        return arr;
     }
 
 }

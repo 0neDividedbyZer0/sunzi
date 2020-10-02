@@ -1,5 +1,6 @@
 export const name = 'piece'
 
+import {Board} from '../board'
 import {Space} from '../space'
 
 export enum Color {
@@ -24,6 +25,6 @@ export abstract class Piece {
         return this.sp;
     }
 
-    abstract moves(): Space[];
+    abstract moves(board: Board): Space[];
 
 }
