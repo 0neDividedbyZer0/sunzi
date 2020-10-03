@@ -18,6 +18,12 @@ export abstract class Piece {
         this.sp.set_c(this.color);
     }
 
+    set_sp(sp: Space): void {
+        this.sp.set_c(null);
+        this.sp = sp;
+        this.sp.set_c(this.color);
+    }
+
     get_color(): Color {
         return this.color;
     }
