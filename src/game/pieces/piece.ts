@@ -15,6 +15,7 @@ export abstract class Piece {
     constructor(color: Color, sp: Space) {
         this.color = color;
         this.sp = sp;
+        this.sp.set_c(this.color);
     }
 
     get_color(): Color {

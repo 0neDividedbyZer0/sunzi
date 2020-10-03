@@ -25,16 +25,16 @@ export class Pawn extends Piece {
     moves(board: Board): Space[] {
         let arr: Space[] = [];
         let mv: Space = board.get_rel(this.get_sp(), 0, 1);
-        if (mv) {
+        if (mv && mv.c() != this.get_color()) {
             arr.push(mv);
         }
         if (this.crossed_river()) {
             mv = board.get_rel(this.get_sp(), 1, 0);
-            if (mv) {
+            if (mv && mv.c() != this.get_color()) {
                 arr.push(mv);
             }
             mv = board.get_rel(this.get_sp(), -1, 0);
-            if (mv) {
+            if (mv && mv.c() != this.get_color()) {
                 arr.push(mv);
             }
         }

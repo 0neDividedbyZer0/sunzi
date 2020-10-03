@@ -1,6 +1,6 @@
 export const name = 'board'
 
-import {Color} from './pieces/piece'
+import {Piece} from './pieces/piece'
 import {Space} from './space'
 
 /**
@@ -27,11 +27,13 @@ export const B_RIVER: number = 5;
 
 export class Board {
     private board: Space[];
+    private r_pieces: Piece[];
+    private b_pieces: Piece[];
     
     constructor() {
         for (let i = 0; i < RANKS; i++) {
             for (let j = 0; j < FILES; j++) {
-                this.board.push(new Space(j, i));
+                this.board.push(new Space(j, i, null));
             }
         }
     }
@@ -48,6 +50,10 @@ export class Board {
 
     get_rel(curr: Space, files_to_add: number, ranks_to_add: number): Space {
         return this.get(curr.f() + files_to_add, curr.r() + ranks_to_add);
+    }
+
+    is_occupied(sp: Space): boolean {
+        return sp.c() != null;
     }
 
 
