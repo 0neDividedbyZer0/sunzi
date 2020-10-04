@@ -12,8 +12,8 @@ import {Space} from './space'
  * (In implementation, they are labeled from 0)
  */
 
-const FILES: number = 9;
-const RANKS: number = 10;
+export const FILES: number = 9;0
+export const RANKS: number = 10;
 
 //What file is each side's section of the river
 export const RIVER = {
