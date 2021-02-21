@@ -7,6 +7,8 @@ Plan is to use electron to make it a browser game kinda. Will do AI in python th
 
 Language: Typescript
 
+For information on implementation
+https://www.chessprogramming.org/
 
 ## Plan:
 1. Implement Board Representation

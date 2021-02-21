@@ -1,7 +1,7 @@
 {
   "name": "xiangqi",
   "version": "1.0.0",
-  "description": "Xiangqi gameboard",
+  "description": "Xiangqi Gameboard",
   "main": "main.ts",
   "scripts": {
     "test": "mocha 'tests/**/*.ts'",
