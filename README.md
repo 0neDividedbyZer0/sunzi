@@ -9,9 +9,8 @@ Language: Typescript
 
 
 ## Plan:
-1. Implement Xiangqi
-    1. Implement Spaces
-    2. Implement Board
-    3. Implement Pieces
-    4. Implement Board
+1. Implement Board Representation
+    1. Implement Bitboard
+    2. Implement move generation (legal moves or all?)
+    3. test bugsss
 2. Implement GUI

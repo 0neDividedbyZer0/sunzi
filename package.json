@@ -4,7 +4,7 @@
   "description": "Xiangqi gameboard",
   "main": "main.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha 'tests/**/*.ts'",
     "start": "electron .",
     "ts": "ts-node main.ts"
   },
@@ -19,6 +19,10 @@
   },
   "homepage": "https://github.com/0neDividedbyZer0/xiangqi#readme",
   "devDependencies": {
+    "@types/mocha": "^8.2.1",
     "electron": "^10.1.3"
+  },
+  "dependencies": {
+    "mocha": "^8.3.0"
   }
 }
