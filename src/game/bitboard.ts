@@ -13,7 +13,7 @@
  */
 export const name = 'bitboard'
 
-export const BOARD_SIZE = 90;
+export const BOARD_SIZE: number = 90;
 
 export class BitBoard {
     private bits: bigint;
@@ -91,6 +91,10 @@ export class BitBoard {
             x &= x - BigInt(1);
         }
         return count;
+    }
+
+    copy() {
+        return new BitBoard(this.bits);
     }
 
     //TODO MSB aka bitscan reverse?
