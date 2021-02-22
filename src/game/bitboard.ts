@@ -5,25 +5,93 @@
  * bitboard per each color AND for each piece type,
  * so there are 7*2 = 14 bitboards in a list called Position
  * 7 pieces: G, A, C, P, H, E, R and the red and black sides
- * There will need to be a boolean array of 90
+ * There will need to a bigInt of 90 binary digits long
+ * 
+ * Board representation: rightmost corner of red's side is the LSB 
+ * and it ascends going to the left and upwards. Should be using
+ * unsigned ints
  */
 export const name = 'bitboard'
 
+export const BOARD_SIZE = 90;
+
 export class BitBoard {
-    private boolarray: boolean[];
+    private bits: bigint;
 
-    constructor() {
-        this.boolarray = Array(90).fill(false);
+    constructor(bits: bigint) {
+        this.bits = bits;
     }
 
-    set(i: number, val: boolean) {
-        this.boolarray[i] = val;
+    getBits() {
+        return this.bits;
     }
 
+    set(i: number, present: boolean) {
+        if (!Number.isInteger(i)) {
+            throw "i must be an integer";
+        }
+        if (i >= BOARD_SIZE) {
+            throw "Tried to set larger than the board's size";
+        }
+        let b = BigInt("0");
+        let shift = BigInt(i);
+        if (present) {
+            b++;
+        }
+        this.bits = this.bits & (b << shift);
+    }
+
+    //Returns bigint currently, may be changed 
     get(i: number) {
-        return this.boolarray[i];
+        if (!Number.isInteger(i)) {
+            throw "i must be an integer";
+        }
+        if (i >= BOARD_SIZE) {
+            throw "Tried to get larger than the board's size";
+        }
+        let b = BigInt("1");
+        let shift = BigInt(i);
+        return (this.bits & (b << shift)) >> shift;
+    }
+
+    isEqual(other: BitBoard) {
+        return this.bits == other.getBits();
+    }
+
+    isEmpty() {
+        return this.bits == BigInt(0);
+    }
+
+    and(other: BitBoard) {
+        return new BitBoard(this.bits & other.getBits());
+    }
+
+    or(other: BitBoard) {
+        return new BitBoard(this.bits | other.getBits());
+    }
+
+    not() {
+        return new BitBoard(~this.bits);
     }
     
-    //TODO: add in all the set operations for bitboard manipulation
+    //Least significant one bit
+    ls1b() {
+        return new BitBoard(this.bits & -this.bits);
+    }
 
+    isSingle() {
+        return this.bits != BigInt(0) && ((this.bits & (this.bits - BigInt(1))) == BigInt(0)); 
+    }
+
+    popCount() {
+        let count = 0;
+        let x = this.bits;
+        while (x) {
+            count++;
+            x &= x - BigInt(1);
+        }
+        return count;
+    }
+
+    //TODO MSB aka bitscan reverse?
 }
