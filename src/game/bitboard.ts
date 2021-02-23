@@ -11,6 +11,7 @@
  * and it ascends going to the left and upwards. Should be using
  * unsigned ints
  */
+
 export const name = 'bitboard'
 
 export const BOARD_SIZE: number = 90;
