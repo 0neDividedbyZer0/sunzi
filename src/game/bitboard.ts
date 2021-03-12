@@ -16,6 +16,8 @@ export const name = 'bitboard'
 
 export const BOARD_SIZE: number = 90;
 
+const mask: bigint = (BigInt(1) << BigInt(BOARD_SIZE)) - BigInt(1);
+
 export class BitBoard {
     private bits: bigint;
 
@@ -34,12 +36,14 @@ export class BitBoard {
         if (i >= BOARD_SIZE) {
             throw "Tried to set larger than the board's size";
         }
-        let b = BigInt("0");
+        let b = BigInt(1);
         let shift = BigInt(i);
         if (present) {
-            b++;
+          this.bits = this.bits | (b << shift);
+        } else {
+          this.bits = this.bits & ~(b << shift);
         }
-        this.bits = this.bits & (b << shift);
+        
     }
 
     //Returns bigint currently, may be changed 
@@ -72,7 +76,7 @@ export class BitBoard {
     }
 
     not() {
-        return new BitBoard(~this.bits);
+        return new BitBoard(~this.bits && mask);
     }
     
     //Least significant one bit

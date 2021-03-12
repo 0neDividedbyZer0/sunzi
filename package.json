@@ -4,10 +4,11 @@
   "description": "Xiangqi Gameboard",
   "main": "main.ts",
   "scripts": {
+    "compile": "tsc",
     "test": "mocha 'tests/**/*.js'",
     "start": "electron .",
     "ts": "ts-node main.ts",
-    "clean": "rm -rf ./*.js"
+    "clean": "find . -name 'main.js'  -delete; find ./tests -name '*.js'  -delete; find ./src/** -name '*.js'  -delete"
   },
   "repository": {
     "type": "git",
