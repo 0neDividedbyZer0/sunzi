@@ -31,6 +31,7 @@ export class Board {
     private b_pieces: Piece[];
     
     constructor() {
+        this.board = [];
         for (let i = 0; i < RANKS; i++) {
             for (let j = 0; j < FILES; j++) {
                 this.board.push(new Space(j, i, null));
