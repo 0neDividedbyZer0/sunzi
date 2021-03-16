@@ -63,11 +63,28 @@ export class Position {
     }
 
     private bitsToBoard(bits: number) {
-        var board = new Pair()
+        var board = new Pair();
         board.file = bits % FILES;
         board.rank = Math.floor(bits / FILES);
         return board;
     }
+
+    private all() {
+        var boards = new BitBoard(BigInt(0));
+        boards = boards.not();
+        this.bitboards.forEach(b => {
+            boards = boards.and(b);
+        });
+        return boards;
+    }
+
+    private red_pawn_moves() {
+        
+    }
+
+    //have a legal move generator, legal moves are
+    //pseudolegal moves that do not put general 
+    //in check or in line of sight of opposite general
 
     
 }
@@ -75,6 +92,6 @@ export class Position {
 //0 is the 1st rank on the red's side, 9th file is leftmost
 //red's POV
 export class Pair {
-    public file: number;
-    public rank: number;
+    public file: number = -1;
+    public rank: number = -1;
 }
