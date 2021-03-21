@@ -80,7 +80,7 @@ export class Position {
         return boards;
     }
 
-    private red() {
+    private red(): BitBoard {
         var boards = new BitBoard(BigInt(0));
         boards = boards.not();
         for (let i = 0; i < 7; i++) {
@@ -89,7 +89,7 @@ export class Position {
         return boards;
     }
 
-    private black() {
+    private black(): BitBoard {
         var boards = new BitBoard(BigInt(0));
         boards = boards.not();
         for (let i = 7; i < this.bitboards.length; i++) {
@@ -98,23 +98,13 @@ export class Position {
         return boards;
     }
 
+    //What happens with multiple moves to the same square?
     private red_pawn_moves(): BitBoard {
-        //approach is to add shifts
-        //Basically, vertical shift is fine
-        //horizontal shifts will require wrapping
-        //by zeroing out edges
-        //Also, can mask the bottom half of the board horizontally
-        //to get rid of horizontal moves below river? as long as vertical
-        //is done afterwards, it should be fine
-        //Algorithm: first do horizontal shifts, then mask off
-        //below river, and then generate vertical shifts and 
-        //union. Then do standard checks for pieces in the way
-        //and stuff. 
         var result = this.bitboards[6].shiftLeft1();
         result = result.and(this.bitboards[6].shiftRight1());
         result = result.and(BLACK_MASK);
         result = result.and(this.bitboards[6].shiftVert(1));
-        return result;
+        return result.and(this.red().not());
     }
 
     private black_pawn_moves(): BitBoard {
@@ -122,7 +112,7 @@ export class Position {
         result = result.and(this.bitboards[13].shiftRight1());
         result = result.and(RED_MASK);
         result = result.and(this.bitboards[13].shiftVert(-1));
-        return result;
+        return result.and(this.black().not());
     }
 
     //have a legal move generator, legal moves are
