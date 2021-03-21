@@ -27,6 +27,8 @@ export const INDICES: number[][] = [G_R, A_R, E_R, H_R, R_R, C_R, P_R, G_B, A_B,
 const one: bigint = BigInt(1);
 const zero: bigint = BigInt(0);
 
+const RED_MASK: BitBoard = new BitBoard((one << BigInt(45)) - one);
+const BLACK_MASK: BitBoard = RED_MASK.not();
 
 export class Position {
     private bitboards: BitBoard[];
@@ -96,7 +98,7 @@ export class Position {
         return boards;
     }
 
-    private red_pawn_moves() {
+    private red_pawn_moves(): BitBoard {
         //approach is to add shifts
         //Basically, vertical shift is fine
         //horizontal shifts will require wrapping
@@ -108,6 +110,19 @@ export class Position {
         //below river, and then generate vertical shifts and 
         //union. Then do standard checks for pieces in the way
         //and stuff. 
+        var result = this.bitboards[6].shiftLeft1();
+        result = result.and(this.bitboards[6].shiftRight1());
+        result = result.and(BLACK_MASK);
+        result = result.and(this.bitboards[6].shiftVert(1));
+        return result;
+    }
+
+    private black_pawn_moves(): BitBoard {
+        var result = this.bitboards[0].shiftLeft1();
+        result = result.and(this.bitboards[13].shiftRight1());
+        result = result.and(RED_MASK);
+        result = result.and(this.bitboards[13].shiftVert(-1));
+        return result;
     }
 
     //have a legal move generator, legal moves are
