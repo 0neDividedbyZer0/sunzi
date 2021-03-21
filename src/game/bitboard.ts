@@ -16,6 +16,11 @@ export const name = 'bitboard'
 
 export const BOARD_SIZE: number = 90;
 
+const FIRST_FILE: bigint = BigInt("0x00201008040201008040201");
+const NINTH_FILE: bigint = FIRST_FILE << BigInt(8);
+
+const FILES: bigint = BigInt(9);
+
 const mask: bigint = (BigInt(1) << BigInt(BOARD_SIZE)) - BigInt(1);
 
 export class BitBoard {
@@ -25,11 +30,11 @@ export class BitBoard {
         this.bits = bits;
     }
 
-    getBits() {
+    getBits(): bigint {
         return this.bits;
     }
 
-    set(i: number, present: boolean) {
+    set(i: number, present: boolean): void {
         if (!Number.isInteger(i)) {
             throw "i must be an integer";
         }
@@ -47,7 +52,7 @@ export class BitBoard {
     }
 
     //Returns bigint currently, may be changed 
-    get(i: number) {
+    get(i: number): bigint {
         if (!Number.isInteger(i)) {
             throw "i must be an integer";
         }
@@ -59,36 +64,36 @@ export class BitBoard {
         return (this.bits & (b << shift)) >> shift;
     }
 
-    isEqual(other: BitBoard) {
+    isEqual(other: BitBoard): boolean {
         return this.bits == other.getBits();
     }
 
-    isEmpty() {
+    isEmpty(): boolean {
         return this.bits == BigInt(0);
     }
 
-    and(other: BitBoard) {
+    and(other: BitBoard): BitBoard {
         return new BitBoard(this.bits & other.getBits());
     }
 
-    or(other: BitBoard) {
+    or(other: BitBoard): BitBoard {
         return new BitBoard(this.bits | other.getBits());
     }
 
-    not() {
+    not(): BitBoard {
         return new BitBoard(~this.bits && mask);
     }
     
     //Least significant one bit
-    ls1b() {
+    ls1b(): BitBoard {
         return new BitBoard(this.bits & -this.bits);
     }
 
-    isSingle() {
+    isSingle(): boolean {
         return this.bits != BigInt(0) && ((this.bits & (this.bits - BigInt(1))) == BigInt(0)); 
     }
 
-    popCount() {
+    popCount(): number {
         let count = 0;
         let x = this.bits;
         while (x) {
@@ -98,8 +103,29 @@ export class BitBoard {
         return count;
     }
 
-    copy() {
+    copy(): BitBoard {
         return new BitBoard(this.bits);
+    }
+
+    //Safely shifts without wrapping
+    shiftLeft1(): BitBoard {
+        var temp = (this.bits & ~NINTH_FILE) << BigInt(1);
+        return new BitBoard(temp);
+    }
+
+    shiftRight1(): BitBoard {
+        var temp = (this.bits & ~FIRST_FILE) >> BigInt(1);
+        return new BitBoard(temp);
+    }
+
+    shiftVert(shift: number): BitBoard {
+        let s = BigInt(Math.abs(shift));
+        if (shift > 0) {
+            var temp = this.bits << (FILES * s);
+        } else {
+            var temp = this.bits >> (FILES * s);
+        }
+        return new BitBoard(temp & mask);
     }
 
     //TODO MSB aka bitscan reverse?

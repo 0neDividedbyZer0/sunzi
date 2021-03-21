@@ -91,4 +91,50 @@ describe('Bitboard', function() {
       assert.equal(b.popCount(), 90);
     });
   });
+
+  describe('Left shift test', function() {
+    it('should safely move all bits over by 1', function() {
+      let bits = BigInt("0x00001010101010101010100");
+      let result = BigInt("0x00002020202020202020000");
+      let correct = new BB.BitBoard(result);
+      let b = new BB.BitBoard(bits);
+      b = b.shiftLeft1();
+      assert.equal(b.isEqual(correct), true);
+    });
+  });
+
+  describe('Right shift test', function() {
+    it('should safely move all bits over by 1', function() {
+      let bits = BigInt("0x00001010101010101010100");
+      let result = BigInt("0x00000008080808080808080");
+      let correct = new BB.BitBoard(result);
+      let b = new BB.BitBoard(bits);
+      b = b.shiftRight1();
+      assert.equal(b.isEqual(correct), true);
+    });
+  });
+
+  //TODO: Vertical shift tests
+
+  describe('Vertical shift test 1', function() {
+    it('should safely move all bits up by 1', function() {
+      let bits = BigInt("0x00201008040201008040201");
+      let result = BigInt("0x00201008040201008040200");
+      let correct = new BB.BitBoard(result);
+      let b = new BB.BitBoard(bits);
+      b = b.shiftVert(1);
+      assert.equal(b.isEqual(correct), true);
+    });
+  });
+
+  describe('Vertical shift test 2', function() {
+    it('should safely move all bits down by 1', function() {
+      let bits = BigInt("0x00201008040201008040201");
+      let result = BigInt("0x00001008040201008040201");
+      let correct = new BB.BitBoard(result);
+      let b = new BB.BitBoard(bits);
+      b = b.shiftVert(-1);
+      assert.equal(b.isEqual(correct), true);
+    });
+  });
 });

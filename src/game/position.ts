@@ -78,8 +78,36 @@ export class Position {
         return boards;
     }
 
+    private red() {
+        var boards = new BitBoard(BigInt(0));
+        boards = boards.not();
+        for (let i = 0; i < 7; i++) {
+            boards = boards.and(this.bitboards[i]);
+        }
+        return boards;
+    }
+
+    private black() {
+        var boards = new BitBoard(BigInt(0));
+        boards = boards.not();
+        for (let i = 7; i < this.bitboards.length; i++) {
+            boards = boards.and(this.bitboards[i]);
+        }
+        return boards;
+    }
+
     private red_pawn_moves() {
-        
+        //approach is to add shifts
+        //Basically, vertical shift is fine
+        //horizontal shifts will require wrapping
+        //by zeroing out edges
+        //Also, can mask the bottom half of the board horizontally
+        //to get rid of horizontal moves below river? as long as vertical
+        //is done afterwards, it should be fine
+        //Algorithm: first do horizontal shifts, then mask off
+        //below river, and then generate vertical shifts and 
+        //union. Then do standard checks for pieces in the way
+        //and stuff. 
     }
 
     //have a legal move generator, legal moves are
