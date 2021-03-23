@@ -5,6 +5,7 @@ import { BitBoard } from "./bitboard";
 
 export const FILES: number = 9;
 export const RANKS: number = 10;
+export const BOARD_SIZE: number = 90;
 
 export const G_R: number[] = [4];
 export const A_R: number[] = [3, 5];
@@ -30,6 +31,56 @@ const zero: bigint = BigInt(0);
 const RED_MASK: BitBoard = new BitBoard((one << BigInt(45)) - one);
 const BLACK_MASK: BitBoard = RED_MASK.not();
 
+//Create the pawn move table with respect to red
+const red_pawn_move_table: Move[][] = ((): Move[][] => {
+    let b = new BitBoard(one);
+    var table: Move[][] = [];
+    for(let i = 0; i < BOARD_SIZE; i++) {
+        let result = b.shiftLeft1();
+        result = result.and(b.shiftRight1());
+        result = result.and(BLACK_MASK);
+        result = result.and(b.shiftVert(1));
+        var moves: Move[] = [];
+        for (let j = 0; j < BOARD_SIZE; j++) {
+            if (result.occupied(j)) {
+                moves.push(new Move(b, result.get(j)));
+            }
+        }
+        table.push(moves);
+        b.set(i + 1, true);
+        b.set(i, false);
+    }
+    return table;
+})();
+
+const black_pawn_move_table: Move[][] = ((): Move[][] => {
+    let b = new BitBoard(one);
+    var table: Move[][] = [];
+    for(let i = 0; i < BOARD_SIZE; i++) {
+        let result = b.shiftLeft1();
+        result = result.and(b.shiftRight1());
+        result = result.and(RED_MASK);
+        result = result.and(b.shiftVert(-1));
+        var moves: Move[] = [];
+        for (let j = 0; j < BOARD_SIZE; j++) {
+            if (result.occupied(j)) {
+                moves.push(new Move(b, result.get(j)));
+            }
+        }
+        table.push(moves);
+        b.set(i + 1, true);
+        b.set(i, false);
+    }
+    return table;
+})();
+
+//const red_general_move_table: Move[][]
+
+//const red_elephant_move_table: Move[][]
+
+//const red_advisor_move_table: Move[][]
+
+//const horse_move_table: Move[][]
 export class Position {
     private bitboards: BitBoard[];
 
@@ -98,6 +149,11 @@ export class Position {
         return boards;
     }
 
+    //takes red or black index and converts to the opposite color index (relative to its position)
+    private flip(ind: number): number {
+        return 89 - ind;
+    }
+
     //What happens with multiple moves to the same square?
     private red_pawn_moves(): BitBoard {
         var result = this.bitboards[6].shiftLeft1();
@@ -105,6 +161,8 @@ export class Position {
         result = result.and(BLACK_MASK);
         result = result.and(this.bitboards[6].shiftVert(1));
         return result.and(this.red().not());
+
+        //New approach, lookup table for moves instead
     }
 
     private black_pawn_moves(): BitBoard {
@@ -127,4 +185,14 @@ export class Position {
 export class Pair {
     public file: number = -1;
     public rank: number = -1;
+}
+
+export class Move {
+    public init: BitBoard;
+    public final: BitBoard;
+
+    public constructor(init: BitBoard, final: BitBoard) {
+        this.init = init;
+        this.final = final;
+    }
 }

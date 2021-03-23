@@ -28,11 +28,11 @@ describe('Bitboard', function() {
       let exp = BigInt(70);  
       let b = new BB.BitBoard(BigInt(0));
       b.set(70, 1);
-      assert.equal(b.get(70), one);
+      assert.equal(b.occupied(70), true);
       assert.equal(b.getBits(), BigInt(one << exp))
 
       b.set(70, 0);
-      assert.equal(b.get(70), zero);
+      assert.equal(b.occupied(70), false);
 
       
     });
@@ -43,13 +43,13 @@ describe('Bitboard', function() {
       let exp1 = BigInt(71);
       let exp2 = BigInt(70);
          
-      let b = new BB.BitBoard(BigInt(0));
+      let b = new BB.BitBoard(zero);
       b.set(71, 1);
-      assert.equal(b.get(71), one);
+      assert.equal(b.occupied(71), true);
       assert.equal(b.getBits(), BigInt(one << exp1))
 
       b.set(70, 1);
-      assert.equal(b.get(70), one);
+      assert.equal(b.occupied(70), true);
       assert.equal(b.getBits(), BigInt(one << exp1) + BigInt(one << exp2))
       
     });

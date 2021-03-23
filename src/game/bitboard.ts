@@ -52,7 +52,7 @@ export class BitBoard {
     }
 
     //Returns bigint currently, may be changed 
-    get(i: number): bigint {
+    get(i: number): BitBoard {
         if (!Number.isInteger(i)) {
             throw "i must be an integer";
         }
@@ -61,7 +61,19 @@ export class BitBoard {
         }
         let b = BigInt("1");
         let shift = BigInt(i);
-        return (this.bits & (b << shift)) >> shift;
+        return new BitBoard(this.bits & (b << shift));
+    }
+
+    occupied(i: number): boolean {
+        if (!Number.isInteger(i)) {
+            throw "i must be an integer";
+        }
+        if (i >= BOARD_SIZE) {
+            throw "Tried to get larger than the board's size";
+        }
+        let b = BigInt("1");
+        let shift = BigInt(i);
+        return (this.bits & (b << shift)) > BigInt(0);
     }
 
     isEqual(other: BitBoard): boolean {
