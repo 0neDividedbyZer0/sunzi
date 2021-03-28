@@ -22,6 +22,9 @@ const BOARD_RANKS: number = 14;
 const RED_GENERAL_PALACE: number[] = [4, 5, 6, 15, 16, 17, 26, 27, 28];
 const BLACK_GENERAL_PALACE: number[] = [125, 126, 127, 136, 137, 138, 147, 148, 149];
 
+const RED_ELEPHANT_INDICES: number[] = [3, 7, 23, 27, 31, 47, 51 ];
+const BLACK_ELEPHANT_INDICES: number[] = [102, 106, 122, 126, 130, 146, 150];
+
 const START_BOARD_C: COLOR[] = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
