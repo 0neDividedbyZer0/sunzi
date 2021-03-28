@@ -1,7 +1,8 @@
 export const name = 'board'
 
-import {Piece} from './pieces/piece'
-import {Space} from './space'
+//11x13 board with two sentinel rows and files. Piece lists
+//Two boards, one with colors, the other with piece types.
+//Deal with horses leaping offbound on the edges with wraparound
 
 /**
  * The board's absolute position is based on
@@ -12,50 +13,112 @@ import {Space} from './space'
  * (In implementation, they are labeled from 0)
  */
 
-export const FILES: number = 9;0
-export const RANKS: number = 10;
+const FILES: number = 9;
+const RANKS: number = 10;
 
-//What file is each side's section of the river
-export const RIVER = {
-    RED: 4,
-    BLACK: 5
-};
+const BOARD_FILES: number = 11;
+const BOARD_RANKS: number = 14;
 
-export const R_RIVER: number = 4;
-//Black's side of the river
-export const B_RIVER: number = 5;
+const START_BOARD_C: COLOR[] = [
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 1, 0, 0, 0, 0, 0, 1, 0, -1,
+    -1, 1, 0, 1, 0, 1, 0, 1, 0, 1, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 2, 0, 2, 0, 2, 0, 2, 0, 2, -1,
+    -1, 0, 2, 0, 0, 0, 0, 0, 2, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 2, 2, 2, 2, 2, 2, 2, 2, 2, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+];
+
+const START_BOARD_P: PIECE[] = [
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, 5, 4, 3, 2, 1, 2, 3, 4, 5, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 6, 0, 0, 0, 0, 0, 6, 0, -1,
+    -1, 7, 0, 7, 0, 7, 0, 7, 0, 7, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 7, 0, 7, 0, 7, 0, 7, 0, 7, -1,
+    -1, 0, 6, 0, 0, 0, 0, 0, 6, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 5, 4, 3, 2, 1, 2, 3, 4, 5, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+];
+
+const EMPTY_BOARD_C: COLOR[] = [
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+];
+
+const EMPTY_BOARD_P: PIECE[] = [
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+];
+
+export enum COLOR {
+    EMPTY,
+    RED,
+    BLACK,
+    SENTINEL = -1
+}
+
+export enum PIECE {
+    EMPTY,
+    GENERAL,
+    ADVISOR,
+    ELEPHANT,
+    HORSE,
+    CHARIOT,
+    CANNON,
+    PAWN,
+    SENTINEL = -1
+}
+
+/**          
+ *  10 9 8 7 6 5 4 3 2 1 0, red side
+ */
 
 export class Board {
-    private board: Space[];
-    private r_pieces: Piece[];
-    private b_pieces: Piece[];
+    private colors: COLOR[];
+    private pieces: PIECE[];
     
-    constructor() {
-        this.board = [];
-        for (let i = 0; i < RANKS; i++) {
-            for (let j = 0; j < FILES; j++) {
-                this.board.push(new Space(j, i, null));
-            }
-        }
+    public constructor() {
+        this.colors = EMPTY_BOARD_C;
+        this.pieces = EMPTY_BOARD_P;
     }
-
-    get(file: number, rank: number): Space {
-        if (file < 0 || file >= FILES) {
-            return null;
-        }
-        if (rank < 0 || rank >= RANKS) {
-            return null;
-        }
-        return this.board[rank * FILES + file];
-    }
-
-    get_rel(curr: Space, files_to_add: number, ranks_to_add: number): Space {
-        return this.get(curr.f() + files_to_add, curr.r() + ranks_to_add);
-    }
-
-    is_occupied(sp: Space): boolean {
-        return sp.c() != null;
-    }
+    
 
 
 }
