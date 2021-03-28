@@ -173,6 +173,54 @@ export class Board {
         
     }
 
+    /**
+     * Return if there is a blocking element in the way of 
+     * a piece at INDEX in the direction DIR   
+     * Blockable special cases: horses, elephants. All others
+     * blocked by adjacent same color pieces 
+     * returns an array of all blocked directions
+     */
+    private blocked(index: number): DIR[] {
+        if (this.pieces[index] == PIECE.HORSE) {
+            if ()
+        }
+    }
+
+    /**
+     * Safely gets index in a certain direction DIR from 
+     * INDEX STEPS steps away. If offboard, returns -1
+     */
+    private get_ind(index: number, steps: number, dir: DIR) {
+        switch(dir) {
+            case DIR.E:
+
+                break;
+            case DIR.NE:
+                
+                break;
+            case DIR.N:
+                
+                break;
+            case DIR.NW:
+                
+                break;
+            case DIR.W:
+                
+                break;
+            case DIR.SW:
+                
+                break;
+            case DIR.S:
+                
+                break;
+            case DIR.SE:
+                
+                break;
+            default:
+                throw "Invalid direction";
+        }
+    }
+
     /* TODO
     public copy(): Board {
 
