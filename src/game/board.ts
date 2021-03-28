@@ -19,6 +19,9 @@ const RANKS: number = 10;
 const BOARD_FILES: number = 11;
 const BOARD_RANKS: number = 14;
 
+const RED_GENERAL_PALACE: number[] = [4, 5, 6, 15, 16, 17, 26, 27, 28];
+const BLACK_GENERAL_PALACE: number[] = [125, 126, 127, 136, 137, 138, 147, 148, 149];
+
 const START_BOARD_C: COLOR[] = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -196,6 +199,62 @@ export class Board {
         } else {
             throw "There was an empty piece at " + index;
         }
+    }
+
+    public generalMoves(index: number) {
+        var moves: Move[] = [];
+        if (this.colors[index] == COLOR.RED) {
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.N)
+                if (RED_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.E)
+                if (RED_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.S)
+                if (RED_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.W)
+                if (RED_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+        } else if (this.colors[index] == COLOR.BLACK) {
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.N)
+                if (BLACK_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.E)
+                if (BLACK_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.S)
+                if (BLACK_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.W)
+                if (BLACK_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+        }
+        throw "No general at index " + index;
     }
 
     
