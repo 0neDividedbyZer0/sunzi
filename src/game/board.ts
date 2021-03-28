@@ -170,86 +170,109 @@ export class Board {
 
     //Create moves for a pawn at INDEX
     public pawnMoves(index: number): Move[] {
-        
-    }
-
-    /**
-     * Return if there is a blocking element in the way of 
-     * a piece at INDEX in the direction DIR   
-     * Blockable special cases: horses, elephants. All others
-     * blocked by adjacent same color pieces 
-     * returns an array of all blocked directions
-     */
-    private blocked(index: number): DIR[] {
-        if (this.pieces[index] == PIECE.HORSE) {
-            if ()
+        var moves: Move[] = [];
+        if (this.colors[index] == COLOR.RED) {
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
+                moves.push(new Move(index, this.get_ind(index, 1, DIR.N)));
+            }
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
+            }
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
+            }
+            return moves;
+        } else if (this.colors[index] == COLOR.BLACK) {
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
+                moves.push(new Move(index, this.get_ind(index, 1, DIR.S)));
+            }
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
+            }
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
+            }
+            return moves;
+        } else {
+            throw "There was an empty piece at " + index;
         }
     }
 
+    
+
+    //Safely gets the index in a certain direction without wrapping
+    private get_ind(index: number, steps: number, dir: DIR): number {
+        let rank = Math.floor(index / BOARD_FILES);
+        let file = index % BOARD_FILES;
+        switch(dir) {
+            case DIR.E:
+                if (file - steps > 0) {
+                    return rank * BOARD_FILES + file - steps;
+                }
+                return -1;
+                break;
+            case DIR.NE:
+                let limit1 = Math.min(file, BOARD_RANKS - 1 - rank);
+                if (steps <= limit1) {
+                    return index + (BOARD_FILES - 1) * steps;
+                }
+                return -1;
+                break;
+            case DIR.N:
+                if (rank + steps < BOARD_RANKS) {
+                    return (rank + steps) * BOARD_FILES + file;
+                }
+                return -1;
+                break;
+            case DIR.NW:
+                let limit2 = Math.min(BOARD_FILES - 1 -file, BOARD_RANKS - 1 - rank);
+                if (steps <= limit2) {
+                    return index + (BOARD_FILES + 1) * steps;
+                }
+                return -1;
+                break;
+            case DIR.W:
+                if (file + steps < BOARD_FILES) {
+                    return rank * BOARD_FILES + file + steps;
+                }
+                return -1;
+                break;
+            case DIR.SW:
+                let limit3 = Math.min(BOARD_FILES - 1 -file, rank);
+                if (steps <= limit3) {
+                    return index - (BOARD_FILES - 1) * steps;
+                }
+                return -1;
+                break;
+            case DIR.S:
+                if (rank - steps > 0) {
+                    return (rank - steps) * BOARD_FILES + file;
+                }
+                return -1;
+                break;
+            case DIR.SE:
+                let limit4 = Math.min(file, rank);
+                if (steps <= limit4) {
+                    return index - (BOARD_FILES + 1) * steps;
+                }
+                return -1;
+                break;
+            default:
+                throw "Invalid direction";
+        }
+    }
+        
     /**
      * Safely gets COLOR piece in a certain direction DIR from 
      * INDEX STEPS steps away. If offboard, returns -1
      * STEPS is assumed to be positive
      */
     private get(index: number, steps: number, dir: DIR): COLOR {
-        let rank = Math.floor(index / BOARD_FILES);
-        let file = index % BOARD_FILES;
-        switch(dir) {
-            case DIR.E:
-                if (file - steps > 0) {
-                    return this.colors[rank * BOARD_FILES + file - steps];
-                }
-                return COLOR.SENTINEL;
-                break;
-            case DIR.NE:
-                let limit1 = Math.min(file, BOARD_RANKS - 1 - rank);
-                if (steps <= limit1) {
-                    return this.colors[index + (BOARD_FILES - 1) * steps]
-                }
-                return COLOR.SENTINEL;
-                break;
-            case DIR.N:
-                if (rank + steps < BOARD_RANKS) {
-                    return this.colors[(rank + steps) * BOARD_FILES + file];
-                }
-                return COLOR.SENTINEL;
-                break;
-            case DIR.NW:
-                let limit2 = Math.min(BOARD_FILES - 1 -file, BOARD_RANKS - 1 - rank);
-                if (steps <= limit2) {
-                    return this.colors[index + (BOARD_FILES + 1) * steps]
-                }
-                return COLOR.SENTINEL;
-                break;
-            case DIR.W:
-                if (file + steps < BOARD_FILES) {
-                    return this.colors[rank * BOARD_FILES + file + steps];
-                }
-                return COLOR.SENTINEL;
-                break;
-            case DIR.SW:
-                let limit3 = Math.min(BOARD_FILES - 1 -file, rank);
-                if (steps <= limit3) {
-                    return this.colors[index - (BOARD_FILES - 1) * steps]
-                }
-                return COLOR.SENTINEL;
-                break;
-            case DIR.S:
-                if (rank - steps > 0) {
-                    return this.colors[(rank - steps) * BOARD_FILES + file];
-                }
-                return COLOR.SENTINEL;
-                break;
-            case DIR.SE:
-                let limit4 = Math.min(file, rank);
-                if (steps <= limit4) {
-                    return this.colors[index - (BOARD_FILES + 1) * steps]
-                }
-                return COLOR.SENTINEL;
-                break;
-            default:
-                throw "Invalid direction";
+        let i = this.get_ind(index, steps, dir);
+        if (i < 0) {
+            return COLOR.SENTINEL;
         }
+        return this.colors[i];
     }
 
     /* TODO
@@ -279,6 +302,11 @@ export enum DIR {
 };
 
 export class Move {
-    public initial: number = -1;
-    public final: number = -1;
+    public initial: number;
+    public final: number;
+
+    public constructor(initial: number, final: number) {
+        this.initial = initial;
+        this.final = final;
+    }
 };
