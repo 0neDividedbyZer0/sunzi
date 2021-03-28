@@ -109,7 +109,7 @@ export enum COLOR {
     RED,
     BLACK,
     SENTINEL = -1
-}
+};
 
 export enum PIECE {
     EMPTY,
@@ -121,7 +121,7 @@ export enum PIECE {
     CANNON,
     PAWN,
     SENTINEL = -1
-}
+};
 
 /**          
  *  10 9 8 7 6 5 4 3 2 1 0, red side
@@ -167,7 +167,39 @@ export class Board {
         this.blackCannons = [];
         this.blackPawns = [];
     }
+
+    //Create moves for a pawn at INDEX
+    public pawnMoves(index: number): Move[] {
+        
+    }
+
+    /* TODO
+    public copy(): Board {
+
+    }*/
     
+    //TODO direction enum
 
+    
+};
 
-}
+//From red's perspective always
+/**  3 2 1
+ *   4   0
+ *   5 6 7
+ */
+export enum DIR {
+    E,
+    NE,
+    N,
+    NW,
+    W,
+    SW,
+    S,
+    SE,
+};
+
+export class Move {
+    public initial: number = -1;
+    public final: number = -1;
+};
