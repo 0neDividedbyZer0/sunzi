@@ -201,7 +201,7 @@ export class Board {
         }
     }
 
-    public generalMoves(index: number) {
+    public generalMoves(index: number): Move[] {
         var moves: Move[] = [];
         if (this.colors[index] == COLOR.RED) {
             if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
@@ -228,6 +228,7 @@ export class Board {
                     moves.push(new Move(index, i));
                 }
             }
+            return moves;
         } else if (this.colors[index] == COLOR.BLACK) {
             if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
                 let i = this.get_ind(index, 1, DIR.N)
@@ -253,8 +254,83 @@ export class Board {
                     moves.push(new Move(index, i));
                 }
             }
+            return moves;
         }
         throw "No general at index " + index;
+    }
+
+    public advisorMoves(index: number): Move[] {
+        var moves: Move[] = [];
+        if (this.colors[index] == COLOR.RED) {
+            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.NE);
+                if (RED_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.NW);
+                if (RED_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.SW);
+                if (RED_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.SE);
+                if (RED_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            return moves;
+        } else if (this.colors[index] == COLOR.BLACK) {
+            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.NE);
+                if (BLACK_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.NW);
+                if (BLACK_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.SW);
+                if (BLACK_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 1, DIR.SE);
+                if (BLACK_GENERAL_PALACE.includes(i)) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            return moves;
+        }
+        throw "No advisor at index " + index;
+    }
+
+    public elephantMoves(index: number) {
+
+    }
+
+    public horseMoves(index: number) {
+
+    }
+
+    public chariotMoves(index: number) {
+
+    }
+
+    public cannonMoves(index: number) {
+
     }
 
     
