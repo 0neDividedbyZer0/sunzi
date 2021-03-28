@@ -275,6 +275,33 @@ export class Board {
         return this.colors[i];
     }
 
+    /**
+     * Checks if both colors and pieces make sense.
+     * Piece lists are NOT checked
+     *
+     */
+    public isValid(): boolean {
+        for (let i = 0; i < BOARD_FILES * BOARD_RANKS; i++) {
+            if (this.colors[i] == COLOR.SENTINEL) {
+                if (this.pieces[i] != PIECE.SENTINEL) {
+                    return false;
+                }
+            } 
+            if (this.colors[i] == COLOR.EMPTY) {
+                if (this.pieces[i] != PIECE.EMPTY) {
+                    return false;
+                }
+            } 
+            if (this.colors[i] == COLOR.RED || this.colors[i] == COLOR.BLACK) {
+                if (this.pieces[i] == PIECE.SENTINEL ||
+                    this.pieces[i] == PIECE.EMPTY) {
+                    return false;
+                }
+            } 
+        }
+        return true;
+    }
+
     /* TODO
     public copy(): Board {
 
