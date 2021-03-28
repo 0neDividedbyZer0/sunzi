@@ -187,34 +187,65 @@ export class Board {
     }
 
     /**
-     * Safely gets index in a certain direction DIR from 
+     * Safely gets COLOR piece in a certain direction DIR from 
      * INDEX STEPS steps away. If offboard, returns -1
+     * STEPS is assumed to be positive
      */
-    private get_ind(index: number, steps: number, dir: DIR) {
+    private get(index: number, steps: number, dir: DIR): COLOR {
+        let rank = Math.floor(index / BOARD_FILES);
+        let file = index % BOARD_FILES;
         switch(dir) {
             case DIR.E:
-
+                if (file - steps > 0) {
+                    return this.colors[rank * BOARD_FILES + file - steps];
+                }
+                return COLOR.SENTINEL;
                 break;
             case DIR.NE:
-                
+                let limit1 = Math.min(file, BOARD_RANKS - 1 - rank);
+                if (steps <= limit1) {
+                    return this.colors[index + (BOARD_FILES - 1) * steps]
+                }
+                return COLOR.SENTINEL;
                 break;
             case DIR.N:
-                
+                if (rank + steps < BOARD_RANKS) {
+                    return this.colors[(rank + steps) * BOARD_FILES + file];
+                }
+                return COLOR.SENTINEL;
                 break;
             case DIR.NW:
-                
+                let limit2 = Math.min(BOARD_FILES - 1 -file, BOARD_RANKS - 1 - rank);
+                if (steps <= limit2) {
+                    return this.colors[index + (BOARD_FILES + 1) * steps]
+                }
+                return COLOR.SENTINEL;
                 break;
             case DIR.W:
-                
+                if (file + steps < BOARD_FILES) {
+                    return this.colors[rank * BOARD_FILES + file + steps];
+                }
+                return COLOR.SENTINEL;
                 break;
             case DIR.SW:
-                
+                let limit3 = Math.min(BOARD_FILES - 1 -file, rank);
+                if (steps <= limit3) {
+                    return this.colors[index - (BOARD_FILES - 1) * steps]
+                }
+                return COLOR.SENTINEL;
                 break;
             case DIR.S:
-                
+                if (rank - steps > 0) {
+                    return this.colors[(rank - steps) * BOARD_FILES + file];
+                }
+                return COLOR.SENTINEL;
                 break;
             case DIR.SE:
-                
+                let limit4 = Math.min(file, rank);
+                if (steps <= limit4) {
+                    return this.colors[index - (BOARD_FILES + 1) * steps]
+                }
+                return COLOR.SENTINEL;
                 break;
             default:
                 throw "Invalid direction";
