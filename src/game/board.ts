@@ -87,6 +87,23 @@ const EMPTY_BOARD_P: PIECE[] = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 ];
 
+const RED_GENERALS: number[] = [27];
+const RED_ADVISORS: number[] = [26, 28];
+const RED_ELEPHANTS: number[] = [25, 29];
+const RED_HORSES: number[] = [24, 30];
+const RED_CHARIOTS: number[] = [23, 31];
+const RED_CANNONS: number[] = [46, 52];
+const RED_PAWNS: number[] = [56, 58, 60, 62, 64];
+
+const BLACK_GENERALS: number[] = [126];
+const BLACK_ADVISORS: number[] = [125, 127];
+const BLACK_ELEPHANTS: number[] = [124, 128];
+const BLACK_HORSES: number[] = [123, 129];
+const BLACK_CHARIOTS: number[] = [122, 130];
+const BLACK_CANNONS: number[] = [101, 107];
+const BLACK_PAWNS: number[] = [89, 91, 93, 95, 97];
+
+
 export enum COLOR {
     EMPTY,
     RED,
@@ -113,10 +130,42 @@ export enum PIECE {
 export class Board {
     private colors: COLOR[];
     private pieces: PIECE[];
+
+    private redGenerals: number[];
+    private redAdvisors: number[];
+    private redElephants: number[];
+    private redHorses: number[];
+    private redChariots: number[];
+    private redCannons: number[];
+    private redPawns: number[];
+
+    private blackGenerals: number[];
+    private blackAdvisors: number[];
+    private blackElephants: number[];
+    private blackHorses: number[];
+    private blackChariots: number[];
+    private blackCannons: number[];
+    private blackPawns: number[];
     
     public constructor() {
-        this.colors = EMPTY_BOARD_C;
-        this.pieces = EMPTY_BOARD_P;
+        this.colors = Object.assign([], EMPTY_BOARD_C);
+        this.pieces = Object.assign([], EMPTY_BOARD_P);
+
+        this.redGenerals = [];
+        this.redAdvisors = [];
+        this.redElephants = [];
+        this.redHorses = [];
+        this.redChariots = [];
+        this.redCannons = [];
+        this.redPawns = [];
+
+        this.blackGenerals = [];
+        this.blackAdvisors = [];
+        this.blackElephants = [];
+        this.blackHorses = [];
+        this.blackChariots = [];
+        this.blackCannons = [];
+        this.blackPawns = [];
     }
     
 
