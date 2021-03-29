@@ -481,11 +481,105 @@ export class Board {
         throw "No horse at index " + index;
     }
 
-    public chariotMoves(index: number) {
+    public chariotMoves(index: number): Move[] {
+        let moves: Move[] = [];
+        let rank = Math.floor(index / BOARD_FILES);
+        let file = index % BOARD_FILES;
+        if (this.colors[index] == COLOR.RED) {
+            for (let i = rank + 1; i < BOARD_RANKS; i++) {
+                if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
+                    moves.push(new Move(index, i * BOARD_FILES + file));
+                } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
+                    moves.push(new Move(index, i * BOARD_FILES + file));
+                    break;
+                } else {
+                    break;
+                }
+            }
 
+            for (let i = rank - 1; i >= 0; i--) {
+                if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
+                    moves.push(new Move(index, i * BOARD_FILES + file));
+                } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
+                    moves.push(new Move(index, i * BOARD_FILES + file));
+                    break;
+                } else {
+                    break;
+                }
+            }
+
+            for (let i = file + 1; i < BOARD_FILES; i++) {
+                if (this.colors[rank + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank + i));
+                } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
+                    moves.push(new Move(index, rank + i));
+                    break;
+                } else {
+                    break;
+                }
+            }
+
+            for (let i = file - 1; i >= 0; i--) {
+                if (this.colors[rank + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank + i));
+                } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
+                    moves.push(new Move(index, rank + i));
+                    break;
+                } else {
+                    break;
+                }
+            }
+            return moves;
+        } else if (this.colors[index] == COLOR.BLACK) {
+            for (let i = rank + 1; i < BOARD_RANKS; i++) {
+                if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
+                    moves.push(new Move(index, i * BOARD_FILES + file));
+                } else if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
+                    moves.push(new Move(index, i * BOARD_FILES + file));
+                    break;
+                } else {
+                    break;
+                }
+            }
+
+            for (let i = rank - 1; i >= 0; i--) {
+                if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
+                    moves.push(new Move(index, i * BOARD_FILES + file));
+                } else if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
+                    moves.push(new Move(index, i * BOARD_FILES + file));
+                    break;
+                } else {
+                    break;
+                }
+            }
+
+            for (let i = file + 1; i < BOARD_FILES; i++) {
+                if (this.colors[rank + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank + i));
+                } else if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
+                    moves.push(new Move(index, rank + i));
+                    break;
+                } else {
+                    break;
+                }
+            }
+
+            for (let i = file - 1; i >= 0; i--) {
+                if (this.colors[rank + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank + i));
+                } else if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
+                    moves.push(new Move(index, rank + i));
+                    break;
+                } else {
+                    break;
+                }
+            }
+            return moves;
+        }
+        throw "Not a chariot at index " + index;
     }
 
-    public cannonMoves(index: number) {
+    public cannonMoves(index: number): Move[] {
         //continue the ray until the second obstacle
     }
 
