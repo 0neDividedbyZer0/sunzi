@@ -1,8 +1,10 @@
 export const name = 'board'
 
-//11x13 board with two sentinel rows and files. Piece lists
+//11x14 board with two sentinel rows and files. Piece lists
 //Two boards, one with colors, the other with piece types.
 //Deal with horses leaping offbound on the edges with wraparound
+//TODO: convert to 11x12? With how we're doing blocking, the horses 
+//are fine
 
 /**
  * The board's absolute position is based on
@@ -137,21 +139,21 @@ export class Board {
     private colors: COLOR[];
     private pieces: PIECE[];
 
-    private redGenerals: number[];
-    private redAdvisors: number[];
-    private redElephants: number[];
-    private redHorses: number[];
-    private redChariots: number[];
-    private redCannons: number[];
-    private redPawns: number[];
+    public redGenerals: number[];
+    public redAdvisors: number[];
+    public redElephants: number[];
+    public redHorses: number[];
+    public redChariots: number[];
+    public redCannons: number[];
+    public redPawns: number[];
 
-    private blackGenerals: number[];
-    private blackAdvisors: number[];
-    private blackElephants: number[];
-    private blackHorses: number[];
-    private blackChariots: number[];
-    private blackCannons: number[];
-    private blackPawns: number[];
+    public blackGenerals: number[];
+    public blackAdvisors: number[];
+    public blackElephants: number[];
+    public blackHorses: number[];
+    public blackChariots: number[];
+    public blackCannons: number[];
+    public blackPawns: number[];
     
     public constructor() {
         this.colors = Object.assign([], EMPTY_BOARD_C);
@@ -173,6 +175,8 @@ export class Board {
         this.blackCannons = [];
         this.blackPawns = [];
     }
+
+    //TODO: check for emptiness at the index where the move is being made
 
     //Create moves for a pawn at INDEX
     public pawnMoves(index: number): Move[] {
@@ -320,12 +324,161 @@ export class Board {
         throw "No advisor at index " + index;
     }
 
-    public elephantMoves(index: number) {
-
+    public elephantMoves(index: number): Move[] {
+        var moves: Move[] = [];
+        if (this.colors[index] == COLOR.RED) {
+            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 2, DIR.NE);
+                if (RED_ELEPHANT_INDICES.includes(i) && this.colors[i] != COLOR.RED) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 2, DIR.NW);
+                if (RED_ELEPHANT_INDICES.includes(i) && this.colors[i] != COLOR.RED) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 2, DIR.SW);
+                if (RED_ELEPHANT_INDICES.includes(i) && this.colors[i] != COLOR.RED) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 2, DIR.SE);
+                if (RED_ELEPHANT_INDICES.includes(i) && this.colors[i] != COLOR.RED) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            return moves;
+        } else if (this.colors[index] == COLOR.BLACK) {
+            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 2, DIR.NE);
+                if (BLACK_ELEPHANT_INDICES.includes(i) && this.colors[i] != COLOR.BLACK) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 2, DIR.NW);
+                if (BLACK_ELEPHANT_INDICES.includes(i) && this.colors[i] != COLOR.BLACK) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 2, DIR.SW);
+                if (BLACK_ELEPHANT_INDICES.includes(i) && this.colors[i] != COLOR.BLACK) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY) {
+                let i = this.get_ind(index, 2, DIR.SE);
+                if (BLACK_ELEPHANT_INDICES.includes(i) && this.colors[i] != COLOR.BLACK) {
+                    moves.push(new Move(index, i));
+                }
+            }
+            return moves;
+        }
+        throw "No elephant at index " + index;
     }
 
-    public horseMoves(index: number) {
+    public horseMoves(index: number): Move[] {
+        var moves: Move[] = [];
+        let res;
+        if (this.colors[index] == COLOR.RED) {
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
+                res = index + 2*BOARD_FILES - 1;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
+                    moves.push(new Move(index, res));
+                }
 
+                res = index + 2*BOARD_FILES + 1;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
+                    moves.push(new Move(index, res));
+                }
+            }
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
+                res = index - 2*BOARD_FILES - 1;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
+                    moves.push(new Move(index, res));
+                }
+
+                res = index - 2*BOARD_FILES + 1;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
+                    moves.push(new Move(index, res));
+                }
+            }
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                res = index + BOARD_FILES - 2;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
+                    moves.push(new Move(index, res));
+                }
+
+                res = index - BOARD_FILES - 2;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
+                    moves.push(new Move(index, res));
+                }
+            }
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                res = index + BOARD_FILES + 2;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
+                    moves.push(new Move(index, res));
+                }
+
+                res = index - BOARD_FILES + 2;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
+                    moves.push(new Move(index, res));
+                }
+            }
+            return moves;
+        } else if (this.colors[index] == COLOR.BLACK) {
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
+                res = index + 2*BOARD_FILES - 1;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
+                    moves.push(new Move(index, res));
+                }
+
+                res = index + 2*BOARD_FILES + 1;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
+                    moves.push(new Move(index, res));
+                }
+            }
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
+                res = index - 2*BOARD_FILES - 1;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
+                    moves.push(new Move(index, res));
+                }
+
+                res = index - 2*BOARD_FILES + 1;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
+                    moves.push(new Move(index, res));
+                }
+            }
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                res = index + BOARD_FILES - 2;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
+                    moves.push(new Move(index, res));
+                }
+
+                res = index - BOARD_FILES - 2;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
+                    moves.push(new Move(index, res));
+                }
+            }
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                res = index + BOARD_FILES + 2;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
+                    moves.push(new Move(index, res));
+                }
+
+                res = index - BOARD_FILES + 2;
+                if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
+                    moves.push(new Move(index, res));
+                }
+            }
+            return moves;
+        }
+        throw "No horse at index " + index;
     }
 
     public chariotMoves(index: number) {
@@ -333,7 +486,7 @@ export class Board {
     }
 
     public cannonMoves(index: number) {
-
+        //continue the ray until the second obstacle
     }
 
     
