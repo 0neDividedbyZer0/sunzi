@@ -22,8 +22,8 @@ const RED_RIVERBANK = 6;
 const BLACK_RIVERBANK = 7;
 const RED_GENERAL_PALACE = [26, 27, 28, 37, 38, 39, 48, 49, 50];
 const BLACK_GENERAL_PALACE = [103, 104, 105, 114, 115, 116, 125, 126, 127];
-const RED_ELEPHANT_INDICES = [3, 7, 23, 27, 31, 47, 51];
-const BLACK_ELEPHANT_INDICES = [102, 106, 122, 126, 130, 146, 150];
+const RED_ELEPHANT_INDICES = [25, 29, 45, 49, 53, 69, 73];
+const BLACK_ELEPHANT_INDICES = [80, 84, 100, 104, 108, 124, 128];
 const START_BOARD_C = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,

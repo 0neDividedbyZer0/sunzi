@@ -994,6 +994,76 @@ export class Board {
     public getPiece(f: number, r: number): PIECE {
         return this.pieces[r * BOARD_FILES + f];
     }
+    
+    /**
+     * Appropriately add a piece, updating the board
+     * WILL OVERWRITE PIECE ORIGINALLY THERE
+     */
+    public add(c: COLOR, p: PIECE, f: number, r: number): void {
+        //TODO add error checking for out of bounds f and r 
+        if (c == COLOR.RED) {
+            let index = r * BOARD_FILES + f;
+            this.colors[index] = c;
+            this.pieces[index] = p;
+            switch (p) {
+                case PIECE.PAWN:
+                    this.redPawns.push(index);
+                    break;
+                case PIECE.GENERAL:
+                    this.redGenerals.push(index);
+                    break;
+                case PIECE.ADVISOR:
+                    this.redAdvisors.push(index);
+                    break;
+                case PIECE.ELEPHANT:
+                    this.redElephants.push(index);
+                    break;
+                case PIECE.HORSE:
+                    this.redHorses.push(index);
+                    break;
+                case PIECE.CHARIOT:
+                    this.redChariots.push(index);
+                    break;
+                case PIECE.CANNON:
+                    this.redCannons.push(index);
+                    break;
+                default:
+                    throw "Piece was invalid";
+            }
+            return;
+        } else if (c == COLOR.BLACK) {
+            let index = r * BOARD_FILES + f;
+            this.colors[index] = c;
+            this.pieces[index] = p;
+            switch (p) {
+                case PIECE.PAWN:
+                    this.blackPawns.push(index);
+                    break;
+                case PIECE.GENERAL:
+                    this.blackGenerals.push(index);
+                    break;
+                case PIECE.ADVISOR:
+                    this.blackAdvisors.push(index);
+                    break;
+                case PIECE.ELEPHANT:
+                    this.blackElephants.push(index);
+                    break;
+                case PIECE.HORSE:
+                    this.blackHorses.push(index);
+                    break;
+                case PIECE.CHARIOT:
+                    this.blackChariots.push(index);
+                    break;
+                case PIECE.CANNON:
+                    this.blackCannons.push(index);
+                    break;
+                default:
+                    throw "Piece was invalid";
+            }
+            return;
+        }
+        throw "Color is invalid";
+    }
 
     /* TODO
     public copy(): Board {

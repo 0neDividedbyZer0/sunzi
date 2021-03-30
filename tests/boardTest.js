@@ -78,5 +78,40 @@ describe('Board Tests', function () {
                 console.log(m);
             });
         });
+        describe('General Moves 2', function () {
+            it('Checks Black General move in center of palace', function () {
+                let b = new board_1.Board();
+                b.setColor(5, 10, board_1.COLOR.BLACK);
+                b.setPiece(5, 10, board_1.PIECE.GENERAL);
+                b.blackGenerals.push(10 * board_1.BOARD_FILES + 5);
+                let m = b.generateMoves(board_1.COLOR.BLACK);
+                assert.equal(m.length, 4);
+                console.log(m);
+            });
+        });
+        describe('General Moves 3', function () {
+            it('Checks red General move in corner of palace', function () {
+                let b = new board_1.Board();
+                b.setColor(4, 2, board_1.COLOR.RED);
+                b.setPiece(4, 2, board_1.PIECE.GENERAL);
+                b.redGenerals.push(2 * board_1.BOARD_FILES + 4);
+                let m = b.generateMoves(board_1.COLOR.RED);
+                assert.equal(m.length, 2);
+                console.log(m);
+            });
+        });
+        describe('General Moves 4', function () {
+            it('Checks red General move with adjacent pieces', function () {
+                let b = new board_1.Board();
+                b.setColor(4, 2, board_1.COLOR.RED);
+                b.setColor(5, 2, board_1.COLOR.RED);
+                b.setColor(4, 3, board_1.COLOR.BLACK);
+                b.setPiece(4, 2, board_1.PIECE.GENERAL);
+                b.redGenerals.push(2 * board_1.BOARD_FILES + 4);
+                let m = b.generateMoves(board_1.COLOR.RED);
+                assert.equal(m.length, 1);
+                console.log(m);
+            });
+        });
     });
 });
