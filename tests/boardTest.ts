@@ -118,5 +118,6 @@ describe('Board Tests', function() {
         });
     });
 
+    //TODO advisors, elephants tests
 
 });
