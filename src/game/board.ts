@@ -185,28 +185,34 @@ export class Board {
     private pawnMoves(index: number): Move[] {
         var moves: Move[] = [];
         if (this.colors[index] == COLOR.RED) {
-            if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.N) == COLOR.BLACK) {
                 moves.push(new Move(index, this.get_ind(index, 1, DIR.N)));
             }
             if (Math.floor(index / BOARD_FILES) > RED_RIVERBANK) {
-                if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                if (this.get(index, 1, DIR.E) == COLOR.EMPTY || 
+                    this.get(index, 1, DIR.E) == COLOR.BLACK) {
                     moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
                 }
-                if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                if (this.get(index, 1, DIR.W) == COLOR.EMPTY || 
+                    this.get(index, 1, DIR.W) == COLOR.BLACK) {
                     moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
                 }
             }
             
             return moves;
         } else if (this.colors[index] == COLOR.BLACK) {
-            if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.S) == COLOR.RED) {
                 moves.push(new Move(index, this.get_ind(index, 1, DIR.S)));
             }
             if (Math.floor(index / BOARD_FILES) < BLACK_RIVERBANK) {
-                if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                if (this.get(index, 1, DIR.E) == COLOR.EMPTY || 
+                    this.get(index, 1, DIR.E) == COLOR.RED) {
                     moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
                 }
-                if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                if (this.get(index, 1, DIR.W) == COLOR.EMPTY || 
+                    this.get(index, 1, DIR.W) == COLOR.RED) {
                     moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
                 }
             }
@@ -219,25 +225,29 @@ export class Board {
     private generalMoves(index: number): Move[] {
         var moves: Move[] = [];
         if (this.colors[index] == COLOR.RED) {
-            if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.N) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.N)
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.E) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.E)
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.S) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.S)
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.W) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.W)
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
@@ -245,25 +255,29 @@ export class Board {
             }
             return moves;
         } else if (this.colors[index] == COLOR.BLACK) {
-            if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.N) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.N)
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.E) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.E)
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.S) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.S)
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.W) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.W)
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
@@ -277,25 +291,29 @@ export class Board {
     private advisorMoves(index: number): Move[] {
         var moves: Move[] = [];
         if (this.colors[index] == COLOR.RED) {
-            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.NE) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.NE);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.NW) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.NW);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.SW) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.SW);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.SE) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.SE);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
@@ -303,25 +321,29 @@ export class Board {
             }
             return moves;
         } else if (this.colors[index] == COLOR.BLACK) {
-            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.NE) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.NE);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.NW) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.NW);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.SW) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.SW);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY) {
+            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY || 
+                this.get(index, 1, DIR.SE) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.SE);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
@@ -807,6 +829,7 @@ export class Board {
             this.redPawns.forEach(p => {
                 moves = moves.concat(this.pawnMoves(p));
             });
+            return moves;
         } else if (c == COLOR.BLACK) {
             this.blackGenerals.forEach(p => {
                 moves = moves.concat(this.generalMoves(p));
@@ -829,6 +852,7 @@ export class Board {
             this.blackPawns.forEach(p => {
                 moves = moves.concat(this.pawnMoves(p));
             });
+            return moves;
         }
         throw "Invalid color chosen";
     }
