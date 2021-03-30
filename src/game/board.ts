@@ -18,8 +18,8 @@ export const name = 'board'
 const FILES: number = 9;
 const RANKS: number = 10;
 
-const BOARD_FILES: number = 11;
-const BOARD_RANKS: number = 14;
+export const BOARD_FILES: number = 11;
+export const BOARD_RANKS: number = 14;
 
 const RED_RIVERBANK: number = 6;
 const BLACK_RIVERBANK: number = 7;
@@ -182,7 +182,7 @@ export class Board {
     //TODO: check for emptiness at the index where the move is being made
 
     //Create moves for a pawn at INDEX
-    public pawnMoves(index: number): Move[] {
+    private pawnMoves(index: number): Move[] {
         var moves: Move[] = [];
         if (this.colors[index] == COLOR.RED) {
             if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
@@ -216,7 +216,7 @@ export class Board {
         }
     }
 
-    public generalMoves(index: number): Move[] {
+    private generalMoves(index: number): Move[] {
         var moves: Move[] = [];
         if (this.colors[index] == COLOR.RED) {
             if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
@@ -274,7 +274,7 @@ export class Board {
         throw "No general at index " + index;
     }
 
-    public advisorMoves(index: number): Move[] {
+    private advisorMoves(index: number): Move[] {
         var moves: Move[] = [];
         if (this.colors[index] == COLOR.RED) {
             if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
@@ -332,7 +332,7 @@ export class Board {
         throw "No advisor at index " + index;
     }
 
-    public elephantMoves(index: number): Move[] {
+    private elephantMoves(index: number): Move[] {
         var moves: Move[] = [];
         if (this.colors[index] == COLOR.RED) {
             if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
@@ -390,7 +390,7 @@ export class Board {
         throw "No elephant at index " + index;
     }
 
-    public horseMoves(index: number): Move[] {
+    private horseMoves(index: number): Move[] {
         var moves: Move[] = [];
         let res;
         if (this.colors[index] == COLOR.RED) {
@@ -489,7 +489,7 @@ export class Board {
         throw "No horse at index " + index;
     }
 
-    public chariotMoves(index: number): Move[] {
+    private chariotMoves(index: number): Move[] {
         let moves: Move[] = [];
         let rank = Math.floor(index / BOARD_FILES);
         let file = index % BOARD_FILES;
@@ -587,7 +587,7 @@ export class Board {
         throw "Not a chariot at index " + index;
     }
 
-    public cannonMoves(index: number): Move[] {
+    private cannonMoves(index: number): Move[] {
         let moves: Move[] = [];
         let rank = Math.floor(index / BOARD_FILES);
         let file = index % BOARD_FILES;
@@ -782,6 +782,57 @@ export class Board {
         throw "Not a cannon at index " + index;
     }
 
+    //Needs absolute pin and check and general LOS checking
+    public generateMoves(c: COLOR): Move[] {
+        var moves: Move[] = [];
+        if (c == COLOR.RED) {
+            this.redGenerals.forEach(p => {
+                moves = moves.concat(this.generalMoves(p));
+            });
+            this.redAdvisors.forEach(p => {
+                moves = moves.concat(this.advisorMoves(p));
+            });
+            this.redElephants.forEach(p => {
+                moves = moves.concat(this.elephantMoves(p));
+            });
+            this.redHorses.forEach(p => {
+                moves = moves.concat(this.horseMoves(p));
+            });
+            this.redChariots.forEach(p => {
+                moves = moves.concat(this.chariotMoves(p));
+            });
+            this.redCannons.forEach(p => {
+                moves = moves.concat(this.cannonMoves(p));
+            });
+            this.redPawns.forEach(p => {
+                moves = moves.concat(this.pawnMoves(p));
+            });
+        } else if (c == COLOR.BLACK) {
+            this.blackGenerals.forEach(p => {
+                moves = moves.concat(this.generalMoves(p));
+            });
+            this.blackAdvisors.forEach(p => {
+                moves = moves.concat(this.advisorMoves(p));
+            });
+            this.blackElephants.forEach(p => {
+                moves = moves.concat(this.elephantMoves(p));
+            });
+            this.blackHorses.forEach(p => {
+                moves = moves.concat(this.horseMoves(p));
+            });
+            this.blackChariots.forEach(p => {
+                moves = moves.concat(this.chariotMoves(p));
+            });
+            this.blackCannons.forEach(p => {
+                moves = moves.concat(this.cannonMoves(p));
+            });
+            this.blackPawns.forEach(p => {
+                moves = moves.concat(this.pawnMoves(p));
+            });
+        }
+        throw "Invalid color chosen";
+    }
+
     public makeMove(m: Move): void {
         //Check the state of the game and stuff and evolve the board
     }
@@ -895,13 +946,29 @@ export class Board {
         return true;
     }
 
-    public isEqual(other: Board) {
+    public isEqual(other: Board): boolean {
         for (let i = 0; i < BOARD_FILES * BOARD_RANKS; i++) {
             if(this.colors[i] != other.colors[i] || this.pieces[i] != other.pieces[i]) {
                 return false;
             } 
         }
         return true;
+    }
+
+    public setColor(f: number, r:number, color: COLOR): void {
+        this.colors[r * BOARD_FILES + f] = color;
+    }
+
+    public setPiece(f: number, r:number, piece: PIECE): void {
+        this.pieces[r* BOARD_FILES + f] = piece;
+    }
+
+    public getColor(f: number, r: number): COLOR {
+        return this.colors[r * BOARD_FILES + f];
+    }
+
+    public getPiece(f: number, r: number): PIECE {
+        return this.pieces[r * BOARD_FILES + f];
     }
 
     /* TODO
@@ -937,5 +1004,9 @@ export class Move {
     public constructor(initial: number, final: number) {
         this.initial = initial;
         this.final = final;
+    }
+
+    public isEqual(other: Move): boolean {
+        return this.initial == other.initial && this.final == other.final;
     }
 };
