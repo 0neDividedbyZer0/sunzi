@@ -2,7 +2,7 @@ import { Board, Move, COLOR, PIECE, BOARD_FILES, BOARD_RANKS } from "../src/game
 
 var assert = require('assert');
 describe('Board Tests', function() {
-    describe('Moves Suite', function() {
+    describe('Pawn Moves Suite', function() {
         describe('Pawn Moves 1', function() {
             it('Check pawn generates correctly before river', function() {
                 let b: Board = new Board();
@@ -66,7 +66,19 @@ describe('Board Tests', function() {
         })
     });
 
-
+    describe('General Moves Suite', function () {
+        describe('General Moves 1', function () {
+            it('Checks General move in center of palace', function() {
+                let b: Board = new Board();
+                b.setColor(5, 3, COLOR.RED);
+                b.setPiece(5, 3, PIECE.GENERAL);
+                b.redGenerals.push(3 * BOARD_FILES + 5);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 4);
+                console.log(m);
+            });
+        });
+    });
 
 
 });
