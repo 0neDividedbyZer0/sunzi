@@ -21,6 +21,9 @@ const RANKS: number = 10;
 const BOARD_FILES: number = 11;
 const BOARD_RANKS: number = 14;
 
+const RED_RIVERBANK: number = 6;
+const BLACK_RIVERBANK: number = 7;
+
 const RED_GENERAL_PALACE: number[] = [4, 5, 6, 15, 16, 17, 26, 27, 28];
 const BLACK_GENERAL_PALACE: number[] = [125, 126, 127, 136, 137, 138, 147, 148, 149];
 
@@ -136,8 +139,8 @@ export enum PIECE {
  */
 
 export class Board {
-    private colors: COLOR[];
-    private pieces: PIECE[];
+    public colors: COLOR[];
+    public pieces: PIECE[];
 
     public redGenerals: number[];
     public redAdvisors: number[];
@@ -185,22 +188,27 @@ export class Board {
             if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
                 moves.push(new Move(index, this.get_ind(index, 1, DIR.N)));
             }
-            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
-                moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
+            if (Math.floor(index / BOARD_FILES) > RED_RIVERBANK) {
+                if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                    moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
+                }
+                if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                    moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
+                }
             }
-            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
-                moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
-            }
+            
             return moves;
         } else if (this.colors[index] == COLOR.BLACK) {
             if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
                 moves.push(new Move(index, this.get_ind(index, 1, DIR.S)));
             }
-            if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
-                moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
-            }
-            if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
-                moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
+            if (Math.floor(index / BOARD_FILES) < BLACK_RIVERBANK) {
+                if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
+                    moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
+                }
+                if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
+                    moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
+                }
             }
             return moves;
         } else {
@@ -882,6 +890,15 @@ export class Board {
                     this.pieces[i] == PIECE.EMPTY) {
                     return false;
                 }
+            } 
+        }
+        return true;
+    }
+
+    public isEqual(other: Board) {
+        for (let i = 0; i < BOARD_FILES * BOARD_RANKS; i++) {
+            if(this.colors[i] != other.colors[i] || this.pieces[i] != other.pieces[i]) {
+                return false;
             } 
         }
         return true;
