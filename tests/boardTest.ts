@@ -61,8 +61,12 @@ describe('Board Tests', function() {
                 b.setColor(5, 8, COLOR.BLACK);
                 let m = b.generateMoves(COLOR.RED);
                 assert.equal(m.length, 1);
-                //assert.equal(m[0].isEqual(new Move(7 * BOARD_FILES + 5, 8 * BOARD_FILES + 5)), true);
+                assert.equal(m[0].isEqual(new Move(7 * BOARD_FILES + 5, 8 * BOARD_FILES + 5)), true);
             });
         })
     });
+
+
+
+
 });
