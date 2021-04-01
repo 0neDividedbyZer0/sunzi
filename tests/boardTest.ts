@@ -118,6 +118,89 @@ describe('Board Tests', function() {
         });
     });
 
-    //TODO advisors, elephants tests
+    describe('Advisor Move Suite', function () {
+        describe('Advisor Moves 1', function () {
+            it('Checks red advisor moves in center of palace', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.ADVISOR, 5, 3);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 4);
+                console.log(m);
+            });
+        });
+        describe('Advisor Moves 2', function () {
+            it('Checks red advisor moves at corner of palace', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.ADVISOR, 4, 4);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 1);
+                console.log(m);
+            });
+        });
+        describe('Advisor Moves 3', function () {
+            it('Checks black advisor moves at center of palace', function () {
+                let b: Board = new Board();
+                b.add(COLOR.BLACK, PIECE.ADVISOR, 5, 10);
+                let m = b.generateMoves(COLOR.BLACK);
+                assert.equal(m.length, 4);
+                console.log(m);
+            });
+        });
+        describe('Advisor Moves 4', function () {
+            it('Checks red advisor moves when blocked', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.ADVISOR, 5, 3);
+                b.setColor(4, 2, COLOR.RED);
+                b.setColor(6, 2, COLOR.RED);
+                b.setColor(6, 4, COLOR.BLACK);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 2);
+                console.log(m);
+            });
+        });
+    });
+
+    describe('Elephant Move Suite', function () {
+        describe('Elephant Moves 1', function () {
+            it('Checks red elephant moves in center', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.ELEPHANT, 5, 4);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 4);
+                console.log(m);
+            });
+        });
+        describe('Elephant Moves 2', function () {
+            it('Checks red elephant moves do not cross river', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.ELEPHANT, 3, 6);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 2);
+                console.log(m);
+            });
+        });
+        describe('Elephant Moves 3', function () {
+            it('Checks black elephant moves at center of board', function () {
+                let b: Board = new Board();
+                b.add(COLOR.BLACK, PIECE.ELEPHANT, 5, 9);
+                let m = b.generateMoves(COLOR.BLACK);
+                assert.equal(m.length, 4);
+                console.log(m);
+            });
+        });
+        describe('Elephant Moves 4', function () {
+            it('Checks red elephant moves when blocked', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.ADVISOR, 5, 4);
+                b.setColor(4, 3, COLOR.RED);
+                b.setColor(6, 3, COLOR.BLACK);
+                b.setColor(6, 6, COLOR.BLACK);
+                b.setColor(4, 6, COLOR.RED);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 1);
+                console.log(m);
+            });
+        });
+    });
 
 });
