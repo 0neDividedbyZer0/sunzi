@@ -191,16 +191,62 @@ describe('Board Tests', function() {
         describe('Elephant Moves 4', function () {
             it('Checks red elephant moves when blocked', function () {
                 let b: Board = new Board();
-                b.add(COLOR.RED, PIECE.ADVISOR, 5, 4);
+                b.add(COLOR.RED, PIECE.ELEPHANT, 5, 4);
                 b.setColor(4, 3, COLOR.RED);
                 b.setColor(6, 3, COLOR.BLACK);
-                b.setColor(6, 6, COLOR.BLACK);
-                b.setColor(4, 6, COLOR.RED);
+                b.setColor(7, 6, COLOR.BLACK);
+                b.setColor(3, 6, COLOR.RED);
                 let m = b.generateMoves(COLOR.RED);
                 assert.equal(m.length, 1);
                 console.log(m);
             });
         });
     });
+
+    describe('Horse Move Suite', function () {
+        describe('Horse Moves 1', function () {
+            it('Checks red horse moves with no obstruction', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.HORSE, 5, 4);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 8);
+                console.log(m);
+            });
+        });
+        describe('Horse Moves 2', function () {
+            it('Checks red horse moves at edge', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.HORSE, 1, 6);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 4);
+                console.log(m);
+            });
+        });
+        describe('Horse Moves 3', function () {
+            it('Checks horse moves 1 away from edge', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.HORSE, 2, 4);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 6);
+                console.log(m);
+            });
+        });
+        describe('Horse Moves 4', function () {
+            it('Checks red horse moves when blocked', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.HORSE, 5, 4);
+                b.setColor(4, 4, COLOR.RED);
+                b.setColor(6, 4, COLOR.BLACK);
+                b.setColor(5, 3, COLOR.BLACK);
+                b.setColor(4, 6, COLOR.BLACK);
+                b.setColor(6, 6, COLOR.RED);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 1);
+                console.log(m);
+            });
+        });
+    });
+
+    //Cannon and chariot tests
 
 });
