@@ -539,10 +539,10 @@ export class Board {
             }
 
             for (let i = file + 1; i < BOARD_FILES; i++) {
-                if (this.colors[rank + i] == COLOR.EMPTY) {
-                    moves.push(new Move(index, rank + i));
-                } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
-                    moves.push(new Move(index, rank + i));
+                if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank * BOARD_FILES + i));
+                } else if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK) {
+                    moves.push(new Move(index, rank * BOARD_FILES + i));
                     break;
                 } else {
                     break;
@@ -550,10 +550,10 @@ export class Board {
             }
 
             for (let i = file - 1; i >= 0; i--) {
-                if (this.colors[rank + i] == COLOR.EMPTY) {
-                    moves.push(new Move(index, rank + i));
-                } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
-                    moves.push(new Move(index, rank + i));
+                if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank * BOARD_FILES + i));
+                } else if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK) {
+                    moves.push(new Move(index, rank * BOARD_FILES + i));
                     break;
                 } else {
                     break;
@@ -584,10 +584,10 @@ export class Board {
             }
 
             for (let i = file + 1; i < BOARD_FILES; i++) {
-                if (this.colors[rank + i] == COLOR.EMPTY) {
-                    moves.push(new Move(index, rank + i));
-                } else if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                    moves.push(new Move(index, rank + i));
+                if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank * BOARD_FILES + i));
+                } else if(this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
+                    moves.push(new Move(index, rank * BOARD_FILES + i));
                     break;
                 } else {
                     break;
@@ -595,10 +595,10 @@ export class Board {
             }
 
             for (let i = file - 1; i >= 0; i--) {
-                if (this.colors[rank + i] == COLOR.EMPTY) {
-                    moves.push(new Move(index, rank + i));
-                } else if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                    moves.push(new Move(index, rank + i));
+                if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank * BOARD_FILES + i));
+                } else if(this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
+                    moves.push(new Move(index, rank * BOARD_FILES + i));
                     break;
                 } else {
                     break;

@@ -247,6 +247,34 @@ describe('Board Tests', function() {
         });
     });
 
+    describe('Chariot Move Suite', function () {
+        describe('Chariot Moves 1', function () {
+            it('Checks red chariot moves with no obstruction', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.CHARIOT, 5, 4);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 17);
+                console.log(m);
+                
+            });
+        });
+        describe('Chariot Moves 2', function () {
+            it('Checks red chariot with obstructions', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.CHARIOT, 5, 4);
+                b.setColor(5, 3, COLOR.RED);
+                b.setColor(5, 5, COLOR.BLACK);
+                b.setColor(6, 4, COLOR.BLACK);
+                b.setColor(4, 4, COLOR.RED);
+                let m = b.generateMoves(COLOR.RED);
+                console.log(m);
+                assert.equal(m.length, 2);
+                
+            });
+        });
+        
+    });
+
     //Cannon and chariot tests
 
 });
