@@ -275,6 +275,73 @@ describe('Board Tests', function() {
         
     });
 
+    describe('Cannon Move Suite', function () {
+        describe('Cannon Moves 1', function () {
+            it('Checks red cannon moves with no obstruction', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.CANNON, 5, 4);
+                let m = b.generateMoves(COLOR.RED);
+                assert.equal(m.length, 17);
+                console.log(m);
+                
+            });
+        });
+        describe('Cannon Moves 2', function () {
+            it('Checks red cannon jump', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.CANNON, 5, 4);
+                // No Jump
+                b.setColor(5, 3, COLOR.RED);
+
+                //Blocked jump
+                b.setColor(5, 5, COLOR.BLACK);
+                b.setColor(5, 6, COLOR.RED);
+
+                //No double jump
+                b.setColor(6, 4, COLOR.BLACK);
+                b.setColor(7, 4, COLOR.RED);
+                b.setColor(8, 4, COLOR.BLACK);
+
+                //Regular jump
+                b.setColor(4, 4, COLOR.RED);
+                b.setColor(3, 4, COLOR.BLACK);
+
+                let m = b.generateMoves(COLOR.RED);
+                console.log(m);
+                assert.equal(m.length, 1);
+                
+            });
+        });
+
+        describe('Cannon Moves 2', function () {
+            it('Checks red cannon double jump special case', function () {
+                let b: Board = new Board();
+                b.add(COLOR.RED, PIECE.CANNON, 5, 4);
+                // No Jump
+                b.setColor(5, 3, COLOR.RED);
+
+                //Blocked jump
+                b.setColor(5, 5, COLOR.BLACK);
+                b.setColor(5, 6, COLOR.RED);
+
+                //No double jump
+                b.setColor(6, 4, COLOR.BLACK);
+                b.setColor(7, 4, COLOR.BLACK);
+                b.setColor(8, 4, COLOR.BLACK);
+
+                //Regular jump
+                b.setColor(4, 4, COLOR.RED);
+                b.setColor(3, 4, COLOR.BLACK);
+
+                let m = b.generateMoves(COLOR.RED);
+                console.log(m);
+                assert.equal(m.length, 2);
+                
+            });
+        });
+        
+    });
+
     //Cannon and chariot tests
 
 });
