@@ -1,11 +1,5 @@
 export const name = 'board'
 
-//11x14 board with two sentinel rows and files. Piece lists
-//Two boards, one with colors, the other with piece types.
-//Deal with horses leaping offbound on the edges with wraparound
-//TODO: convert to 11x12? With how we're doing blocking, the horses 
-//are fine
-
 /**
  * The board's absolute position is based on
  * red's orientation. Files are numbered 
@@ -178,8 +172,6 @@ export class Board {
         this.blackCannons = [];
         this.blackPawns = [];
     }
-
-    //TODO: check for emptiness at the index where the move is being made
 
     //Create moves for a pawn at INDEX
     private pawnMoves(index: number): Move[] {
@@ -804,7 +796,32 @@ export class Board {
         throw "Not a cannon at index " + index;
     }
 
-    //Needs absolute pin and check and general LOS checking
+    
+
+    private pinChecker(moves: Move[], pinner: number) {
+        //Do all the legality checking on the list
+        //Bascically, check if the pinner can attack the general
+        //after a move
+    }
+
+    private absolutePins() {
+     //Checks for absolute pins, by checking LOS of general and the 
+     //pinning pieces, which are horses, chariots, and cannons and generals LOS   
+     //Idea: just get the list of pinned pieces and their pinners.
+     //For those pieces, do legality testing on their generated moves
+    }
+
+    private checkEvasion() {
+        //is your general in check?
+        //Does a very quick search and checks moves that
+        //block general, and moves that the general can
+        //make
+        //If null, then checkmate and game is won by
+        //side doing checking.
+        //Stalemate is handled by the movegenerator.
+    }
+
+    //TODO: Needs absolute pin and check and general LOS checking
     public generateMoves(c: COLOR): Move[] {
         var moves: Move[] = [];
         if (c == COLOR.RED) {
@@ -1069,8 +1086,6 @@ export class Board {
     public copy(): Board {
 
     }*/
-    
-    //TODO direction enum
 
     
 };
