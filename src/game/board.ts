@@ -811,6 +811,96 @@ export class Board {
      //For those pieces, do legality testing on their generated moves
     }
 
+    //Returns the pinned piece index, with -1 returned if no pin
+    private absoluteChariotPins(pinner: number): number {
+        let pinnerFile = pinner % BOARD_FILES;
+        let pinnerRank = Math.floor(pinner / BOARD_FILES);
+        let c = this.colors[pinner];
+        let generalFile;
+        let generalRank;
+        let general;
+        if (c == COLOR.RED) {
+            generalFile = this.blackGenerals[0] % BOARD_FILES;
+            generalRank = Math.floor(this.blackGenerals[0] / BOARD_FILES);
+            general = this.blackGenerals[0];
+        } else if (c == COLOR.BLACK){
+            generalFile = this.redGenerals[0] % BOARD_FILES;
+            generalRank = Math.floor(this.redGenerals[0] / BOARD_FILES);
+            general = this.redGenerals[0];
+        } else {
+            throw "No Chariot at " + pinner;
+        }
+        
+        let count = 0;
+        let returnIndex = -1;
+        if (pinnerFile == generalFile) {
+            if (pinnerRank < generalRank) {
+                for (let i = pinnerRank + 1; i < generalRank; i++) {
+                    let index = i * BOARD_FILES + pinnerFile;
+                    if (this.colors[index] == this.colors[general]) {
+                        count++;
+                        returnIndex = index;
+                    } 
+
+                    if (count >= 2) {
+                        return -1;
+                    } else if (this.colors[index] == this.colors[pinner]) {
+                        return -1
+                    }
+                }
+            } else {
+                for (let i = pinnerRank - 1; i > generalRank; i--) {
+                    let index = i * BOARD_FILES + pinnerFile;
+                    if (this.colors[index] == this.colors[general]) {
+                        count++;
+                        returnIndex = index;
+                    } 
+
+                    if (count >= 2) {
+                        return -1;
+                    } else if (this.colors[index] == this.colors[pinner]) {
+                        return -1
+                    }
+                }
+            }
+            return returnIndex;
+        } else if (pinnerRank == generalRank){ 
+            if (pinnerFile < generalFile) {
+                for (let i = pinnerFile + 1; i < generalFile; i++) {
+                    let index = pinnerRank * BOARD_FILES + i;
+                    if (this.colors[index] == this.colors[general]) {
+                        count++;
+                        returnIndex = index;
+                    } 
+
+                    if (count >= 2) {
+                        return -1;
+                    } else if (this.colors[index] == this.colors[pinner]) {
+                        return -1
+                    }
+                }
+            } else {
+                for (let i = pinnerFile - 1; i > generalFile; i--) {
+                    let index = pinnerRank * BOARD_FILES + i;
+                    if (this.colors[index] == this.colors[general]) {
+                        count++;
+                        returnIndex = index;
+                    } 
+
+                    if (count >= 2) {
+                        return -1;
+                    } else if (this.colors[index] == this.colors[pinner]) {
+                        return -1
+                    }
+                }
+            }
+            return returnIndex;
+        } else {
+            return -1;
+        }
+
+    }
+
     private checkEvasion() {
         //is your general in check?
         //Does a very quick search and checks moves that
