@@ -1209,3 +1209,6 @@ export class Move {
         return this.initial == other.initial && this.final == other.final;
     }
 };
+
+
+//xiangqi.js + xiangqijs for board and game logic, I want to go to modeling and machine learning and AI
