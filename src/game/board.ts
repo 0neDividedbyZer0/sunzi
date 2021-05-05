@@ -799,10 +799,6 @@ export class Board {
         throw "Not a cannon at index " + index;
     }
 
-    private generalAttacked(move: Move) {
-        //check if the general is attacked after making this move
-    }
-
     //Generate moves for the piece at INDEX
     public moves(index: number): Move[] {
         let p = this.pieces[index];
@@ -999,6 +995,26 @@ export class Board {
             this.colors[m.final] = COLOR.EMPTY;
             this.pieces[m.final] = PIECE.EMPTY;
         }        
+    }
+
+    //Need to investigate if in the next board there are checks
+    private generalAttacked(move: Move): boolean {
+        this.makeMove(move);
+        let c;
+        if (this.move_history.length % 2 == 0) {
+            c = COLOR.RED;
+        } else {
+            c = COLOR.BLACK;
+        }
+        let moves = this.generateMoves(c);
+        moves.forEach(m => {
+            if(m.isCapture()) {
+                if (m.captured == PIECE.GENERAL) {
+                    return true;
+                }
+            }
+        });
+        return false;
     }
 
     //Make a new board 
