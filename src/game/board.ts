@@ -1034,7 +1034,28 @@ export class Board {
 
     //Make a new board 
     public copy(): Board {
-        return new Board();
+        return <Board>{
+            colors: Array.from(this.colors),
+            pieces: Array.from(this.pieces),
+
+            redGenerals: Array.from(this.redGenerals),
+            redAdvisors: Array.from(this.redAdvisors),
+            redElephants: Array.from(this.redElephants),
+            redHorses: Array.from(this.redHorses),
+            redChariots: Array.from(this.redChariots),
+            redCannons: Array.from(this.redCannons),
+            redPawns: Array.from(this.redPawns),
+
+            blackGenerals: Array.from(this.blackGenerals),
+            blackAdvisors: Array.from(this.blackAdvisors),
+            blackElephants: Array.from(this.blackElephants),
+            blackHorses: Array.from(this.blackHorses),
+            blackChariots: Array.from(this.blackChariots),
+            blackCannons: Array.from(this.blackCannons),
+            blackPawns: Array.from(this.blackPawns),
+
+            move_history: Array.from(this.move_history),
+        };
     }
 
     
