@@ -948,7 +948,8 @@ export class Board {
         }
     }
 
-    public legalMoves(moves: Move[]): Move[] {
+    public legalMoves(c: COLOR): Move[] {
+        let moves = this.generateMoves(c);
         var legal_moves: Move[] = [];
         moves.forEach(m => {
             if (!this.generalAttacked(m)) {
@@ -1024,6 +1025,11 @@ export class Board {
         });
         this.undoMove();
         return false;
+    }
+
+    public isFinished(c: COLOR): boolean { 
+        let moves = this.legalMoves(c);
+        return this.moves.length == 0;
     }
 
     //Make a new board 
