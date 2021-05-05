@@ -1022,6 +1022,7 @@ export class Board {
                 }
             }
         });
+        this.undoMove();
         return false;
     }
 
