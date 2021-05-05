@@ -151,6 +151,9 @@ export class Board {
     public blackChariots: number[];
     public blackCannons: number[];
     public blackPawns: number[];
+
+    //Even moves are red, odd is black
+    public move_history: Move[] = [];
     
     public constructor() {
         this.colors = Object.assign([], EMPTY_BOARD_C);
@@ -796,122 +799,33 @@ export class Board {
         throw "Not a cannon at index " + index;
     }
 
-    
-
-    private pinChecker(moves: Move[], pinner: number) {
-        //Do all the legality checking on the list
-        //Bascically, check if the pinner can attack the general
-        //after a move
+    private generalAttacked(move: Move) {
+        //check if the general is attacked after making this move
     }
 
-    private absolutePins() {
-     //Checks for absolute pins, by checking LOS of general and the 
-     //pinning pieces, which are horses, chariots, and cannons and generals LOS   
-     //Idea: just get the list of pinned pieces and their pinners.
-     //For those pieces, do legality testing on their generated moves
-    }
-
-    //Returns the pinned piece index, with -1 returned if no pin
-    private absoluteChariotPins(pinner: number): number {
-        let pinnerFile = pinner % BOARD_FILES;
-        let pinnerRank = Math.floor(pinner / BOARD_FILES);
-        let c = this.colors[pinner];
-        let generalFile;
-        let generalRank;
-        let general;
-        if (c == COLOR.RED) {
-            generalFile = this.blackGenerals[0] % BOARD_FILES;
-            generalRank = Math.floor(this.blackGenerals[0] / BOARD_FILES);
-            general = this.blackGenerals[0];
-        } else if (c == COLOR.BLACK){
-            generalFile = this.redGenerals[0] % BOARD_FILES;
-            generalRank = Math.floor(this.redGenerals[0] / BOARD_FILES);
-            general = this.redGenerals[0];
-        } else {
-            throw "No Chariot at " + pinner;
+    //Generate moves for the piece at INDEX
+    public moves(index: number): Move[] {
+        let p = this.pieces[index];
+        switch(p) {
+            case PIECE.GENERAL:
+                return this.generalMoves(index);
+            case PIECE.ADVISOR:
+                return this.advisorMoves(index);
+            case PIECE.ELEPHANT:
+                return this.elephantMoves(index);
+            case PIECE.HORSE:
+                return this.horseMoves(index);
+            case PIECE.CHARIOT:
+                return this.chariotMoves(index);
+            case PIECE.CANNON:
+                return this.cannonMoves(index);
+            case PIECE.PAWN:
+                return this.pawnMoves(index);
+            default:
+                return [];
         }
-        
-        let count = 0;
-        let returnIndex = -1;
-        if (pinnerFile == generalFile) {
-            if (pinnerRank < generalRank) {
-                for (let i = pinnerRank + 1; i < generalRank; i++) {
-                    let index = i * BOARD_FILES + pinnerFile;
-                    if (this.colors[index] == this.colors[general]) {
-                        count++;
-                        returnIndex = index;
-                    } 
-
-                    if (count >= 2) {
-                        return -1;
-                    } else if (this.colors[index] == this.colors[pinner]) {
-                        return -1
-                    }
-                }
-            } else {
-                for (let i = pinnerRank - 1; i > generalRank; i--) {
-                    let index = i * BOARD_FILES + pinnerFile;
-                    if (this.colors[index] == this.colors[general]) {
-                        count++;
-                        returnIndex = index;
-                    } 
-
-                    if (count >= 2) {
-                        return -1;
-                    } else if (this.colors[index] == this.colors[pinner]) {
-                        return -1
-                    }
-                }
-            }
-            return returnIndex;
-        } else if (pinnerRank == generalRank){ 
-            if (pinnerFile < generalFile) {
-                for (let i = pinnerFile + 1; i < generalFile; i++) {
-                    let index = pinnerRank * BOARD_FILES + i;
-                    if (this.colors[index] == this.colors[general]) {
-                        count++;
-                        returnIndex = index;
-                    } 
-
-                    if (count >= 2) {
-                        return -1;
-                    } else if (this.colors[index] == this.colors[pinner]) {
-                        return -1
-                    }
-                }
-            } else {
-                for (let i = pinnerFile - 1; i > generalFile; i--) {
-                    let index = pinnerRank * BOARD_FILES + i;
-                    if (this.colors[index] == this.colors[general]) {
-                        count++;
-                        returnIndex = index;
-                    } 
-
-                    if (count >= 2) {
-                        return -1;
-                    } else if (this.colors[index] == this.colors[pinner]) {
-                        return -1
-                    }
-                }
-            }
-            return returnIndex;
-        } else {
-            return -1;
-        }
-
     }
 
-    private checkEvasion() {
-        //is your general in check?
-        //Does a very quick search and checks moves that
-        //block general, and moves that the general can
-        //make
-        //If null, then checkmate and game is won by
-        //side doing checking.
-        //Stalemate is handled by the movegenerator.
-    }
-
-    //TODO: Needs absolute pin and check and general LOS checking
     public generateMoves(c: COLOR): Move[] {
         var moves: Move[] = [];
         if (c == COLOR.RED) {
@@ -936,7 +850,6 @@ export class Board {
             this.redPawns.forEach(p => {
                 moves = moves.concat(this.pawnMoves(p));
             });
-            return moves;
         } else if (c == COLOR.BLACK) {
             this.blackGenerals.forEach(p => {
                 moves = moves.concat(this.generalMoves(p));
@@ -959,13 +872,133 @@ export class Board {
             this.blackPawns.forEach(p => {
                 moves = moves.concat(this.pawnMoves(p));
             });
-            return moves;
+        } else {
+            throw "Invalid color chosen";
         }
-        throw "Invalid color chosen";
+        moves.forEach(m => {
+            m.captured = this.pieces[m.final];
+        });
+        return moves;
     }
 
+    private removePiece(c: COLOR, p: PIECE, final: number): void {
+        let index;
+        if (c == COLOR.RED) {
+            switch(p) {
+                case PIECE.GENERAL:
+                    index = this.blackGenerals.indexOf(final);
+                    this.blackGenerals.splice(index);
+                    break;
+                case PIECE.ADVISOR:
+                    index = this.blackAdvisors.indexOf(final);
+                    this.blackAdvisors.splice(index);
+                    break;
+                case PIECE.ELEPHANT:
+                    index = this.blackElephants.indexOf(final);
+                    this.blackElephants.splice(index);
+                    break;
+                case PIECE.HORSE:
+                    index = this.blackHorses.indexOf(final);
+                    this.blackHorses.splice(index);
+                    break;
+                case PIECE.CHARIOT:
+                    index = this.blackChariots.indexOf(final);
+                    this.blackChariots.splice(index);
+                    break;
+                case PIECE.CANNON:
+                    index = this.blackCannons.indexOf(final);
+                    this.blackCannons.splice(index);
+                    break;
+                case PIECE.PAWN:
+                    index = this.blackPawns.indexOf(final);
+                    this.blackPawns.splice(index);
+                    break;
+                default:
+                    throw "Captured nothing"
+            }
+        } else {
+            switch(p) {
+                case PIECE.GENERAL:
+                    index = this.redGenerals.indexOf(final);
+                    this.redGenerals.splice(index);
+                    break;
+                case PIECE.ADVISOR:
+                    index = this.redAdvisors.indexOf(final);
+                    this.redAdvisors.splice(index);
+                    break;
+                case PIECE.ELEPHANT:
+                    index = this.redElephants.indexOf(final);
+                    this.redElephants.splice(index);
+                    break;
+                case PIECE.HORSE:
+                    index = this.redHorses.indexOf(final);
+                    this.redHorses.splice(index);
+                    break;
+                case PIECE.CHARIOT:
+                    index = this.redChariots.indexOf(final);
+                    this.redChariots.splice(index);
+                    break;
+                case PIECE.CANNON:
+                    index = this.redCannons.indexOf(final);
+                    this.redCannons.splice(index);
+                    break;
+                case PIECE.PAWN:
+                    index = this.redPawns.indexOf(final);
+                    this.redPawns.splice(index);
+                    break;
+                default:
+                    throw "Captured nothing"
+            }
+        }
+    }
+
+    
+
+    //Make move without checking legality
+    //Need to keep move history
+    //Need to change move to distinguish between captures and remember
+    //what was captured
     public makeMove(m: Move): void {
-        //Check the state of the game and stuff and evolve the board
+        this.move_history.push(m);
+        let p = this.pieces[m.final];
+        let c = this.colors[m.final];
+        if (m.isCapture()) {
+            this.removePiece(c, p, m.final);
+        }
+        p = this.pieces[m.initial];
+        c = this.colors[m.initial];
+        this.removePiece(c, p, m.initial);
+        let r = Math.floor(m.initial / BOARD_FILES);
+        let f = m.initial % BOARD_FILES; 
+        this.add(c, p, f, r)
+
+    }
+
+    public undoMove(): void {
+        let m = this.move_history.pop();
+        if (typeof m === 'undefined') {
+            throw "move history empty";
+        }
+        let p = this.pieces[m.final];
+        let c = this.colors[m.final];
+        this.removePiece(c, p, m.final);
+        let r = Math.floor(m.initial / BOARD_FILES);
+        let f = m.initial % BOARD_FILES; 
+        this.add(c, p, f, r)
+        if (m.isCapture()) {
+            if (c == COLOR.RED) {
+                c = COLOR.BLACK;
+            } else {
+                c = COLOR.RED;
+            }
+            p = m.captured
+            let r = Math.floor(m.final / BOARD_FILES);
+            let f = m.final % BOARD_FILES; 
+            this.add(c, p, f, r);
+        } else {
+            this.colors[m.final] = COLOR.EMPTY;
+            this.pieces[m.final] = PIECE.EMPTY;
+        }        
     }
 
     //Make a new board 
@@ -1199,6 +1232,7 @@ export enum DIR {
 export class Move {
     public initial: number;
     public final: number;
+    public captured: PIECE = PIECE.EMPTY; 
 
     public constructor(initial: number, final: number) {
         this.initial = initial;
@@ -1208,6 +1242,12 @@ export class Move {
     public isEqual(other: Move): boolean {
         return this.initial == other.initial && this.final == other.final;
     }
+
+    public isCapture(): boolean {
+        return this.captured != PIECE.EMPTY && this.captured != PIECE.SENTINEL;
+    }
+
+    
 };
 
 
