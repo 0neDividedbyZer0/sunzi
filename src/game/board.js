@@ -1,30 +1,25 @@
-export const name = 'board'
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.name = 'board';
 /**
  * The board's absolute position is based on
- * red's orientation. Files are numbered 
+ * red's orientation. Files are numbered
  * right to left, from 1-9, ranks are numbered
  * down to up. The perspective is from red, so
  * the right-corner in red is F:1 R:1
  * (In implementation, they are labeled from 0)
  */
-
-const FILES: number = 9;
-const RANKS: number = 10;
-
-export const BOARD_FILES: number = 11;
-export const BOARD_RANKS: number = 14;
-
-const RED_RIVERBANK: number = 6;
-const BLACK_RIVERBANK: number = 7;
-
-const RED_GENERAL_PALACE: number[] = [26, 27, 28, 37, 38, 39, 48, 49, 50];
-const BLACK_GENERAL_PALACE: number[] = [103, 104, 105, 114, 115, 116, 125, 126, 127];
-
-const RED_ELEPHANT_INDICES: number[] = [25, 29, 45, 49, 53, 69, 73 ];
-const BLACK_ELEPHANT_INDICES: number[] = [80, 84, 100, 104, 108, 124, 128];
-
-const START_BOARD_C: COLOR[] = [
+const FILES = 9;
+const RANKS = 10;
+exports.BOARD_FILES = 11;
+exports.BOARD_RANKS = 14;
+const RED_RIVERBANK = 6;
+const BLACK_RIVERBANK = 7;
+const RED_GENERAL_PALACE = [26, 27, 28, 37, 38, 39, 48, 49, 50];
+const BLACK_GENERAL_PALACE = [103, 104, 105, 114, 115, 116, 125, 126, 127];
+const RED_ELEPHANT_INDICES = [25, 29, 45, 49, 53, 69, 73];
+const BLACK_ELEPHANT_INDICES = [80, 84, 100, 104, 108, 124, 128];
+const START_BOARD_C = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -1,
@@ -40,8 +35,7 @@ const START_BOARD_C: COLOR[] = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 ];
-
-const START_BOARD_P: PIECE[] = [
+const START_BOARD_P = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, 5, 4, 3, 2, 1, 2, 3, 4, 5, -1,
@@ -57,8 +51,7 @@ const START_BOARD_P: PIECE[] = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 ];
-
-const EMPTY_BOARD_C: COLOR[] = [
+const EMPTY_BOARD_C = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
@@ -74,8 +67,7 @@ const EMPTY_BOARD_C: COLOR[] = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 ];
-
-const EMPTY_BOARD_P: PIECE[] = [
+const EMPTY_BOARD_P = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1,
@@ -91,74 +83,50 @@ const EMPTY_BOARD_P: PIECE[] = [
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
 ];
-
-const RED_GENERALS: number[] = [27];
-const RED_ADVISORS: number[] = [26, 28];
-const RED_ELEPHANTS: number[] = [25, 29];
-const RED_HORSES: number[] = [24, 30];
-const RED_CHARIOTS: number[] = [23, 31];
-const RED_CANNONS: number[] = [46, 52];
-const RED_PAWNS: number[] = [56, 58, 60, 62, 64];
-
-const BLACK_GENERALS: number[] = [126];
-const BLACK_ADVISORS: number[] = [125, 127];
-const BLACK_ELEPHANTS: number[] = [124, 128];
-const BLACK_HORSES: number[] = [123, 129];
-const BLACK_CHARIOTS: number[] = [122, 130];
-const BLACK_CANNONS: number[] = [101, 107];
-const BLACK_PAWNS: number[] = [89, 91, 93, 95, 97];
-
-
-export enum COLOR {
-    EMPTY,
-    RED,
-    BLACK,
-    SENTINEL = -1
-};
-
-export enum PIECE {
-    EMPTY,
-    GENERAL,
-    ADVISOR,
-    ELEPHANT,
-    HORSE,
-    CHARIOT,
-    CANNON,
-    PAWN,
-    SENTINEL = -1
-};
-
-/**          
+const RED_GENERALS = [27];
+const RED_ADVISORS = [26, 28];
+const RED_ELEPHANTS = [25, 29];
+const RED_HORSES = [24, 30];
+const RED_CHARIOTS = [23, 31];
+const RED_CANNONS = [46, 52];
+const RED_PAWNS = [56, 58, 60, 62, 64];
+const BLACK_GENERALS = [126];
+const BLACK_ADVISORS = [125, 127];
+const BLACK_ELEPHANTS = [124, 128];
+const BLACK_HORSES = [123, 129];
+const BLACK_CHARIOTS = [122, 130];
+const BLACK_CANNONS = [101, 107];
+const BLACK_PAWNS = [89, 91, 93, 95, 97];
+var COLOR;
+(function (COLOR) {
+    COLOR[COLOR["EMPTY"] = 0] = "EMPTY";
+    COLOR[COLOR["RED"] = 1] = "RED";
+    COLOR[COLOR["BLACK"] = 2] = "BLACK";
+    COLOR[COLOR["SENTINEL"] = -1] = "SENTINEL";
+})(COLOR = exports.COLOR || (exports.COLOR = {}));
+;
+var PIECE;
+(function (PIECE) {
+    PIECE[PIECE["EMPTY"] = 0] = "EMPTY";
+    PIECE[PIECE["GENERAL"] = 1] = "GENERAL";
+    PIECE[PIECE["ADVISOR"] = 2] = "ADVISOR";
+    PIECE[PIECE["ELEPHANT"] = 3] = "ELEPHANT";
+    PIECE[PIECE["HORSE"] = 4] = "HORSE";
+    PIECE[PIECE["CHARIOT"] = 5] = "CHARIOT";
+    PIECE[PIECE["CANNON"] = 6] = "CANNON";
+    PIECE[PIECE["PAWN"] = 7] = "PAWN";
+    PIECE[PIECE["SENTINEL"] = -1] = "SENTINEL";
+})(PIECE = exports.PIECE || (exports.PIECE = {}));
+;
+/**
  *  10 9 8 7 6 5 4 3 2 1 0, red side
  */
-
-export class Board {
-    public colors: COLOR[];
-    public pieces: PIECE[];
-
-    public redGenerals: number[];
-    public redAdvisors: number[];
-    public redElephants: number[];
-    public redHorses: number[];
-    public redChariots: number[];
-    public redCannons: number[];
-    public redPawns: number[];
-
-    public blackGenerals: number[];
-    public blackAdvisors: number[];
-    public blackElephants: number[];
-    public blackHorses: number[];
-    public blackChariots: number[];
-    public blackCannons: number[];
-    public blackPawns: number[];
-
-    //Even moves are red, odd is black
-    public move_history: Move[] = [];
-    
-    public constructor() {
+class Board {
+    constructor() {
+        //Even moves are red, odd is black
+        this.move_history = [];
         this.colors = Object.assign([], EMPTY_BOARD_C);
         this.pieces = Object.assign([], EMPTY_BOARD_P);
-
         this.redGenerals = [];
         this.redAdvisors = [];
         this.redElephants = [];
@@ -166,7 +134,6 @@ export class Board {
         this.redChariots = [];
         this.redCannons = [];
         this.redPawns = [];
-
         this.blackGenerals = [];
         this.blackAdvisors = [];
         this.blackElephants = [];
@@ -175,105 +142,105 @@ export class Board {
         this.blackCannons = [];
         this.blackPawns = [];
     }
-
     //Create moves for a pawn at INDEX
-    private pawnMoves(index: number): Move[] {
-        var moves: Move[] = [];
+    pawnMoves(index) {
+        var moves = [];
         if (this.colors[index] == COLOR.RED) {
-            if (this.get(index, 1, DIR.N) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.N) == COLOR.BLACK) {
                 moves.push(new Move(index, this.get_ind(index, 1, DIR.N)));
             }
-            if (Math.floor(index / BOARD_FILES) > RED_RIVERBANK) {
-                if (this.get(index, 1, DIR.E) == COLOR.EMPTY || 
+            if (Math.floor(index / exports.BOARD_FILES) > RED_RIVERBANK) {
+                if (this.get(index, 1, DIR.E) == COLOR.EMPTY ||
                     this.get(index, 1, DIR.E) == COLOR.BLACK) {
                     moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
                 }
-                if (this.get(index, 1, DIR.W) == COLOR.EMPTY || 
+                if (this.get(index, 1, DIR.W) == COLOR.EMPTY ||
                     this.get(index, 1, DIR.W) == COLOR.BLACK) {
                     moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
                 }
             }
-            
             return moves;
-        } else if (this.colors[index] == COLOR.BLACK) {
-            if (this.get(index, 1, DIR.S) == COLOR.EMPTY || 
+        }
+        else if (this.colors[index] == COLOR.BLACK) {
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.S) == COLOR.RED) {
                 moves.push(new Move(index, this.get_ind(index, 1, DIR.S)));
             }
-            if (Math.floor(index / BOARD_FILES) < BLACK_RIVERBANK) {
-                if (this.get(index, 1, DIR.E) == COLOR.EMPTY || 
+            if (Math.floor(index / exports.BOARD_FILES) < BLACK_RIVERBANK) {
+                if (this.get(index, 1, DIR.E) == COLOR.EMPTY ||
                     this.get(index, 1, DIR.E) == COLOR.RED) {
                     moves.push(new Move(index, this.get_ind(index, 1, DIR.E)));
                 }
-                if (this.get(index, 1, DIR.W) == COLOR.EMPTY || 
+                if (this.get(index, 1, DIR.W) == COLOR.EMPTY ||
                     this.get(index, 1, DIR.W) == COLOR.RED) {
                     moves.push(new Move(index, this.get_ind(index, 1, DIR.W)));
                 }
             }
             return moves;
-        } else {
+        }
+        else {
             throw "There was an empty piece at " + index;
         }
     }
-
-    private generalMoves(index: number): Move[] {
-        var moves: Move[] = [];
+    generalMoves(index) {
+        var moves = [];
         if (this.colors[index] == COLOR.RED) {
-            if (this.get(index, 1, DIR.N) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.N) == COLOR.BLACK) {
-                let i = this.get_ind(index, 1, DIR.N)
+                let i = this.get_ind(index, 1, DIR.N);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.E) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.E) == COLOR.BLACK) {
-                let i = this.get_ind(index, 1, DIR.E)
+                let i = this.get_ind(index, 1, DIR.E);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.S) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.S) == COLOR.BLACK) {
-                let i = this.get_ind(index, 1, DIR.S)
+                let i = this.get_ind(index, 1, DIR.S);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.W) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.W) == COLOR.BLACK) {
-                let i = this.get_ind(index, 1, DIR.W)
+                let i = this.get_ind(index, 1, DIR.W);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
             return moves;
-        } else if (this.colors[index] == COLOR.BLACK) {
-            if (this.get(index, 1, DIR.N) == COLOR.EMPTY || 
+        }
+        else if (this.colors[index] == COLOR.BLACK) {
+            if (this.get(index, 1, DIR.N) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.N) == COLOR.RED) {
-                let i = this.get_ind(index, 1, DIR.N)
+                let i = this.get_ind(index, 1, DIR.N);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.E) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.E) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.E) == COLOR.RED) {
-                let i = this.get_ind(index, 1, DIR.E)
+                let i = this.get_ind(index, 1, DIR.E);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.S) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.S) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.S) == COLOR.RED) {
-                let i = this.get_ind(index, 1, DIR.S)
+                let i = this.get_ind(index, 1, DIR.S);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.W) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.W) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.W) == COLOR.RED) {
-                let i = this.get_ind(index, 1, DIR.W)
+                let i = this.get_ind(index, 1, DIR.W);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
@@ -282,32 +249,31 @@ export class Board {
         }
         throw "No general at index " + index;
     }
-
-    private advisorMoves(index: number): Move[] {
-        var moves: Move[] = [];
+    advisorMoves(index) {
+        var moves = [];
         if (this.colors[index] == COLOR.RED) {
-            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.NE) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.NE);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.NW) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.NW);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.SW) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.SW);
                 if (RED_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.SE) == COLOR.BLACK) {
                 let i = this.get_ind(index, 1, DIR.SE);
                 if (RED_GENERAL_PALACE.includes(i)) {
@@ -315,29 +281,30 @@ export class Board {
                 }
             }
             return moves;
-        } else if (this.colors[index] == COLOR.BLACK) {
-            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY || 
+        }
+        else if (this.colors[index] == COLOR.BLACK) {
+            if (this.get(index, 1, DIR.NE) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.NE) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.NE);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.NW) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.NW) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.NW);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.SW) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.SW) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.SW);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
                     moves.push(new Move(index, i));
                 }
             }
-            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY || 
+            if (this.get(index, 1, DIR.SE) == COLOR.EMPTY ||
                 this.get(index, 1, DIR.SE) == COLOR.RED) {
                 let i = this.get_ind(index, 1, DIR.SE);
                 if (BLACK_GENERAL_PALACE.includes(i)) {
@@ -348,9 +315,8 @@ export class Board {
         }
         throw "No advisor at index " + index;
     }
-
-    private elephantMoves(index: number): Move[] {
-        var moves: Move[] = [];
+    elephantMoves(index) {
+        var moves = [];
         if (this.colors[index] == COLOR.RED) {
             if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
                 let i = this.get_ind(index, 2, DIR.NE);
@@ -377,7 +343,8 @@ export class Board {
                 }
             }
             return moves;
-        } else if (this.colors[index] == COLOR.BLACK) {
+        }
+        else if (this.colors[index] == COLOR.BLACK) {
             if (this.get(index, 1, DIR.NE) == COLOR.EMPTY) {
                 let i = this.get_ind(index, 2, DIR.NE);
                 if (BLACK_ELEPHANT_INDICES.includes(i) && this.colors[i] != COLOR.BLACK) {
@@ -406,97 +373,89 @@ export class Board {
         }
         throw "No elephant at index " + index;
     }
-
-    private horseMoves(index: number): Move[] {
-        var moves: Move[] = [];
+    horseMoves(index) {
+        var moves = [];
         let res;
         if (this.colors[index] == COLOR.RED) {
             if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
-                res = index + 2*BOARD_FILES - 1;
+                res = index + 2 * exports.BOARD_FILES - 1;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
                     moves.push(new Move(index, res));
                 }
-
-                res = index + 2*BOARD_FILES + 1;
+                res = index + 2 * exports.BOARD_FILES + 1;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
                     moves.push(new Move(index, res));
                 }
             }
             if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
-                res = index - 2*BOARD_FILES - 1;
+                res = index - 2 * exports.BOARD_FILES - 1;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
                     moves.push(new Move(index, res));
                 }
-
-                res = index - 2*BOARD_FILES + 1;
+                res = index - 2 * exports.BOARD_FILES + 1;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
                     moves.push(new Move(index, res));
                 }
             }
             if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
-                res = index + BOARD_FILES - 2;
+                res = index + exports.BOARD_FILES - 2;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
                     moves.push(new Move(index, res));
                 }
-
-                res = index - BOARD_FILES - 2;
+                res = index - exports.BOARD_FILES - 2;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
                     moves.push(new Move(index, res));
                 }
             }
             if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
-                res = index + BOARD_FILES + 2;
+                res = index + exports.BOARD_FILES + 2;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
                     moves.push(new Move(index, res));
                 }
-
-                res = index - BOARD_FILES + 2;
+                res = index - exports.BOARD_FILES + 2;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.BLACK) {
                     moves.push(new Move(index, res));
                 }
             }
             return moves;
-        } else if (this.colors[index] == COLOR.BLACK) {
+        }
+        else if (this.colors[index] == COLOR.BLACK) {
             if (this.get(index, 1, DIR.N) == COLOR.EMPTY) {
-                res = index + 2*BOARD_FILES - 1;
+                res = index + 2 * exports.BOARD_FILES - 1;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
                     moves.push(new Move(index, res));
                 }
-
-                res = index + 2*BOARD_FILES + 1;
+                res = index + 2 * exports.BOARD_FILES + 1;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
                     moves.push(new Move(index, res));
                 }
             }
             if (this.get(index, 1, DIR.S) == COLOR.EMPTY) {
-                res = index - 2*BOARD_FILES - 1;
+                res = index - 2 * exports.BOARD_FILES - 1;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
                     moves.push(new Move(index, res));
                 }
-
-                res = index - 2*BOARD_FILES + 1;
+                res = index - 2 * exports.BOARD_FILES + 1;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
                     moves.push(new Move(index, res));
                 }
             }
             if (this.get(index, 1, DIR.E) == COLOR.EMPTY) {
-                res = index + BOARD_FILES - 2;
+                res = index + exports.BOARD_FILES - 2;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
                     moves.push(new Move(index, res));
                 }
-
-                res = index - BOARD_FILES - 2;
+                res = index - exports.BOARD_FILES - 2;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
                     moves.push(new Move(index, res));
                 }
             }
             if (this.get(index, 1, DIR.W) == COLOR.EMPTY) {
-                res = index + BOARD_FILES + 2;
+                res = index + exports.BOARD_FILES + 2;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
                     moves.push(new Move(index, res));
                 }
-
-                res = index - BOARD_FILES + 2;
+                res = index - exports.BOARD_FILES + 2;
                 if (this.colors[res] == COLOR.EMPTY || this.colors[res] == COLOR.RED) {
                     moves.push(new Move(index, res));
                 }
@@ -505,97 +464,107 @@ export class Board {
         }
         throw "No horse at index " + index;
     }
-
-    private chariotMoves(index: number): Move[] {
-        let moves: Move[] = [];
-        let rank = Math.floor(index / BOARD_FILES);
-        let file = index % BOARD_FILES;
+    chariotMoves(index) {
+        let moves = [];
+        let rank = Math.floor(index / exports.BOARD_FILES);
+        let file = index % exports.BOARD_FILES;
         if (this.colors[index] == COLOR.RED) {
-            for (let i = rank + 1; i < BOARD_RANKS; i++) {
-                if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
-                    moves.push(new Move(index, i * BOARD_FILES + file));
-                } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
-                    moves.push(new Move(index, i * BOARD_FILES + file));
+            for (let i = rank + 1; i < exports.BOARD_RANKS; i++) {
+                if (this.colors[i * exports.BOARD_FILES + file] == COLOR.EMPTY) {
+                    moves.push(new Move(index, i * exports.BOARD_FILES + file));
+                }
+                else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK) {
+                    moves.push(new Move(index, i * exports.BOARD_FILES + file));
                     break;
-                } else {
+                }
+                else {
                     break;
                 }
             }
-
             for (let i = rank - 1; i >= 0; i--) {
-                if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
-                    moves.push(new Move(index, i * BOARD_FILES + file));
-                } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
-                    moves.push(new Move(index, i * BOARD_FILES + file));
+                if (this.colors[i * exports.BOARD_FILES + file] == COLOR.EMPTY) {
+                    moves.push(new Move(index, i * exports.BOARD_FILES + file));
+                }
+                else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK) {
+                    moves.push(new Move(index, i * exports.BOARD_FILES + file));
                     break;
-                } else {
+                }
+                else {
                     break;
                 }
             }
-
-            for (let i = file + 1; i < BOARD_FILES; i++) {
-                if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
-                    moves.push(new Move(index, rank * BOARD_FILES + i));
-                } else if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK) {
-                    moves.push(new Move(index, rank * BOARD_FILES + i));
+            for (let i = file + 1; i < exports.BOARD_FILES; i++) {
+                if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank * exports.BOARD_FILES + i));
+                }
+                else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK) {
+                    moves.push(new Move(index, rank * exports.BOARD_FILES + i));
                     break;
-                } else {
+                }
+                else {
                     break;
                 }
             }
-
             for (let i = file - 1; i >= 0; i--) {
-                if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
-                    moves.push(new Move(index, rank * BOARD_FILES + i));
-                } else if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK) {
-                    moves.push(new Move(index, rank * BOARD_FILES + i));
+                if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank * exports.BOARD_FILES + i));
+                }
+                else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK) {
+                    moves.push(new Move(index, rank * exports.BOARD_FILES + i));
                     break;
-                } else {
+                }
+                else {
                     break;
                 }
             }
             return moves;
-        } else if (this.colors[index] == COLOR.BLACK) {
-            for (let i = rank + 1; i < BOARD_RANKS; i++) {
-                if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
-                    moves.push(new Move(index, i * BOARD_FILES + file));
-                } else if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                    moves.push(new Move(index, i * BOARD_FILES + file));
+        }
+        else if (this.colors[index] == COLOR.BLACK) {
+            for (let i = rank + 1; i < exports.BOARD_RANKS; i++) {
+                if (this.colors[i * exports.BOARD_FILES + file] == COLOR.EMPTY) {
+                    moves.push(new Move(index, i * exports.BOARD_FILES + file));
+                }
+                else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                    moves.push(new Move(index, i * exports.BOARD_FILES + file));
                     break;
-                } else {
+                }
+                else {
                     break;
                 }
             }
-
             for (let i = rank - 1; i >= 0; i--) {
-                if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
-                    moves.push(new Move(index, i * BOARD_FILES + file));
-                } else if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                    moves.push(new Move(index, i * BOARD_FILES + file));
+                if (this.colors[i * exports.BOARD_FILES + file] == COLOR.EMPTY) {
+                    moves.push(new Move(index, i * exports.BOARD_FILES + file));
+                }
+                else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                    moves.push(new Move(index, i * exports.BOARD_FILES + file));
                     break;
-                } else {
+                }
+                else {
                     break;
                 }
             }
-
-            for (let i = file + 1; i < BOARD_FILES; i++) {
-                if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
-                    moves.push(new Move(index, rank * BOARD_FILES + i));
-                } else if(this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
-                    moves.push(new Move(index, rank * BOARD_FILES + i));
+            for (let i = file + 1; i < exports.BOARD_FILES; i++) {
+                if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank * exports.BOARD_FILES + i));
+                }
+                else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                    moves.push(new Move(index, rank * exports.BOARD_FILES + i));
                     break;
-                } else {
+                }
+                else {
                     break;
                 }
             }
-
             for (let i = file - 1; i >= 0; i--) {
-                if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
-                    moves.push(new Move(index, rank * BOARD_FILES + i));
-                } else if(this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
-                    moves.push(new Move(index, rank * BOARD_FILES + i));
+                if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.EMPTY) {
+                    moves.push(new Move(index, rank * exports.BOARD_FILES + i));
+                }
+                else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                    moves.push(new Move(index, rank * exports.BOARD_FILES + i));
                     break;
-                } else {
+                }
+                else {
                     break;
                 }
             }
@@ -603,206 +572,223 @@ export class Board {
         }
         throw "Not a chariot at index " + index;
     }
-
-    private cannonMoves(index: number): Move[] {
-        let moves: Move[] = [];
-        let rank = Math.floor(index / BOARD_FILES);
-        let file = index % BOARD_FILES;
+    cannonMoves(index) {
+        let moves = [];
+        let rank = Math.floor(index / exports.BOARD_FILES);
+        let file = index % exports.BOARD_FILES;
         let first_seen = false;
         if (this.colors[index] == COLOR.RED) {
             first_seen = false;
-            for (let i = rank + 1; i < BOARD_RANKS; i++) {
+            for (let i = rank + 1; i < exports.BOARD_RANKS; i++) {
                 if (!first_seen) {
-                    if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
-                        moves.push(new Move(index, i * BOARD_FILES + file));
-                    } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK
-                        || this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                        first_seen = true;
-                    } else {
-                        break;
+                    if (this.colors[i * exports.BOARD_FILES + file] == COLOR.EMPTY) {
+                        moves.push(new Move(index, i * exports.BOARD_FILES + file));
                     }
-                } else {
-                    if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
-                        moves.push(new Move(index, i * BOARD_FILES + file));
-                        break;
-                    } else if(this.colors[i * BOARD_FILES + file] == COLOR.SENTINEL ||
-                        this.colors[i * BOARD_FILES + file] == COLOR.RED){
+                    else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK
+                        || this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                        first_seen = true;
+                    }
+                    else {
                         break;
                     }
                 }
-                
+                else {
+                    if (this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK) {
+                        moves.push(new Move(index, i * exports.BOARD_FILES + file));
+                        break;
+                    }
+                    else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.SENTINEL ||
+                        this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                        break;
+                    }
+                }
             }
-
             first_seen = false;
             for (let i = rank - 1; i >= 0; i--) {
                 if (!first_seen) {
-                    if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
-                        moves.push(new Move(index, i * BOARD_FILES + file));
-                    } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK
-                        || this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                        first_seen = true;
-                    } else {
-                        break;
+                    if (this.colors[i * exports.BOARD_FILES + file] == COLOR.EMPTY) {
+                        moves.push(new Move(index, i * exports.BOARD_FILES + file));
                     }
-                } else {
-                    if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK) {
-                        moves.push(new Move(index, i * BOARD_FILES + file));
-                        break;
-                    } else if(this.colors[i * BOARD_FILES + file] == COLOR.SENTINEL ||
-                        this.colors[i * BOARD_FILES + file] == COLOR.RED){
+                    else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK
+                        || this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                        first_seen = true;
+                    }
+                    else {
                         break;
                     }
                 }
-                
+                else {
+                    if (this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK) {
+                        moves.push(new Move(index, i * exports.BOARD_FILES + file));
+                        break;
+                    }
+                    else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.SENTINEL ||
+                        this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                        break;
+                    }
+                }
             }
-
             first_seen = false;
-            for (let i = file + 1; i < BOARD_FILES; i++) {
+            for (let i = file + 1; i < exports.BOARD_FILES; i++) {
                 if (!first_seen) {
-                    if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
-                        moves.push(new Move(index, rank * BOARD_FILES + i));
-                    } else if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK
-                        || this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
-                        first_seen = true;
-                    } else {
-                        break;
+                    if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.EMPTY) {
+                        moves.push(new Move(index, rank * exports.BOARD_FILES + i));
                     }
-                } else {
-                    if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK) {
-                        moves.push(new Move(index, rank * BOARD_FILES + i));
-                        break;
-                    } else if(this.colors[rank * BOARD_FILES + i] == COLOR.SENTINEL ||
-                        this.colors[rank * BOARD_FILES + i] == COLOR.RED){
+                    else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK
+                        || this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                        first_seen = true;
+                    }
+                    else {
                         break;
                     }
                 }
-                
+                else {
+                    if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK) {
+                        moves.push(new Move(index, rank * exports.BOARD_FILES + i));
+                        break;
+                    }
+                    else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.SENTINEL ||
+                        this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                        break;
+                    }
+                }
             }
-
             first_seen = false;
             for (let i = file - 1; i >= 0; i--) {
                 if (!first_seen) {
-                    if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
-                        moves.push(new Move(index, rank * BOARD_FILES + i));
-                    } else if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK
-                        || this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
-                        first_seen = true;
-                    } else {
-                        break;
+                    if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.EMPTY) {
+                        moves.push(new Move(index, rank * exports.BOARD_FILES + i));
                     }
-                } else {
-                    if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK) {
-                        moves.push(new Move(index, rank * BOARD_FILES + i));
-                        break;
-                    } else if(this.colors[rank * BOARD_FILES + i] == COLOR.SENTINEL ||
-                        this.colors[rank * BOARD_FILES + i] == COLOR.RED){
+                    else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK
+                        || this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                        first_seen = true;
+                    }
+                    else {
                         break;
                     }
                 }
-                
+                else {
+                    if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK) {
+                        moves.push(new Move(index, rank * exports.BOARD_FILES + i));
+                        break;
+                    }
+                    else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.SENTINEL ||
+                        this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                        break;
+                    }
+                }
             }
             return moves;
-        } else if (this.colors[index] == COLOR.BLACK) {
+        }
+        else if (this.colors[index] == COLOR.BLACK) {
             first_seen = false;
-            for (let i = rank + 1; i < BOARD_RANKS; i++) {
+            for (let i = rank + 1; i < exports.BOARD_RANKS; i++) {
                 if (!first_seen) {
-                    if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
-                        moves.push(new Move(index, i * BOARD_FILES + file));
-                    } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK
-                        || this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                        first_seen = true;
-                    } else {
-                        break;
+                    if (this.colors[i * exports.BOARD_FILES + file] == COLOR.EMPTY) {
+                        moves.push(new Move(index, i * exports.BOARD_FILES + file));
                     }
-                } else {
-                    if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                        moves.push(new Move(index, i * BOARD_FILES + file));
-                        break;
-                    } else if(this.colors[i * BOARD_FILES + file] == COLOR.SENTINEL ||
-                        this.colors[i * BOARD_FILES + file] == COLOR.BLACK){
+                    else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK
+                        || this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                        first_seen = true;
+                    }
+                    else {
                         break;
                     }
                 }
-                
+                else {
+                    if (this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                        moves.push(new Move(index, i * exports.BOARD_FILES + file));
+                        break;
+                    }
+                    else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.SENTINEL ||
+                        this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK) {
+                        break;
+                    }
+                }
             }
-
             first_seen = false;
             for (let i = rank - 1; i >= 0; i--) {
                 if (!first_seen) {
-                    if (this.colors[i * BOARD_FILES + file] == COLOR.EMPTY) {
-                        moves.push(new Move(index, i * BOARD_FILES + file));
-                    } else if(this.colors[i * BOARD_FILES + file] == COLOR.BLACK
-                        || this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                        first_seen = true;
-                    } else {
-                        break;
+                    if (this.colors[i * exports.BOARD_FILES + file] == COLOR.EMPTY) {
+                        moves.push(new Move(index, i * exports.BOARD_FILES + file));
                     }
-                } else {
-                    if(this.colors[i * BOARD_FILES + file] == COLOR.RED) {
-                        moves.push(new Move(index, i * BOARD_FILES + file));
-                        break;
-                    } else if(this.colors[i * BOARD_FILES + file] == COLOR.SENTINEL ||
-                        this.colors[i * BOARD_FILES + file] == COLOR.BLACK){
+                    else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK
+                        || this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                        first_seen = true;
+                    }
+                    else {
                         break;
                     }
                 }
-                
+                else {
+                    if (this.colors[i * exports.BOARD_FILES + file] == COLOR.RED) {
+                        moves.push(new Move(index, i * exports.BOARD_FILES + file));
+                        break;
+                    }
+                    else if (this.colors[i * exports.BOARD_FILES + file] == COLOR.SENTINEL ||
+                        this.colors[i * exports.BOARD_FILES + file] == COLOR.BLACK) {
+                        break;
+                    }
+                }
             }
-
             first_seen = false;
-            for (let i = file + 1; i < BOARD_FILES; i++) {
+            for (let i = file + 1; i < exports.BOARD_FILES; i++) {
                 if (!first_seen) {
-                    if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
-                        moves.push(new Move(index, rank * BOARD_FILES + i));
-                    } else if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK
-                        || this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
-                        first_seen = true;
-                    } else {
-                        break;
+                    if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.EMPTY) {
+                        moves.push(new Move(index, rank * exports.BOARD_FILES + i));
                     }
-                } else {
-                    if(this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
-                        moves.push(new Move(index, rank * BOARD_FILES + i));
-                        break;
-                    } else if(this.colors[rank * BOARD_FILES + i] == COLOR.SENTINEL ||
-                        this.colors[rank * BOARD_FILES + i] == COLOR.BLACK){
+                    else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK
+                        || this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                        first_seen = true;
+                    }
+                    else {
                         break;
                     }
                 }
-                
+                else {
+                    if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                        moves.push(new Move(index, rank * exports.BOARD_FILES + i));
+                        break;
+                    }
+                    else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.SENTINEL ||
+                        this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK) {
+                        break;
+                    }
+                }
             }
-
             first_seen = false;
             for (let i = file - 1; i >= 0; i--) {
                 if (!first_seen) {
-                    if (this.colors[rank * BOARD_FILES + i] == COLOR.EMPTY) {
-                        moves.push(new Move(index, rank * BOARD_FILES + i));
-                    } else if(this.colors[rank * BOARD_FILES + i] == COLOR.BLACK
-                        || this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
-                        first_seen = true;
-                    } else {
-                        break;
+                    if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.EMPTY) {
+                        moves.push(new Move(index, rank * exports.BOARD_FILES + i));
                     }
-                } else {
-                    if(this.colors[rank * BOARD_FILES + i] == COLOR.RED) {
-                        moves.push(new Move(index, rank * BOARD_FILES + i));
-                        break;
-                    } else if(this.colors[rank * BOARD_FILES + i] == COLOR.SENTINEL ||
-                        this.colors[rank * BOARD_FILES + i] == COLOR.BLACK){
+                    else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK
+                        || this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                        first_seen = true;
+                    }
+                    else {
                         break;
                     }
                 }
-                
+                else {
+                    if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.RED) {
+                        moves.push(new Move(index, rank * exports.BOARD_FILES + i));
+                        break;
+                    }
+                    else if (this.colors[rank * exports.BOARD_FILES + i] == COLOR.SENTINEL ||
+                        this.colors[rank * exports.BOARD_FILES + i] == COLOR.BLACK) {
+                        break;
+                    }
+                }
             }
             return moves;
         }
         throw "Not a cannon at index " + index;
     }
-
     //Generate moves for the piece at INDEX
-    public moves(index: number): Move[] {
+    moves(index) {
         let p = this.pieces[index];
-        switch(p) {
+        switch (p) {
             case PIECE.GENERAL:
                 return this.generalMoves(index);
             case PIECE.ADVISOR:
@@ -821,9 +807,8 @@ export class Board {
                 return [];
         }
     }
-
-    public generateMoves(c: COLOR): Move[] {
-        var moves: Move[] = [];
+    generateMoves(c) {
+        var moves = [];
         if (c == COLOR.RED) {
             this.redGenerals.forEach(p => {
                 moves = moves.concat(this.moves(p));
@@ -846,7 +831,8 @@ export class Board {
             this.redPawns.forEach(p => {
                 moves = moves.concat(this.moves(p));
             });
-        } else if (c == COLOR.BLACK) {
+        }
+        else if (c == COLOR.BLACK) {
             this.blackGenerals.forEach(p => {
                 moves = moves.concat(this.moves(p));
             });
@@ -868,7 +854,8 @@ export class Board {
             this.blackPawns.forEach(p => {
                 moves = moves.concat(this.moves(p));
             });
-        } else {
+        }
+        else {
             throw "Invalid color chosen";
         }
         moves.forEach(m => {
@@ -876,11 +863,10 @@ export class Board {
         });
         return moves;
     }
-
-    private removePiece(c: COLOR, p: PIECE, final: number): void {
+    removePiece(c, p, final) {
         let index;
         if (c == COLOR.RED) {
-            switch(p) {
+            switch (p) {
                 case PIECE.GENERAL:
                     index = this.blackGenerals.indexOf(final);
                     this.blackGenerals.splice(index);
@@ -910,10 +896,11 @@ export class Board {
                     this.blackPawns.splice(index);
                     break;
                 default:
-                    throw "Captured nothing"
+                    throw "Captured nothing";
             }
-        } else {
-            switch(p) {
+        }
+        else {
+            switch (p) {
                 case PIECE.GENERAL:
                     index = this.redGenerals.indexOf(final);
                     this.redGenerals.splice(index);
@@ -943,14 +930,13 @@ export class Board {
                     this.redPawns.splice(index);
                     break;
                 default:
-                    throw "Captured nothing"
+                    throw "Captured nothing";
             }
         }
     }
-
-    public legalMoves(c: COLOR): Move[] {
+    legalMoves(c) {
         let moves = this.generateMoves(c);
-        var legal_moves: Move[] = [];
+        var legal_moves = [];
         moves.forEach(m => {
             if (!this.generalAttacked(m)) {
                 legal_moves.push(m);
@@ -958,12 +944,11 @@ export class Board {
         });
         return legal_moves;
     }
-
     //Make move without checking legality
     //Need to keep move history
     //Need to change move to distinguish between captures and remember
     //what was captured
-    public makeMove(m: Move): void {
+    makeMove(m) {
         this.move_history.push(m);
         let p = this.pieces[m.final];
         let c = this.colors[m.final];
@@ -973,54 +958,52 @@ export class Board {
         p = this.pieces[m.initial];
         c = this.colors[m.initial];
         this.removePiece(c, p, m.initial);
-        let r = Math.floor(m.final / BOARD_FILES);
-        let f = m.final % BOARD_FILES; 
-        this.add(c, p, f, r)
-
+        let r = Math.floor(m.final / exports.BOARD_FILES);
+        let f = m.final % exports.BOARD_FILES;
+        this.add(c, p, f, r);
     }
-
-    public undoMove(): void {
-
+    undoMove() {
         let m = this.move_history.pop();
         console.log(m);
         if (m === undefined) {
-            
             throw "move history empty";
         }
         let p = this.pieces[m.final];
         let c = this.colors[m.final];
         this.removePiece(c, p, m.final);
-        let r = Math.floor(m.initial / BOARD_FILES);
-        let f = m.initial % BOARD_FILES; 
-        this.add(c, p, f, r)
+        let r = Math.floor(m.initial / exports.BOARD_FILES);
+        let f = m.initial % exports.BOARD_FILES;
+        this.add(c, p, f, r);
         if (m.isCapture()) {
             if (c == COLOR.RED) {
                 c = COLOR.BLACK;
-            } else {
+            }
+            else {
                 c = COLOR.RED;
             }
-            p = m.captured
-            let r = Math.floor(m.final / BOARD_FILES);
-            let f = m.final % BOARD_FILES; 
+            p = m.captured;
+            let r = Math.floor(m.final / exports.BOARD_FILES);
+            let f = m.final % exports.BOARD_FILES;
             this.add(c, p, f, r);
-        } else {
+        }
+        else {
             this.colors[m.final] = COLOR.EMPTY;
             this.pieces[m.final] = PIECE.EMPTY;
-        }        
+        }
     }
-
     //Need to investigate if in the next board there are checks
-    private generalAttacked(move: Move): boolean {
+    generalAttacked(move) {
         this.makeMove(move);
         let c;
         if (this.move_history.length % 2 == 0) {
             c = COLOR.RED;
-        } else {
+        }
+        else {
             c = COLOR.BLACK;
         }
         let moves = this.generateMoves(c);
         moves.forEach(m => {
-            if(m.isCapture()) {
+            if (m.isCapture()) {
                 if (m.captured == PIECE.GENERAL) {
                     this.undoMove();
                     return true;
@@ -1030,18 +1013,15 @@ export class Board {
         this.undoMove();
         return false;
     }
-
-    public isFinished(c: COLOR): boolean { 
+    isFinished(c) {
         let moves = this.legalMoves(c);
         return this.moves.length == 0;
     }
-
     //Make a new board 
-    public copy(): Board {
-        return <Board>{
+    copy() {
+        return {
             colors: Array.from(this.colors),
             pieces: Array.from(this.pieces),
-
             redGenerals: Array.from(this.redGenerals),
             redAdvisors: Array.from(this.redAdvisors),
             redElephants: Array.from(this.redElephants),
@@ -1049,7 +1029,6 @@ export class Board {
             redChariots: Array.from(this.redChariots),
             redCannons: Array.from(this.redCannons),
             redPawns: Array.from(this.redPawns),
-
             blackGenerals: Array.from(this.blackGenerals),
             blackAdvisors: Array.from(this.blackAdvisors),
             blackElephants: Array.from(this.blackElephants),
@@ -1057,67 +1036,63 @@ export class Board {
             blackChariots: Array.from(this.blackChariots),
             blackCannons: Array.from(this.blackCannons),
             blackPawns: Array.from(this.blackPawns),
-
             move_history: Array.from(this.move_history),
         };
     }
-
-    
-
     //Safely gets the index in a certain direction without wrapping
-    private get_ind(index: number, steps: number, dir: DIR): number {
-        let rank = Math.floor(index / BOARD_FILES);
-        let file = index % BOARD_FILES;
-        switch(dir) {
+    get_ind(index, steps, dir) {
+        let rank = Math.floor(index / exports.BOARD_FILES);
+        let file = index % exports.BOARD_FILES;
+        switch (dir) {
             case DIR.E:
                 if (file - steps > 0) {
-                    return rank * BOARD_FILES + file - steps;
+                    return rank * exports.BOARD_FILES + file - steps;
                 }
                 return -1;
                 break;
             case DIR.NE:
-                let limit1 = Math.min(file, BOARD_RANKS - 1 - rank);
+                let limit1 = Math.min(file, exports.BOARD_RANKS - 1 - rank);
                 if (steps <= limit1) {
-                    return index + (BOARD_FILES - 1) * steps;
+                    return index + (exports.BOARD_FILES - 1) * steps;
                 }
                 return -1;
                 break;
             case DIR.N:
-                if (rank + steps < BOARD_RANKS) {
-                    return (rank + steps) * BOARD_FILES + file;
+                if (rank + steps < exports.BOARD_RANKS) {
+                    return (rank + steps) * exports.BOARD_FILES + file;
                 }
                 return -1;
                 break;
             case DIR.NW:
-                let limit2 = Math.min(BOARD_FILES - 1 -file, BOARD_RANKS - 1 - rank);
+                let limit2 = Math.min(exports.BOARD_FILES - 1 - file, exports.BOARD_RANKS - 1 - rank);
                 if (steps <= limit2) {
-                    return index + (BOARD_FILES + 1) * steps;
+                    return index + (exports.BOARD_FILES + 1) * steps;
                 }
                 return -1;
                 break;
             case DIR.W:
-                if (file + steps < BOARD_FILES) {
-                    return rank * BOARD_FILES + file + steps;
+                if (file + steps < exports.BOARD_FILES) {
+                    return rank * exports.BOARD_FILES + file + steps;
                 }
                 return -1;
                 break;
             case DIR.SW:
-                let limit3 = Math.min(BOARD_FILES - 1 -file, rank);
+                let limit3 = Math.min(exports.BOARD_FILES - 1 - file, rank);
                 if (steps <= limit3) {
-                    return index - (BOARD_FILES - 1) * steps;
+                    return index - (exports.BOARD_FILES - 1) * steps;
                 }
                 return -1;
                 break;
             case DIR.S:
                 if (rank - steps > 0) {
-                    return (rank - steps) * BOARD_FILES + file;
+                    return (rank - steps) * exports.BOARD_FILES + file;
                 }
                 return -1;
                 break;
             case DIR.SE:
                 let limit4 = Math.min(file, rank);
                 if (steps <= limit4) {
-                    return index - (BOARD_FILES + 1) * steps;
+                    return index - (exports.BOARD_FILES + 1) * steps;
                 }
                 return -1;
                 break;
@@ -1125,80 +1100,72 @@ export class Board {
                 throw "Invalid direction";
         }
     }
-        
     /**
-     * Safely gets COLOR piece in a certain direction DIR from 
+     * Safely gets COLOR piece in a certain direction DIR from
      * INDEX STEPS steps away. If offboard, returns -1
      * STEPS is assumed to be positive
      */
-    private get(index: number, steps: number, dir: DIR): COLOR {
+    get(index, steps, dir) {
         let i = this.get_ind(index, steps, dir);
         if (i < 0) {
             return COLOR.SENTINEL;
         }
         return this.colors[i];
     }
-
     /**
      * Checks if both colors and pieces make sense.
      * Piece lists are NOT checked
      *
      */
-    public isValid(): boolean {
-        for (let i = 0; i < BOARD_FILES * BOARD_RANKS; i++) {
+    isValid() {
+        for (let i = 0; i < exports.BOARD_FILES * exports.BOARD_RANKS; i++) {
             if (this.colors[i] == COLOR.SENTINEL) {
                 if (this.pieces[i] != PIECE.SENTINEL) {
                     return false;
                 }
-            } 
+            }
             if (this.colors[i] == COLOR.EMPTY) {
                 if (this.pieces[i] != PIECE.EMPTY) {
                     return false;
                 }
-            } 
+            }
             if (this.colors[i] == COLOR.RED || this.colors[i] == COLOR.BLACK) {
                 if (this.pieces[i] == PIECE.SENTINEL ||
                     this.pieces[i] == PIECE.EMPTY) {
                     return false;
                 }
-            } 
+            }
         }
         return true;
     }
-
-    public isEqual(other: Board): boolean {
-        for (let i = 0; i < BOARD_FILES * BOARD_RANKS; i++) {
-            if(this.colors[i] != other.colors[i] || this.pieces[i] != other.pieces[i]) {
+    isEqual(other) {
+        for (let i = 0; i < exports.BOARD_FILES * exports.BOARD_RANKS; i++) {
+            if (this.colors[i] != other.colors[i] || this.pieces[i] != other.pieces[i]) {
                 return false;
-            } 
+            }
         }
         return true;
     }
-
-    public setColor(f: number, r:number, color: COLOR): void {
-        this.colors[r * BOARD_FILES + f] = color;
+    setColor(f, r, color) {
+        this.colors[r * exports.BOARD_FILES + f] = color;
     }
-
-    public setPiece(f: number, r:number, piece: PIECE): void {
-        this.pieces[r* BOARD_FILES + f] = piece;
+    setPiece(f, r, piece) {
+        this.pieces[r * exports.BOARD_FILES + f] = piece;
     }
-
-    public getColor(f: number, r: number): COLOR {
-        return this.colors[r * BOARD_FILES + f];
+    getColor(f, r) {
+        return this.colors[r * exports.BOARD_FILES + f];
     }
-
-    public getPiece(f: number, r: number): PIECE {
-        return this.pieces[r * BOARD_FILES + f];
+    getPiece(f, r) {
+        return this.pieces[r * exports.BOARD_FILES + f];
     }
-    
     /**
      * Appropriately add a piece, updating the board
      * WILL OVERWRITE PIECE ORIGINALLY THERE
      */
-    public add(c: COLOR, p: PIECE, f: number, r: number): void {
+    add(c, p, f, r) {
         //TODO add error checking for out of bounds f and r 
         if (c == COLOR.RED) {
-            let index = r * BOARD_FILES + f;
+            let index = r * exports.BOARD_FILES + f;
             this.colors[index] = c;
             this.pieces[index] = p;
             switch (p) {
@@ -1227,8 +1194,9 @@ export class Board {
                     throw "Piece was invalid";
             }
             return;
-        } else if (c == COLOR.BLACK) {
-            let index = r * BOARD_FILES + f;
+        }
+        else if (c == COLOR.BLACK) {
+            let index = r * exports.BOARD_FILES + f;
             this.colors[index] = c;
             this.pieces[index] = p;
             switch (p) {
@@ -1260,51 +1228,39 @@ export class Board {
         }
         throw "Color is invalid";
     }
-
-    /* TODO
-    public copy(): Board {
-
-    }*/
-
-    
-};
-
+}
+exports.Board = Board;
+;
 //From red's perspective always
 /**  3 2 1
  *   4   0
  *   5 6 7
  */
-export enum DIR {
-    E,
-    NE,
-    N,
-    NW,
-    W,
-    SW,
-    S,
-    SE,
-};
-
-export class Move {
-    public initial: number;
-    public final: number;
-    public captured: PIECE = PIECE.EMPTY; 
-
-    public constructor(initial: number, final: number) {
+var DIR;
+(function (DIR) {
+    DIR[DIR["E"] = 0] = "E";
+    DIR[DIR["NE"] = 1] = "NE";
+    DIR[DIR["N"] = 2] = "N";
+    DIR[DIR["NW"] = 3] = "NW";
+    DIR[DIR["W"] = 4] = "W";
+    DIR[DIR["SW"] = 5] = "SW";
+    DIR[DIR["S"] = 6] = "S";
+    DIR[DIR["SE"] = 7] = "SE";
+})(DIR = exports.DIR || (exports.DIR = {}));
+;
+class Move {
+    constructor(initial, final) {
+        this.captured = PIECE.EMPTY;
         this.initial = initial;
         this.final = final;
     }
-
-    public isEqual(other: Move): boolean {
+    isEqual(other) {
         return this.initial == other.initial && this.final == other.final;
     }
-
-    public isCapture(): boolean {
+    isCapture() {
         return this.captured != PIECE.EMPTY && this.captured != PIECE.SENTINEL;
     }
-
-    
-};
-
-
+}
+exports.Move = Move;
+;
 //xiangqi.js + xiangqijs for board and game logic, I want to go to modeling and machine learning and AI

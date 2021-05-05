@@ -342,6 +342,21 @@ describe('Board Tests', function() {
         
     });
 
-    //Cannon and chariot tests
+    describe('Legal Move Generation', function () {
+        describe('Legal Move Test 1', function () {
+            it('Tests a forcing move', function () {
+                let b = new Board();
+                b.add(COLOR.RED, PIECE.GENERAL, 5, 2);
+                b.add(COLOR.RED, PIECE.ADVISOR, 4, 2);
+                b.add(COLOR.RED, PIECE.ADVISOR, 6, 2);
+                b.add(COLOR.BLACK, PIECE.CHARIOT, 5, 7);
+
+                let m = b.legalMoves(COLOR.RED);
+                assert.equal(m.length, 2);
+                console.log('Legal Moves:');
+                console.log(m);
+            });
+        });
+    });
 
 });
