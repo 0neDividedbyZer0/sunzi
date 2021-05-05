@@ -948,7 +948,15 @@ export class Board {
         }
     }
 
-    
+    public legalMoves(moves: Move[]): Move[] {
+        var legal_moves: Move[] = [];
+        moves.forEach(m => {
+            if (!this.generalAttacked(m)) {
+                legal_moves.push(m);
+            }
+        });
+        return legal_moves;
+    }
 
     //Make move without checking legality
     //Need to keep move history
