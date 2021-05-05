@@ -826,47 +826,47 @@ export class Board {
         var moves: Move[] = [];
         if (c == COLOR.RED) {
             this.redGenerals.forEach(p => {
-                moves = moves.concat(this.generalMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.redAdvisors.forEach(p => {
-                moves = moves.concat(this.advisorMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.redElephants.forEach(p => {
-                moves = moves.concat(this.elephantMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.redHorses.forEach(p => {
-                moves = moves.concat(this.horseMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.redChariots.forEach(p => {
-                moves = moves.concat(this.chariotMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.redCannons.forEach(p => {
-                moves = moves.concat(this.cannonMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.redPawns.forEach(p => {
-                moves = moves.concat(this.pawnMoves(p));
+                moves = moves.concat(this.moves(p));
             });
         } else if (c == COLOR.BLACK) {
             this.blackGenerals.forEach(p => {
-                moves = moves.concat(this.generalMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.blackAdvisors.forEach(p => {
-                moves = moves.concat(this.advisorMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.blackElephants.forEach(p => {
-                moves = moves.concat(this.elephantMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.blackHorses.forEach(p => {
-                moves = moves.concat(this.horseMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.blackChariots.forEach(p => {
-                moves = moves.concat(this.chariotMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.blackCannons.forEach(p => {
-                moves = moves.concat(this.cannonMoves(p));
+                moves = moves.concat(this.moves(p));
             });
             this.blackPawns.forEach(p => {
-                moves = moves.concat(this.pawnMoves(p));
+                moves = moves.concat(this.moves(p));
             });
         } else {
             throw "Invalid color chosen";
