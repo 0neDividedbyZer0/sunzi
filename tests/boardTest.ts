@@ -352,9 +352,25 @@ describe('Board Tests', function() {
                 b.add(COLOR.BLACK, PIECE.CHARIOT, 5, 7);
 
                 let m = b.legalMoves(COLOR.RED);
-                assert.equal(m.length, 2);
                 console.log('Legal Moves:');
                 console.log(m);
+                assert.equal(m.length, 2);
+                
+            });
+        });
+
+        describe('Legal Move Test 2', function () {
+            it('Tests flying generals', function () {
+                let b = new Board();
+                b.add(COLOR.RED, PIECE.GENERAL, 5, 2);
+                
+                b.add(COLOR.BLACK, PIECE.GENERAL, 4, 11);
+
+                let m = b.legalMoves(COLOR.RED);
+                console.log('Legal Moves:');
+                console.log(m);
+                assert.equal(m.length, 2);
+                
             });
         });
     });

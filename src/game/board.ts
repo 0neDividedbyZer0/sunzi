@@ -948,10 +948,12 @@ export class Board {
         }
     }
 
+    //Check flying general
     public legalMoves(c: COLOR): Move[] {
         let moves = this.generateMoves(c);
         var legal_moves: Move[] = [];
         moves.forEach(m => {
+            console.log(this.blackGenerals);
             if (!this.generalAttacked(m)) {
                 legal_moves.push(m);
             }
@@ -976,15 +978,12 @@ export class Board {
         let r = Math.floor(m.final / BOARD_FILES);
         let f = m.final % BOARD_FILES; 
         this.add(c, p, f, r)
-
     }
 
+    //Some bug is in undomove or something
     public undoMove(): void {
-
         let m = this.move_history.pop();
-        console.log(m);
         if (m === undefined) {
-            
             throw "move history empty";
         }
         let p = this.pieces[m.final];
@@ -1009,9 +1008,29 @@ export class Board {
         }        
     }
 
-    //Need to investigate if in the next board there are checks
     private generalAttacked(move: Move): boolean {
         this.makeMove(move);
+        let isAttacked = false;
+        let flying_general = true;
+        let r_index = this.redGenerals[0];
+        let b_index = this.blackGenerals[0];
+        console.log(r_index % BOARD_FILES);
+        if (r_index % BOARD_FILES == b_index % BOARD_FILES) {
+            let start_r = Math.floor(r_index / BOARD_FILES);
+            let end_r = Math.floor(b_index / BOARD_FILES);
+            let start_f = r_index / BOARD_FILES;
+            for (let i = start_r + 1; i < end_r; i++) {
+                
+                if (this.pieces[i * BOARD_FILES + start_f] != PIECE.EMPTY) {
+                    flying_general = false;
+                    break;
+                }
+            }
+            if (flying_general) {
+                this.undoMove();
+                return true;
+            }
+        }
         let c;
         if (this.move_history.length % 2 == 0) {
             c = COLOR.RED;
@@ -1019,16 +1038,17 @@ export class Board {
             c = COLOR.BLACK;
         }
         let moves = this.generateMoves(c);
+        
         moves.forEach(m => {
             if(m.isCapture()) {
                 if (m.captured == PIECE.GENERAL) {
-                    this.undoMove();
-                    return true;
+                    isAttacked = true;
+                    return;
                 }
             }
         });
         this.undoMove();
-        return false;
+        return isAttacked;
     }
 
     public isFinished(c: COLOR): boolean { 
