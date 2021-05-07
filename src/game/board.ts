@@ -1,6 +1,6 @@
 export const name = 'board'
 
-
+//TODO: toString
 
 /**
  * The board's absolute position is based on
@@ -1302,6 +1302,10 @@ export class Board {
             return;
         }
         throw "Color is invalid";
+    }
+
+    public toString(): string {
+        return '';
     }
 
     

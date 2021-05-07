@@ -1,8 +1,8 @@
 import { Board, COLOR, Move } from "../game/board";
+import { Game } from "../game/game";
 
 export const name = 'player'
 
-export interface Player {
-    //chooseMove(b: Board, c: color)
-    (b: Board, c: COLOR): Move;
+export class Player {
+    chooseMove(b: Game, c: COLOR): Move {return new Move(-1, -1)}
 }
