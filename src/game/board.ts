@@ -1,5 +1,7 @@
 export const name = 'board'
 
+
+
 /**
  * The board's absolute position is based on
  * red's orientation. Files are numbered 
@@ -154,6 +156,30 @@ export class Board {
 
     //Even moves are red, odd is black
     public move_history: Move[] = [];
+
+    public static startBoard(): Board {
+        return <Board>{
+            colors: Array.from(START_BOARD_C),
+            pieces: Array.from(START_BOARD_P),
+
+            redGenerals: Array.from(RED_GENERALS),
+            redAdvisors: Array.from(RED_ADVISORS),
+            redElephants: Array.from(RED_ELEPHANTS),
+            redHorses: Array.from(RED_HORSES),
+            redChariots: Array.from(RED_CHARIOTS),
+            redCannons: Array.from(RED_CANNONS),
+            redPawns: Array.from(RED_PAWNS),
+
+            blackGenerals: Array.from(BLACK_GENERALS),
+            blackAdvisors: Array.from(BLACK_ADVISORS),
+            blackElephants: Array.from(BLACK_ELEPHANTS),
+            blackHorses: Array.from(BLACK_HORSES),
+            blackChariots: Array.from(BLACK_CHARIOTS),
+            blackCannons: Array.from(BLACK_CANNONS),
+            blackPawns: Array.from(BLACK_PAWNS),
+        };
+
+    }
     
     public constructor() {
         this.colors = Object.assign([], EMPTY_BOARD_C);
