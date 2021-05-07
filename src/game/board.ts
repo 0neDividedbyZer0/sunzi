@@ -1048,9 +1048,9 @@ export class Board {
         return isAttacked;
     }
 
-    public isFinished(c: COLOR): boolean { 
+    public isMated(c: COLOR): boolean { 
         let moves = this.legalMoves(c);
-        return this.moves.length == 0;
+        return moves.length == 0;
     }
 
     //Make a new board 

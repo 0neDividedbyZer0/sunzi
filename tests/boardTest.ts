@@ -370,7 +370,47 @@ describe('Board Tests', function() {
                 console.log('Legal Moves:');
                 console.log(m);
                 assert.equal(m.length, 2);
+            });
+        });
+
+        describe('Legal Move Test 3', function () {
+            it('Tests pin', function () {
+                let b = new Board();
+                b.add(COLOR.RED, PIECE.GENERAL, 5, 2);
+                b.add(COLOR.RED, PIECE.ELEPHANT, 5, 4);
                 
+                b.add(COLOR.BLACK, PIECE.GENERAL, 5, 11);
+
+                let m = b.legalMoves(COLOR.RED);
+                console.log('Legal Moves:');
+                console.log(m);
+                assert.equal(m.length, 3);
+            });
+        });
+
+        describe('Legal Move Test 4', function () {
+            it('Tests checkmate', function () {
+                let b = new Board();
+                b.add(COLOR.RED, PIECE.GENERAL, 4, 2);
+                
+                b.add(COLOR.BLACK, PIECE.GENERAL, 5, 11);
+                b.add(COLOR.BLACK, PIECE.CHARIOT, 4, 10);
+
+                assert.equal(b.isMated(COLOR.RED), true);
+            });
+        });
+
+        describe('Legal Move Test 5', function () {
+            it('Tests stalemate', function () {
+                let b = new Board();
+                b.add(COLOR.RED, PIECE.GENERAL, 5, 2);
+                b.add(COLOR.RED, PIECE.ADVISOR, 5, 3);
+                b.add(COLOR.RED, PIECE.ADVISOR, 6, 2);
+                
+                b.add(COLOR.BLACK, PIECE.GENERAL, 5, 11);
+                b.add(COLOR.BLACK, PIECE.CHARIOT, 4, 10);
+
+                assert.equal(b.isMated(COLOR.RED), true);
             });
         });
     });
