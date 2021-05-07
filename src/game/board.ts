@@ -879,7 +879,9 @@ export class Board {
 
     private removePiece(c: COLOR, p: PIECE, final: number): void {
         let index;
-        if (c == COLOR.RED) {
+        this.colors[final] = COLOR.EMPTY;
+        this.pieces[final] = PIECE.EMPTY;
+        if (c == COLOR.BLACK) {
             switch(p) {
                 case PIECE.GENERAL:
                     index = this.blackGenerals.indexOf(final);
@@ -910,7 +912,7 @@ export class Board {
                     this.blackPawns.splice(index);
                     break;
                 default:
-                    throw "Captured nothing"
+                    throw "Piece not present to remove";
             }
         } else {
             switch(p) {
@@ -943,7 +945,7 @@ export class Board {
                     this.redPawns.splice(index);
                     break;
                 default:
-                    throw "Captured nothing"
+                    throw "Piece not present to remove";
             }
         }
     }
@@ -953,7 +955,6 @@ export class Board {
         let moves = this.generateMoves(c);
         var legal_moves: Move[] = [];
         moves.forEach(m => {
-            console.log(this.blackGenerals);
             if (!this.generalAttacked(m)) {
                 legal_moves.push(m);
             }
@@ -998,14 +999,11 @@ export class Board {
             } else {
                 c = COLOR.RED;
             }
-            p = m.captured
+            p = m.captured;
             let r = Math.floor(m.final / BOARD_FILES);
             let f = m.final % BOARD_FILES; 
             this.add(c, p, f, r);
-        } else {
-            this.colors[m.final] = COLOR.EMPTY;
-            this.pieces[m.final] = PIECE.EMPTY;
-        }        
+        } 
     }
 
     private generalAttacked(move: Move): boolean {
@@ -1014,11 +1012,10 @@ export class Board {
         let flying_general = true;
         let r_index = this.redGenerals[0];
         let b_index = this.blackGenerals[0];
-        console.log(r_index % BOARD_FILES);
         if (r_index % BOARD_FILES == b_index % BOARD_FILES) {
             let start_r = Math.floor(r_index / BOARD_FILES);
             let end_r = Math.floor(b_index / BOARD_FILES);
-            let start_f = r_index / BOARD_FILES;
+            let start_f = r_index % BOARD_FILES;
             for (let i = start_r + 1; i < end_r; i++) {
                 
                 if (this.pieces[i * BOARD_FILES + start_f] != PIECE.EMPTY) {
@@ -1280,11 +1277,6 @@ export class Board {
         }
         throw "Color is invalid";
     }
-
-    /* TODO
-    public copy(): Board {
-
-    }*/
 
     
 };
