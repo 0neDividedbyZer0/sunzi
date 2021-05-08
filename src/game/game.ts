@@ -59,7 +59,7 @@ export class Game {
     }
 
     public isGameOver(): boolean {
-        return false;
+        return this.board.isMated(this.turn);
     }
 
     //Print out WXF formatted game move history
