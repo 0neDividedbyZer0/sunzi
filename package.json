@@ -8,7 +8,8 @@
     "test": "mocha 'tests/**/*.js'",
     "start": "electron .",
     "ts": "ts-node main.ts",
-    "clean": "find . -name 'main.js'  -delete; find ./tests -name '*.js'  -delete; find ./src/** -name '*.js'  -delete"
+    "clean": "find . -name 'main.js'  -delete; find ./tests -name '*.js'  -delete; find ./src/** -name '*.js'  -delete",
+    "test play": "mocha 'tests/**/gameTest.js'"
   },
   "repository": {
     "type": "git",

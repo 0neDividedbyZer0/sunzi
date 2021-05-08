@@ -67,6 +67,23 @@ export class Game {
         return '';
     }
 
+    public get getBoard(): Board {
+        return this.board;
+    }
+
+    public get getTurn(): COLOR {
+        return this.turn;
+    }
+
+    public get getRed(): Player {
+        return this.redPlayer;
+    }
+
+    public get getBlack(): Player {
+        return this.blackPlayer;
+    }
+    
+
     //Game Over method needs to check mate and three repetition
 }
 

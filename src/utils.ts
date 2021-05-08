@@ -1,6 +1,8 @@
-import { Board, COLOR, Move, PIECE } from "./game/board";
+import { Board, COLOR, Move, PIECE, BOARD_FILES, BOARD_RANKS } from "./game/board";
 
 export const name = 'utils';
+
+//We'll see if we even need it.
 
 //Pawn notation is still unknown
 //Pawn notation is complex. If you have doubled or lined up file pawns
@@ -10,6 +12,10 @@ export const name = 'utils';
 //Advisor/Elephant notation when doubled needs no +-
 
 const expr: RegExp = new RegExp('^(([GAEHRCPgaehrcp][1-9])|([+-][HRChrc])|([1-9][1-5])[=+-]([0-9]|1[0]))$');
+
+const simpleMove: RegExp = /^[1-9][Ff][0-9]+[rR][>][1-9][fF][0-9]+[rR]$/;
+
+const BOARD_TOTAL: number = BOARD_FILES * BOARD_RANKS;
 
 export function commandToMove(input: string, c: COLOR, board: Board): Move {
     let stripped = input.replace(/\s+/g, '').toUpperCase();
@@ -54,9 +60,46 @@ export function commandToMove(input: string, c: COLOR, board: Board): Move {
             throw 'error, piece parsed incorrectly';
     }
     
-
+    return new Move(-1, -1);
 }
 
+//This is more important for formatting
 export function moveToCommand(move: Move, c: COLOR, board: Board): string {
+    return '';
+}
 
+export function parseMove(input: string, c: COLOR): Move {
+    let stripped = input.replace(/\s+/g, '')
+    let split = stripped.split(/[FfRr]/);
+    let init = toBoard(Number(split[0]), Number(split[1]));
+    let final = toBoard(Number(split[2]), Number(split[3]));
+    if (c == COLOR.BLACK) {
+        init = reflect(init);
+        final = reflect(final);
+    }
+    return new Move(-1, -1)
+}
+
+export function moveToString(move: Move, c: COLOR): string {
+    let init = move.initial;
+    let final = move.final;
+    if (c == COLOR.BLACK) {
+        init = reflect(init);
+        final = reflect(final);
+    }
+    let split_init = toCoords(init);
+    let split_final = toCoords(final);
+    return `${split_init.f}f${split_init.r}r>${split_final.f}f${split_final.r}r`;
+}
+
+export function toCoords(index: number) {
+    return {f: index % BOARD_FILES, r: Math.floor(index / BOARD_FILES) - 2};
+}
+
+export function toBoard(init_f: number, init_r: number): number {
+    return (init_r + 2) * BOARD_FILES +  init_f;
+}
+
+export function reflect(index: number): number {
+    return BOARD_TOTAL - 1 - index;
 }
