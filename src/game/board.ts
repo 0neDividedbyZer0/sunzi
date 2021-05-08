@@ -1304,6 +1304,8 @@ export class Board {
         throw "Color is invalid";
     }
 
+    
+
     public toString(): string {
         return '';
     }

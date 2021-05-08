@@ -33,6 +33,7 @@ export function commandToMove(input: string, c: COLOR, board: Board): Move {
         p = piece.substring(0, 1);
     }
     //Check for files and stuff
+    //Filter the appropriate pieces when using special notation
     switch(p) {
         case 'G':
 
