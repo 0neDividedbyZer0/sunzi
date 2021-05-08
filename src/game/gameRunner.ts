@@ -14,7 +14,7 @@ export function runGame(): void {
         try {
             game.play();
         } catch(e) {
-            console.log(e.stack);
+            throw e;
         }
     }
     console.log('Game is over');

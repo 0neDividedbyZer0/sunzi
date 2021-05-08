@@ -158,27 +158,27 @@ export class Board {
     public move_history: Move[] = [];
 
     public static startBoard(): Board {
-        return <Board>{
-            colors: Array.from(START_BOARD_C),
-            pieces: Array.from(START_BOARD_P),
+        let b = new Board();
+        b.colors = Array.from(START_BOARD_C);
+        b.pieces = Array.from(START_BOARD_P);
 
-            redGenerals: Array.from(RED_GENERALS),
-            redAdvisors: Array.from(RED_ADVISORS),
-            redElephants: Array.from(RED_ELEPHANTS),
-            redHorses: Array.from(RED_HORSES),
-            redChariots: Array.from(RED_CHARIOTS),
-            redCannons: Array.from(RED_CANNONS),
-            redPawns: Array.from(RED_PAWNS),
+        b.redGenerals = Array.from(RED_GENERALS);
+        b.redAdvisors = Array.from(RED_ADVISORS);
+        b.redElephants = Array.from(RED_ELEPHANTS);
+        b.redHorses = Array.from(RED_HORSES);
+        b.redChariots = Array.from(RED_CHARIOTS);
+        b.redCannons = Array.from(RED_CANNONS);
+        b.redPawns = Array.from(RED_PAWNS);
 
-            blackGenerals: Array.from(BLACK_GENERALS),
-            blackAdvisors: Array.from(BLACK_ADVISORS),
-            blackElephants: Array.from(BLACK_ELEPHANTS),
-            blackHorses: Array.from(BLACK_HORSES),
-            blackChariots: Array.from(BLACK_CHARIOTS),
-            blackCannons: Array.from(BLACK_CANNONS),
-            blackPawns: Array.from(BLACK_PAWNS),
-        };
+        b.blackGenerals = Array.from(BLACK_GENERALS);
+        b.blackAdvisors = Array.from(BLACK_ADVISORS);
+        b.blackElephants = Array.from(BLACK_ELEPHANTS);
+        b.blackHorses = Array.from(BLACK_HORSES);
+        b.blackChariots = Array.from(BLACK_CHARIOTS);
+        b.blackCannons = Array.from(BLACK_CANNONS);
+        b.blackPawns = Array.from(BLACK_PAWNS);
 
+        return b;
     }
     
     public constructor() {
