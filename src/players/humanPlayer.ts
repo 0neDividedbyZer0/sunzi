@@ -21,14 +21,28 @@ export class humanPlayer extends Player {
     public chooseMove(g: Game, c: COLOR): Move {
         let b = g.getBoard;
         let legal_moves = b.legalMoves(c);
-        let moveOutput: string = '';
+        let moveOutput: string = b.toString();
         for (let i = 0; i < legal_moves.length; i++) {
             moveOutput = moveOutput + `${i}: ` + moveToString(legal_moves[i], c) + ' ';
         }
         let index;
+        /*this.query('What move?\n' + moveOutput)
+            .then(function(choice) {
+                index = Number(choice);
+            }).finally(process.exit);*/
         this.input.question('What move?\n' + moveOutput, (answer: string) => {
             index = answer;
-        })
+        });
+        //Problem is that it isn't receiving stdin
         return legal_moves[Number(index)];
+    }
+
+    public query(prompt: string) {
+        console.log(prompt);
+        return new Promise(function (resolve) {
+            process.stdin.once('data', function(data) {
+                resolve(data.toString().trim());
+            });
+        });
     }
 }

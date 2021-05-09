@@ -8,6 +8,7 @@ export const name = 'gameRunner';
 
 
 export function runGame(): void {
+    console.log('Starting game');
     let game: Game = new Game(new humanPlayer(), new humanPlayer());
     let b = game.getBoard;
     while (!game.isGameOver()) {
@@ -25,3 +26,5 @@ export function runGame(): void {
     }
 
 }
+
+runGame();

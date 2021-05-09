@@ -1307,7 +1307,48 @@ export class Board {
     
 
     public toString(): string {
-        return '';
+        let out = '';
+        for (let i = 0; i < RANKS; i++) {
+            out = '\n' + out;
+            for (let j = 1; j <= FILES; j++) {
+                if (this.pieces[(i+2) * BOARD_FILES + j] == PIECE.EMPTY) {
+                    out = '. ' + out;
+                } else {
+                    let p;
+                    switch(this.pieces[(i+2) * BOARD_FILES + j]) {
+                        case PIECE.PAWN:
+                            p = 'p';
+                            break;
+                        case PIECE.GENERAL:
+                            p = 'g';
+                            break;
+                        case PIECE.ADVISOR:
+                            p = 'a';
+                            break;
+                        case PIECE.ELEPHANT:
+                            p = 'e';
+                            break;
+                        case PIECE.HORSE:
+                            p = 'h';
+                            break;
+                        case PIECE.CHARIOT:
+                            p = 'r';
+                            break;
+                        case PIECE.CANNON:
+                            p = 'c';
+                            break;
+                        default:
+                            throw 'invalid piece to stringify';
+                    }
+                    if (this.colors[(i+2) * BOARD_FILES + j] == COLOR.RED) {
+                        p = p.toUpperCase();
+                    }
+                    out = p + ' ' + out;
+                }
+            }
+        }
+        out = out + '\n';
+        return out;
     }
 
     
