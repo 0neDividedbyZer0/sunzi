@@ -50,7 +50,9 @@ export class Game {
         this.currTime = new Date().getTime();
         this.blackTimer = this.blackTime;
         this.redTimer = this.redTime;
+        //Is this even running?
         this.clock = setImmediate(() => {
+            //It seems to be terminating after one run
             this.updateTime();
             if (this.isTimedOut()) {
                 if (this.turn  == COLOR.RED) {
@@ -75,7 +77,10 @@ export class Game {
             this.blackTime += this.blackPlus;
             this.turn = COLOR.RED;
         }
-        this.board.makeMove(move);
+        //Check timeout here to stop making moves
+        if (this.colorWonByTimeout == COLOR.EMPTY) {
+            this.board.makeMove(move);
+        }
     }
 
     //These crawl the game history. If there is a change, the 
@@ -113,15 +118,17 @@ export class Game {
         if (this.turn == COLOR.RED) {
             let timeToSet = new Date().getTime();
             this.redTimer -= timeToSet - this.currTime;
+            console.log(timeToSet - this.currTime);
             this.currTime = timeToSet;
         } else {
             let timeToSet = new Date().getTime();
             this.blackTimer -= timeToSet - this.currTime;
+            console.log(timeToSet - this.currTime);
             this.currTime = timeToSet;
         }
     }
 
-    private isTimedOut(): boolean {
+    public isTimedOut(): boolean {
         if (this.turn == COLOR.RED) {
             return this.redTimer <= 0;
         } else {

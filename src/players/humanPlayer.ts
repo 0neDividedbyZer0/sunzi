@@ -9,10 +9,7 @@ export const name = 'humanPlayer';
 //input move
 
 export class humanPlayer extends Player {
-    private prompt = require('readline').createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
+    
 
     public async chooseMove(g: Game, c: COLOR): Promise<Move> {
         let b = g.getBoard;
@@ -27,9 +24,13 @@ export class humanPlayer extends Player {
     }
 
     private query(question: string): Promise<string> {
+        var prompt = require('readline').createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
         return new Promise<string>((res) => {
-            this.prompt.question(question, (ans:string) => {
-                this.prompt.close();
+            prompt.question(question, (ans:string) => {
+                prompt.close();
                 res(ans);
             });
         });
