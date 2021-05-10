@@ -10,16 +10,32 @@ export const name = 'game'
 export class Game {
     private redPlayer: Player;
     private blackPlayer: Player;
+    private redTime: number = 15 * 60 * 1000;
+    private blackTime: number = 15 * 60 * 1000;
+    private redPlus: number = 10 * 1000;
+    private blackPlus: number = 10 * 1000;
+    private currTime: number = 0;
     private board: Board;
     private turn: COLOR;
     private historyString: string;
+    private redTimer: number = 0;
+    private blackTimer: number = 0;
+    private clock: NodeJS.Immediate;
+    private colorWon: COLOR = COLOR.EMPTY;
 
-    public constructor(redPlayer: Player, blackPlayer: Player) {
+    public constructor(redPlayer: Player, blackPlayer: Player, redTime:number = 15, blackTime:number = 15, 
+            redPlus = 10, blackPlus = 10) {
         this.redPlayer = redPlayer;
         this.blackPlayer = blackPlayer;
+        this.redTime = redTime * 60 * 1000;
+        this.blackTime = blackTime * 60 * 1000;
+        this.redPlus = redPlus * 1000;
+        this.blackPlus = blackPlus * 1000;
         this.board = Board.startBoard();
         this.turn = COLOR.RED;
         this.historyString = '';
+        this.clock = setImmediate(() => {0});
+        clearImmediate(this.clock);
     }
 
     public setRedPlayer(p: Player): void {
@@ -30,13 +46,33 @@ export class Game {
         this.blackPlayer = p;
     }
 
-    public play(): void {
+    public init(): void {
+        this.currTime = new Date().getTime();
+        this.blackTimer = this.blackTime;
+        this.redTimer = this.redTime;
+        this.clock = setImmediate(() => {
+            this.updateTime();
+            if (this.isTimedOut()) {
+                if (this.turn  == COLOR.RED) {
+                    this.colorWon = COLOR.BLACK;
+                } else {
+                    this.colorWon = COLOR.RED;
+                }
+                clearImmediate(this.clock);
+            }
+        });
+    }
+
+    //Make async so it can time out properly?
+    public async play(): Promise<void> {
         let move: Move;
         if (this.turn == COLOR.RED) {
-            move = this.redPlayer.chooseMove(this, this.turn);
+            move = await this.redPlayer.chooseMove(this, this.turn);
+            this.redTime += this.redPlus;
             this.turn = COLOR.BLACK;
         } else {
-            move = this.blackPlayer.chooseMove(this, this.turn);
+            move = await this.blackPlayer.chooseMove(this, this.turn);
+            this.blackTime += this.blackPlus;
             this.turn = COLOR.RED;
         }
         this.board.makeMove(move);
@@ -52,10 +88,40 @@ export class Game {
 
     }
 
+    public timeLeft(c: COLOR): number {
+        if (c == COLOR.RED) {
+            return Math.floor(this.redTimer / (60 * 1000));
+        } else {
+            return Math.floor(this.blackTimer / (60 * 1000));
+        }
+    }
+
+    private updateTime() {
+        if (this.turn == COLOR.RED) {
+            let timeToSet = new Date().getTime();
+            this.redTimer -= timeToSet - this.currTime;
+            this.currTime = timeToSet;
+        } else {
+            let timeToSet = new Date().getTime();
+            this.blackTimer -= timeToSet - this.currTime;
+            this.currTime = timeToSet;
+        }
+    }
+
+    private isTimedOut(): boolean {
+        if (this.turn == COLOR.RED) {
+            return this.redTimer <= 0;
+        } else {
+            return this.blackTimer <= 0;
+        }
+    }
+
     public reset(): void {
         this.board = Board.startBoard();
         this.turn = COLOR.RED;
         this.historyString = '';
+        this.redTimer = this.redTime;
+        this.blackTime = this.blackTime;
     }
 
     public isGameOver(): boolean {
@@ -87,4 +153,9 @@ export class Game {
     //Game Over method needs to check mate and three repetition
 }
 
-
+export class GameTimeoutError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'GameTimeoutError';
+    }
+}

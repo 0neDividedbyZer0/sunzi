@@ -1049,7 +1049,6 @@ export class Board {
             let end_r = Math.floor(b_index / BOARD_FILES);
             let start_f = r_index % BOARD_FILES;
             for (let i = start_r + 1; i < end_r; i++) {
-                
                 if (this.pieces[i * BOARD_FILES + start_f] != PIECE.EMPTY) {
                     flying_general = false;
                     break;

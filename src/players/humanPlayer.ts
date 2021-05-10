@@ -9,25 +9,29 @@ export const name = 'humanPlayer';
 //input move
 
 export class humanPlayer extends Player {
-    private prompt = require('readline-sync');
+    private prompt = require('readline').createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
 
-    public chooseMove(g: Game, c: COLOR): Move {
+    public async chooseMove(g: Game, c: COLOR): Promise<Move> {
         let b = g.getBoard;
         let legal_moves = b.legalMoves(c);
         let moveOutput: string = b.toString();
         for (let i = 0; i < legal_moves.length; i++) {
             moveOutput = moveOutput + `${i}: ` + moveToString(legal_moves[i], c) + ' ';
         }
-        let index = this.prompt.question('What move?\n\n' + moveOutput + '\n>');
+        let index = await this.query('What move?\n\n' + moveOutput + '\n>');
         return legal_moves[Number(index)];
     }
 
-    public query(prompt: string) {
-        console.log(prompt);
-        return new Promise(function (resolve) {
-            process.stdin.once('data', function(data) {
-                resolve(data.toString().trim());
+    private query(question: string): Promise<string> {
+        return new Promise<string>((res) => {
+            this.prompt.question(question, (ans:string) => {
+                this.prompt.close();
+                res(ans);
             });
         });
     }
+
 }
