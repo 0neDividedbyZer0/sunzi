@@ -413,6 +413,15 @@ describe('Board Tests', function() {
                 assert.equal(b.isMated(COLOR.RED), true);
             });
         });
+
+        describe('Legal Move Test 6', function () {
+            it('Test full board start  move', function () {
+                let b = Board.startBoard();
+               
+                let m = b.legalMoves(COLOR.RED);
+                assert.equal(m.length, 44);
+            });
+        });
     });
 
 });

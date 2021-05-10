@@ -93,7 +93,7 @@ export function moveToString(move: Move, c: COLOR): string {
 }
 
 export function toCoords(index: number) {
-    return {f: index % BOARD_FILES, r: Math.floor(index / BOARD_FILES) - 2};
+    return {f: index % BOARD_FILES, r: Math.floor(index / BOARD_FILES) - 1};
 }
 
 export function toBoard(init_f: number, init_r: number): number {

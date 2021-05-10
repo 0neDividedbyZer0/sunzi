@@ -9,14 +9,7 @@ export const name = 'humanPlayer';
 //input move
 
 export class humanPlayer extends Player {
-    private input: readline.Interface;
-    public constructor() {
-        super();
-        this.input = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
-    }
+    private prompt = require('readline-sync');
 
     public chooseMove(g: Game, c: COLOR): Move {
         let b = g.getBoard;
@@ -25,15 +18,7 @@ export class humanPlayer extends Player {
         for (let i = 0; i < legal_moves.length; i++) {
             moveOutput = moveOutput + `${i}: ` + moveToString(legal_moves[i], c) + ' ';
         }
-        let index;
-        /*this.query('What move?\n' + moveOutput)
-            .then(function(choice) {
-                index = Number(choice);
-            }).finally(process.exit);*/
-        this.input.question('What move?\n' + moveOutput, (answer: string) => {
-            index = answer;
-        });
-        //Problem is that it isn't receiving stdin
+        let index = this.prompt.question('What move?\n\n' + moveOutput + '\n>');
         return legal_moves[Number(index)];
     }
 

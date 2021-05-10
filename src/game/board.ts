@@ -156,6 +156,8 @@ export class Board {
 
     //Even moves are red, odd is black
     public move_history: Move[] = [];
+    private turnNum: number = -1;
+    private curr_moves: Move[] = [];
 
     public static startBoard(): Board {
         let b = new Board();
@@ -911,64 +913,64 @@ export class Board {
             switch(p) {
                 case PIECE.GENERAL:
                     index = this.blackGenerals.indexOf(final);
-                    this.blackGenerals.splice(index);
+                    this.blackGenerals.splice(index, 1);
                     break;
                 case PIECE.ADVISOR:
                     index = this.blackAdvisors.indexOf(final);
-                    this.blackAdvisors.splice(index);
+                    this.blackAdvisors.splice(index, 1);
                     break;
                 case PIECE.ELEPHANT:
                     index = this.blackElephants.indexOf(final);
-                    this.blackElephants.splice(index);
+                    this.blackElephants.splice(index, 1);
                     break;
                 case PIECE.HORSE:
                     index = this.blackHorses.indexOf(final);
-                    this.blackHorses.splice(index);
+                    this.blackHorses.splice(index, 1);
                     break;
                 case PIECE.CHARIOT:
                     index = this.blackChariots.indexOf(final);
-                    this.blackChariots.splice(index);
+                    this.blackChariots.splice(index, 1);
                     break;
                 case PIECE.CANNON:
                     index = this.blackCannons.indexOf(final);
-                    this.blackCannons.splice(index);
+                    this.blackCannons.splice(index, 1);
                     break;
                 case PIECE.PAWN:
                     index = this.blackPawns.indexOf(final);
-                    this.blackPawns.splice(index);
+                    this.blackPawns.splice(index, 1);
                     break;
                 default:
                     throw "Piece not present to remove";
             }
-        } else {
+        } else if (c == COLOR.RED) {
             switch(p) {
                 case PIECE.GENERAL:
                     index = this.redGenerals.indexOf(final);
-                    this.redGenerals.splice(index);
+                    this.redGenerals.splice(index, 1);
                     break;
                 case PIECE.ADVISOR:
                     index = this.redAdvisors.indexOf(final);
-                    this.redAdvisors.splice(index);
+                    this.redAdvisors.splice(index, 1);
                     break;
                 case PIECE.ELEPHANT:
                     index = this.redElephants.indexOf(final);
-                    this.redElephants.splice(index);
+                    this.redElephants.splice(index, 1);
                     break;
                 case PIECE.HORSE:
                     index = this.redHorses.indexOf(final);
-                    this.redHorses.splice(index);
+                    this.redHorses.splice(index, 1);
                     break;
                 case PIECE.CHARIOT:
                     index = this.redChariots.indexOf(final);
-                    this.redChariots.splice(index);
+                    this.redChariots.splice(index, 1);
                     break;
                 case PIECE.CANNON:
                     index = this.redCannons.indexOf(final);
-                    this.redCannons.splice(index);
+                    this.redCannons.splice(index, 1);
                     break;
                 case PIECE.PAWN:
                     index = this.redPawns.indexOf(final);
-                    this.redPawns.splice(index);
+                    this.redPawns.splice(index, 1);
                     break;
                 default:
                     throw "Piece not present to remove";
@@ -978,14 +980,17 @@ export class Board {
 
     //Check flying general
     public legalMoves(c: COLOR): Move[] {
-        let moves = this.generateMoves(c);
-        var legal_moves: Move[] = [];
-        moves.forEach(m => {
-            if (!this.generalAttacked(m)) {
-                legal_moves.push(m);
-            }
-        });
-        return legal_moves;
+        if (this.turnNum != this.move_history.length) {
+            this.curr_moves = [];
+            let moves = this.generateMoves(c);
+            moves.forEach(m => {
+                if (!this.generalAttacked(m)) {
+                    this.curr_moves.push(m);
+                }
+            });
+            this.turnNum = this.move_history.length;
+        }
+        return this.curr_moves;
     }
 
     //Make move without checking legality
@@ -1026,15 +1031,16 @@ export class Board {
                 c = COLOR.RED;
             }
             p = m.captured;
-            let r = Math.floor(m.final / BOARD_FILES);
-            let f = m.final % BOARD_FILES; 
+            r = Math.floor(m.final / BOARD_FILES);
+            f = m.final % BOARD_FILES; 
             this.add(c, p, f, r);
+            
         } 
     }
 
     private generalAttacked(move: Move): boolean {
         this.makeMove(move);
-        let isAttacked = false;
+        var isAttacked = false;
         let flying_general = true;
         let r_index = this.redGenerals[0];
         let b_index = this.blackGenerals[0];
@@ -1081,28 +1087,29 @@ export class Board {
 
     //Make a new board 
     public copy(): Board {
-        return <Board>{
-            colors: Array.from(this.colors),
-            pieces: Array.from(this.pieces),
+        let b = new Board();
+        b.colors = Array.from(this.colors);
+        b.pieces = Array.from(this.pieces);
 
-            redGenerals: Array.from(this.redGenerals),
-            redAdvisors: Array.from(this.redAdvisors),
-            redElephants: Array.from(this.redElephants),
-            redHorses: Array.from(this.redHorses),
-            redChariots: Array.from(this.redChariots),
-            redCannons: Array.from(this.redCannons),
-            redPawns: Array.from(this.redPawns),
+        b.redGenerals = Array.from(this.redGenerals);
+        b.redAdvisors = Array.from(this.redAdvisors);
+        b.redElephants = Array.from(this.redElephants);
+        b.redHorses = Array.from(this.redHorses);
+        b.redChariots = Array.from(this.redChariots);
+        b.redCannons = Array.from(this.redCannons);
+        b.redPawns = Array.from(this.redPawns);
 
-            blackGenerals: Array.from(this.blackGenerals),
-            blackAdvisors: Array.from(this.blackAdvisors),
-            blackElephants: Array.from(this.blackElephants),
-            blackHorses: Array.from(this.blackHorses),
-            blackChariots: Array.from(this.blackChariots),
-            blackCannons: Array.from(this.blackCannons),
-            blackPawns: Array.from(this.blackPawns),
+        b.blackGenerals = Array.from(this.blackGenerals);
+        b.blackAdvisors = Array.from(this.blackAdvisors);
+        b.blackElephants = Array.from(this.blackElephants);
+        b.blackHorses = Array.from(this.blackHorses);
+        b.blackChariots = Array.from(this.blackChariots);
+        b.blackCannons = Array.from(this.blackCannons);
+        b.blackPawns = Array.from(this.blackPawns);
 
-            move_history: Array.from(this.move_history),
-        };
+        b.move_history = Array.from(this.move_history);
+
+        return b;
     }
 
     
