@@ -96,6 +96,19 @@ export class Game {
         }
     }
 
+    public timeLeftPretty(c: COLOR): number[] {
+        let min, sec;
+        if (c == COLOR.RED) {
+            min = Math.floor(this.redTimer / (60 * 1000));
+            sec = Math.floor( (this.redTimer % (60 * 1000)) / 1000);
+            return [min, sec];
+        } else {
+            min = Math.floor(this.blackTimer / (60 * 1000));
+            sec = Math.floor( (this.blackTimer % (60 * 1000)) / 1000);
+            return [min, sec];
+        }
+    }
+
     private updateTime() {
         if (this.turn == COLOR.RED) {
             let timeToSet = new Date().getTime();

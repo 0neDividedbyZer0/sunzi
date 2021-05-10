@@ -13,8 +13,9 @@ export function runGame(redPlayer: Player = new humanPlayer(), blackPlayer: Play
     console.log('Starting game');
     let game: Game = new Game(redPlayer, blackPlayer, redTime, blackTime, redPlus, blackPlus);
     let b = game.getBoard;
-    var lastTurn = game.getTurn;
-    var gameLoop = setImmediate(() => {
+    var lastTurn = COLOR.EMPTY;
+    game.init();
+    var gameLoop = setInterval(() => {
         if (game.colorWonByTimeout != COLOR.EMPTY) {
             console.log('Game is over');
             if (game.colorWonByTimeout == COLOR.RED) {
@@ -22,7 +23,7 @@ export function runGame(redPlayer: Player = new humanPlayer(), blackPlayer: Play
             } else {
                 console.log('Black won');
             }
-            clearImmediate(gameLoop);
+            clearInterval(gameLoop);
         }
         if (game.isGameOver()) {
             console.log('Game is over');
@@ -31,13 +32,13 @@ export function runGame(redPlayer: Player = new humanPlayer(), blackPlayer: Play
             } else {
                 console.log('Red won');
             }
-            clearImmediate(gameLoop);
+            clearInterval(gameLoop);
         }
         if (lastTurn != game.getTurn) {
             lastTurn = game.getTurn;
             game.play();
         }
-    });
+    }, 16);
 }
 
-runGame();
+runGame(new humanPlayer(), new humanPlayer(), 1, 1, 0, 0);
