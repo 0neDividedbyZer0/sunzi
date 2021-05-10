@@ -21,7 +21,7 @@ export class humanPlayer extends Player {
         for (let i = 0; i < legal_moves.length; i++) {
             moveOutput = moveOutput + `${i}: ` + moveToString(legal_moves[i], c) + ' ';
         }
-        let index = await this.query('What move?\n\n' + moveOutput + '\n>');
+        let index = await this.query(`Time: ${g.timeLeft(c)}\n\n What move?\n\n` + moveOutput + '\n>');
         return legal_moves[Number(index)];
     }
 

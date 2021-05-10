@@ -6,6 +6,6 @@ var assert = require('assert');
 
 describe('Game Tests', function() {
     it('Plays a Game', function() {
-        runGame();
+        runGame(new humanPlayer(), new humanPlayer(), 1, 1, 0, 0);
     });
 });

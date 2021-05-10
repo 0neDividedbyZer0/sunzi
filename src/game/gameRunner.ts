@@ -1,4 +1,5 @@
 import { humanPlayer } from "../players/humanPlayer";
+import { Player } from "../players/player";
 import { COLOR, Move } from "./board";
 import { Game } from "./game";
 
@@ -7,9 +8,10 @@ export const name = 'gameRunner';
 
 
 
-export function runGame(): void {
+export function runGame(redPlayer: Player = new humanPlayer(), blackPlayer: Player = new humanPlayer(),
+    redTime = 15, blackTime = 15, redPlus = 10, blackPlus = 10): void {
     console.log('Starting game');
-    let game: Game = new Game(new humanPlayer(), new humanPlayer());
+    let game: Game = new Game(redPlayer, blackPlayer, redTime, blackTime, redPlus, blackPlus);
     let b = game.getBoard;
     var lastTurn = game.getTurn;
     var gameLoop = setImmediate(() => {
