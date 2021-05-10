@@ -21,7 +21,7 @@ export class Game {
     private redTimer: number = 0;
     private blackTimer: number = 0;
     private clock: NodeJS.Immediate;
-    private colorWon: COLOR = COLOR.EMPTY;
+    public colorWonByTimeout: COLOR = COLOR.EMPTY;
 
     public constructor(redPlayer: Player, blackPlayer: Player, redTime:number = 15, blackTime:number = 15, 
             redPlus = 10, blackPlus = 10) {
@@ -54,9 +54,9 @@ export class Game {
             this.updateTime();
             if (this.isTimedOut()) {
                 if (this.turn  == COLOR.RED) {
-                    this.colorWon = COLOR.BLACK;
+                    this.colorWonByTimeout = COLOR.BLACK;
                 } else {
-                    this.colorWon = COLOR.RED;
+                    this.colorWonByTimeout = COLOR.RED;
                 }
                 clearImmediate(this.clock);
             }
@@ -151,11 +151,4 @@ export class Game {
     
 
     //Game Over method needs to check mate and three repetition
-}
-
-export class GameTimeoutError extends Error {
-    constructor(message: string) {
-        super(message);
-        this.name = 'GameTimeoutError';
-    }
 }
