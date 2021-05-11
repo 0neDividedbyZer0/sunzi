@@ -5,6 +5,7 @@ export const name = 'game'
 
 //This is the implementation of the game itself
 //TODO: 3 move draw checking, 3 check rules, infinite time?
+//Nice formatting of moves after a game etc.
 //Undo and redo functions
 
 export class Game {

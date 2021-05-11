@@ -1,6 +1,64 @@
 export const name = 'board'
 
-//TODO: toString
+//TODO: 3 move check-chase, 3 move repetition draw
+
+/* Asia rules for proper adjudication of mates and draws, TODO
+1) Checking is considers a worse offence than chasing another piece. 
+So if one side is perpetually checking, and the other is perpetually 
+chasing, the checking side loses. All chases are equal, though: if 
+one side perpetually chases a Rook, and the other a Pawn, it is draw.
+
+2) To make a forbidden perpetual chase, you must really chase the 
+same piece on every move of the repeat cycle. (And it does not matter 
+which piece does the chasing: two (or multiple) pieces taking turns 
+to chase one is still forbidden. ) Having a single non-forcing move 
+in the cycle ("one check, one idle", "one chase, one idle") 
+completely acquits you of chase charges. Also alternately chasing 
+two different pieces (including "one check, one chase") is allowed.
+
+3) A chase must be a _new_ attack on a piece. If you could already 
+capture piece A with piece B before move M, then being able to 
+capture A with B after M does not threaten anything new, and is 
+not a chase. E.g. moving a Rook along the attack ray is not 
+creating a new attack. (Checks, obviously, always are new.) Note 
+that one move can result in mutiple chases, both on multiple 
+targets, (e.g. forks) and by multiple perpetrators (e.g. 
+discovered attacks). They all must be judged separately.
+
+4) A newly created attack is in general only considered forcing 
+(i.e. a chase) if the target is not protected. If it can be 
+recaptured on the same square, the attack is not a chase. 
+(Note that the possibility to recapture might depend on how the 
+piece is captured, in case of multiple attackers, so this has 
+to be judged per (attacker, victim)-pair, and is not an 
+intrinsic property of the victim.) But there are some exceptions 
+that are declared either always a chase or never a chase, 
+irrespective of the protected status of the victim:
+- Attacks of Horse or Cannon on Rook are always a chase
+- Attacks on a Pawn that has not crossed the River are never a chase
+- Attacks by a Pawn or King are never a chase
+- Attacks on a King are of course always checks
+
+5) An attack on a piece is also not considered a chase if the piece 
+can capture its attacker (which must be of equal type) back. The 
+possibility for such pre-emptive self-defence is considered as good 
+as having a protector that can retaliate. Such attacks are called 
+"sacrifices" or "offers to exchange", not chases. Note that it does 
+not matter if you can pre-emptively capture the attacker with 
+another piece than the chased one, or if the chase victim can 
+capture a piece other than the one chasing it.
+
+6) In all cases only legal moves are taken under consideration. 
+Pseudo-legal captures that are not legal are to be completely 
+ignored. This applies to the attacks itself, to recaptures by 
+a protector, or to pre-emptive counter captures. On the other 
+hand, if the move is legal, does not have to be a good one. 
+Even if it gets you mated in one after making it, or loses 
+you heavy material, the move should be taken into account. 
+(E.g. when a piece is twice attacked, and only once 
+protected, recapturing might be suicidal, but the piece 
+still counts as protected.)
+*/
 
 /**
  * The board's absolute position is based on
@@ -1084,6 +1142,7 @@ export class Board {
         return moves.length == 0;
     }
 
+
     //Make a new board 
     public copy(): Board {
         let b = new Board();
@@ -1396,6 +1455,3 @@ export class Move {
 
     
 };
-
-
-//xiangqi.js + xiangqijs for board and game logic, I want to go to modeling and machine learning and AI
