@@ -4,7 +4,7 @@ import { Board, COLOR, Move } from "./board";
 export const name = 'game'
 
 //This is the implementation of the game itself
-//TODO: 3 move draw checking, timeout, 3 check rules
+//TODO: 3 move draw checking, 3 check rules
 //Undo and redo functions
 
 export class Game {
@@ -17,10 +17,12 @@ export class Game {
     private currTime: number = 0;
     private board: Board;
     private turn: COLOR;
+    private lastTurn: COLOR = COLOR.EMPTY;
     private historyString: string;
     private redTimer: number = 0;
     private blackTimer: number = 0;
-    private clock: NodeJS.Immediate;
+    private clock: NodeJS.Timeout;
+    private gameLoop: NodeJS.Timeout;
     public colorWonByTimeout: COLOR = COLOR.EMPTY;
 
     public constructor(redPlayer: Player, blackPlayer: Player, redTime:number = 15, blackTime:number = 15, 
@@ -34,8 +36,10 @@ export class Game {
         this.board = Board.startBoard();
         this.turn = COLOR.RED;
         this.historyString = '';
-        this.clock = setImmediate(() => {0});
-        clearImmediate(this.clock);
+        this.clock = setInterval(() => {0}, 0);
+        clearInterval(this.clock);
+        this.gameLoop = setInterval(() => {0}, 0);
+        clearInterval(this.gameLoop);
     }
 
     public setRedPlayer(p: Player): void {
@@ -46,13 +50,12 @@ export class Game {
         this.blackPlayer = p;
     }
 
-    public init(): void {
+    public start(): void {
         this.currTime = new Date().getTime();
-        this.blackTimer = this.blackTime;
-        this.redTimer = this.redTime;
         //Is this even running?
-        this.clock = setImmediate(() => {
+        this.clock = setInterval(() => {
             //It seems to be terminating after one run
+            //Is this function getting put into the callback queue?
             this.updateTime();
             if (this.isTimedOut()) {
                 if (this.turn  == COLOR.RED) {
@@ -60,9 +63,34 @@ export class Game {
                 } else {
                     this.colorWonByTimeout = COLOR.RED;
                 }
-                clearImmediate(this.clock);
+                clearInterval(this.clock);
             }
-        });
+        }, 0);
+
+        this.gameLoop = setInterval(() => {
+            if (this.colorWonByTimeout != COLOR.EMPTY) {
+                console.log('\nGame is over');
+                if (this.colorWonByTimeout == COLOR.RED) {
+                    console.log('Red won');
+                } else {
+                    console.log('Black won');
+                }
+                clearInterval(this.gameLoop);
+                process.exit(0);
+            } else if (this.isGameOver()) {
+                console.log('\nGame is over');
+                if (this.getTurn == COLOR.RED) {
+                    console.log('Black won');
+                } else {
+                    console.log('Red won');
+                }
+                clearInterval(this.gameLoop);
+                process.exit(0);
+            } else if (this.lastTurn != this.getTurn) {
+                this.lastTurn = this.getTurn;
+                this.play();
+            }
+        }, 16);
     }
 
     //Make async so it can time out properly?
@@ -70,11 +98,11 @@ export class Game {
         let move: Move;
         if (this.turn == COLOR.RED) {
             move = await this.redPlayer.chooseMove(this, this.turn);
-            this.redTime += this.redPlus;
+            this.redTimer += this.redPlus;
             this.turn = COLOR.BLACK;
         } else {
             move = await this.blackPlayer.chooseMove(this, this.turn);
-            this.blackTime += this.blackPlus;
+            this.blackTimer += this.blackPlus;
             this.turn = COLOR.RED;
         }
         //Check timeout here to stop making moves
@@ -118,12 +146,10 @@ export class Game {
         if (this.turn == COLOR.RED) {
             let timeToSet = new Date().getTime();
             this.redTimer -= timeToSet - this.currTime;
-            console.log(timeToSet - this.currTime);
             this.currTime = timeToSet;
         } else {
             let timeToSet = new Date().getTime();
             this.blackTimer -= timeToSet - this.currTime;
-            console.log(timeToSet - this.currTime);
             this.currTime = timeToSet;
         }
     }
@@ -136,12 +162,75 @@ export class Game {
         }
     }
 
+    //In minutes
+    public editRedTime(newRedTime: number): void {
+        this.redTime = newRedTime * 60 * 1000;
+    }
+
+    public editBlackTime(newBlackTime: number): void {
+        this.blackTime = newBlackTime * 60 * 1000;
+    }
+
+    //In seconds
+    public editRedPlus(newRedPlus: number): void {
+        this.redPlus = newRedPlus * 1000;
+    }
+
+    public editBlackPlus(newBlackPlus: number): void {
+        this.blackPlus = newBlackPlus * 1000;
+    }
+
+    public interrupt(): void {
+        clearInterval(this.gameLoop);
+        clearInterval(this.clock);
+    }
+
+    public stopTime(): void {
+        clearInterval(this.clock);
+    }
+
+    public startTime(): void {
+        this.currTime = new Date().getTime();
+        this.clock = setInterval(() => {
+            //It seems to be terminating after one run
+            //Is this function getting put into the callback queue?
+            this.updateTime();
+            if (this.isTimedOut()) {
+                if (this.turn  == COLOR.RED) {
+                    this.colorWonByTimeout = COLOR.BLACK;
+                } else {
+                    this.colorWonByTimeout = COLOR.RED;
+                }
+                clearInterval(this.clock);
+            }
+        }, 0);
+    }
+
+    public restartTime(): void {
+        this.currTime = new Date().getTime();
+        this.redTimer = this.redTime;
+        this.blackTimer = this.blackTime;
+        this.clock = setInterval(() => {
+            this.updateTime();
+            if (this.isTimedOut()) {
+                if (this.turn  == COLOR.RED) {
+                    this.colorWonByTimeout = COLOR.BLACK;
+                } else {
+                    this.colorWonByTimeout = COLOR.RED;
+                }
+                clearInterval(this.clock);
+            }
+        }, 0);
+    }
+
     public reset(): void {
         this.board = Board.startBoard();
         this.turn = COLOR.RED;
         this.historyString = '';
         this.redTimer = this.redTime;
-        this.blackTime = this.blackTime;
+        this.blackTimer = this.blackTime;
+        this.colorWonByTimeout = COLOR.EMPTY;
+        this.lastTurn = COLOR.EMPTY;
     }
 
     public isGameOver(): boolean {

@@ -12,33 +12,9 @@ export function runGame(redPlayer: Player = new humanPlayer(), blackPlayer: Play
     redTime = 15, blackTime = 15, redPlus = 10, blackPlus = 10): void {
     console.log('Starting game');
     let game: Game = new Game(redPlayer, blackPlayer, redTime, blackTime, redPlus, blackPlus);
-    let b = game.getBoard;
-    var lastTurn = COLOR.EMPTY;
-    game.init();
-    var gameLoop = setInterval(() => {
-        if (game.colorWonByTimeout != COLOR.EMPTY) {
-            console.log('Game is over');
-            if (game.colorWonByTimeout == COLOR.RED) {
-                console.log('Red won');
-            } else {
-                console.log('Black won');
-            }
-            clearInterval(gameLoop);
-        }
-        if (game.isGameOver()) {
-            console.log('Game is over');
-            if (game.getTurn == COLOR.RED) {
-                console.log('Black won');
-            } else {
-                console.log('Red won');
-            }
-            clearInterval(gameLoop);
-        }
-        if (lastTurn != game.getTurn) {
-            lastTurn = game.getTurn;
-            game.play();
-        }
-    }, 16);
+    game.reset();
+    game.start();
+    
 }
 
 runGame(new humanPlayer(), new humanPlayer(), 1, 1, 0, 0);
