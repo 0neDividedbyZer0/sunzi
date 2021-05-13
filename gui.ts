@@ -8,21 +8,58 @@ var bootstrap = require('bootstrap');
 //Basically, we need an html 
 //which we manipulate the DOM for the GUI
 
+const pieces = 'static/pieces/';
+
+//Dimensions are all off. the Board is 900 width, 1200 height
+
+const WIDTH = 45;
+const HEIGHT = 54;
+
+
+
 function drawBoard(): void {
-    let boardDiv = document.getElementById('board');
+    var boardTable = '<table cellspacing=0><tbody>';
+    
     let board = g.getBoard;
     for (let r = 0; r < BOARD_RANKS; r++) {
+        boardTable += '<tr>';
         for (let f = 0; f < BOARD_FILES; f++) {
             let index = r * BOARD_FILES + f;
-            let pieceImg = '<img style="width: 44px" draggable="true"';
-            pieceImg += 'static/pieces/' + pieceSVG(board.getColor(f, r), board.getPiece(f, r)) +'"></img>"';
+            
+            let c = board.getColor(f, r);
+            if (c != COLOR.SENTINEL) {
+                let pieceImg: string = '';
+                if (c != COLOR.EMPTY) {
+                    pieceImg = '<img style="width: 44px" draggable="true" ';
+                    pieceImg += 'src="' + pieces + pieceSVG(board.getColor(f, r), board.getPiece(f, r)) +'"></img>';
+                    console.log(pieceImg);
+                }
+                boardTable += 
+                    '<td align="center" id="' + index + 
+                    '" height="' + HEIGHT + 'px" width="' + WIDTH + 'px" ' +
+                    'onclick="tapPiece(this.id)" ' +
+                    'ondragstart="dragPiece(event, this.id)" ' +
+                    'ondragover="dragOver(event, this.id)" ' +
+                    'ondrop="dropPiece(event, this.id)">';
+
+                if (c == COLOR.EMPTY) {
+                    boardTable += '<td>';
+                } else {
+                    boardTable += pieceImg;
+                    boardTable += '<td>';
+                }
+            }
             //we're using data cells to make the board
             //Add code to make svg pieces. This basically
             //Creates a big board where the background is the board svg
             //So research bootstrap squares and stuff I guess
             //draggable allows the square divs the pieces are on move
         }
+        boardTable += '</tr>';
     }
+    boardTable += '</tbody></table>';
+    document.getElementById('board')!.innerHTML = boardTable;
+    
 }
 
 
@@ -68,3 +105,5 @@ function pieceSVG(c: COLOR, p: PIECE): string {
 }
 
 var g: Game = makeGame();
+
+drawBoard();
