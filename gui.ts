@@ -8,6 +8,8 @@ var bootstrap = require('bootstrap');
 //Basically, we need an html 
 //which we manipulate the DOM for the GUI
 
+//TODO: timer, UI, engine output/thinking or something, highlighting/sounds, buttons and functionalities
+
 const pieces = 'static/pieces/';
 
 const WIDTH = 45;
