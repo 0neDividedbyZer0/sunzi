@@ -20,8 +20,8 @@ https://www.chessprogramming.org/
 
 ## Plan:
 1. Implement GUI
-2. Add in remaining backend (Asian rules of checkmate and draw)
-3. Implement bruteforce AI (alpha beta pruning to 16 layers Ideally, heuristics etc.)
+2. Add in remaining backend (Asian rules of checkmate and draw) (revis: I'd rather just do three move repetition. It's easier and simpler that way)
+3. Implement bruteforce AI (alpha beta pruning to 16-18 layers Ideally, heuristics etc.)
 4. Implement humanlike AI (strategy and stuff) (create styles according to xqinenglish opening styles page, like giving favorite opening systems and personalities). (At beginner levels, basically make its choice of moves probabilistically uniform across all moves, and then at higher levels make it sharpen to the better ones? Or modify how it evaluates at each level?) (remember PASTE: position, analysis, strategy, tactics, execution)
 5. Machine Learning AI (Muzero)
 6. Machine Learning classifier (of moves and integrate with humanlike AI to play more naturally)

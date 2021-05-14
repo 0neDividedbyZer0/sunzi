@@ -25,6 +25,11 @@ function drawBoard(): void {
     for (let r = 1; r < BOARD_RANKS - 1; r++) {
         boardTable += '<tr>';
         for (let f = 1; f <= FILES; f++) {
+            if (flip) {
+                f = 10 - f;
+                r = BOARD_RANKS - 1 - r;
+            }
+
             let index = r * BOARD_FILES + f;
             
             let c = board.getColor(f, r);
@@ -54,6 +59,10 @@ function drawBoard(): void {
             //Creates a big board where the background is the board svg
             //So research bootstrap squares and stuff I guess
             //draggable allows the square divs the pieces are on move
+            if (flip) {
+                f = 10 - f;
+                r = BOARD_RANKS - 1 - r;
+            }
         }
         boardTable += '</tr>';
     }
@@ -61,6 +70,17 @@ function drawBoard(): void {
     document.getElementById('board')!.innerHTML = boardTable;
     
 }
+
+function highlight() {
+
+}
+
+function playSounds() {
+
+}
+
+//All the UI functions 
+//And the API calls necessary for it to work.
 
 
 function makeGame(redPlayer: Player = new humanPlayer(), blackPlayer: Player = new humanPlayer(),
@@ -105,5 +125,7 @@ function pieceSVG(c: COLOR, p: PIECE): string {
 }
 
 var g: Game = makeGame();
+
+var flip: boolean = true;
 
 drawBoard();
