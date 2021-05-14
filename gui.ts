@@ -11,9 +11,10 @@ var bootstrap = require('bootstrap');
 const pieces = 'static/pieces/';
 
 //Dimensions are all off. the Board is 900 width, 1200 height
-
+//At 10 rows, height is 560. If we add 4 rows, then it becomes 40 px
 const WIDTH = 45;
-const HEIGHT = 54;
+const HEIGHT = 56;
+const PIECE_WIDTH = 41;
 
 
 
@@ -30,7 +31,7 @@ function drawBoard(): void {
             if (c != COLOR.SENTINEL) {
                 let pieceImg: string = '';
                 if (c != COLOR.EMPTY) {
-                    pieceImg = '<img style="width: 44px" draggable="true" ';
+                    pieceImg = '<img style="width:' + PIECE_WIDTH +'px" draggable="true" ';
                     pieceImg += 'src="' + pieces + pieceSVG(board.getColor(f, r), board.getPiece(f, r)) +'"></img>';
                     console.log(pieceImg);
                 }
