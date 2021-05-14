@@ -12,11 +12,12 @@ var bootstrap = require('bootstrap');
 
 const pieces = 'static/pieces/';
 
-const WIDTH = 45;
-const HEIGHT = 47.5;
-const PIECE_WIDTH = 42;
+const WIDTH = 46//45;
+const HEIGHT = 48//47.5;
+const PIECE_WIDTH = 42//42;
 
-const BUFFER_HEIGHT = 42.5;
+const BUFFER_HEIGHT = 48//42.5;
+const BUFFER_WIDTH = 0;
 
 
 
@@ -26,9 +27,9 @@ function drawBoard(): void {
     let board = g.getBoard;
     for (let r = 1; r < BOARD_RANKS - 1; r++) {
         boardTable += '<tr>';
-        for (let f = 1; f <= FILES; f++) {
+        for (let f = 0; f < BOARD_FILES; f++) {
             if (flip) {
-                f = 10 - f;
+                f = BOARD_FILES - 1 - f;
                 r = BOARD_RANKS - 1 - r;
             }
 
@@ -44,7 +45,8 @@ function drawBoard(): void {
             }
             boardTable += 
                 '<td align="center" id="' + index + 
-                '" height="' + (c == COLOR.SENTINEL ? BUFFER_HEIGHT : HEIGHT) + 'px" width="' + WIDTH + 'px" ' +
+                '" height="' + (c == COLOR.SENTINEL ? BUFFER_HEIGHT : HEIGHT) + 'px" width="' + 
+                ((f == 0 || f == (BOARD_FILES - 1)) ? BUFFER_WIDTH : WIDTH)+ 'px" ' +
                 'onclick="tapPiece(this.id)" ' +
                 'ondragstart="dragPiece(event, this.id)" ' +
                 'ondragover="dragOver(event, this.id)" ' +
@@ -62,7 +64,7 @@ function drawBoard(): void {
             //So research bootstrap squares and stuff I guess
             //draggable allows the square divs the pieces are on move
             if (flip) {
-                f = 10 - f;
+                f = BOARD_FILES - 1 - f;
                 r = BOARD_RANKS - 1 - r;
             }
         }

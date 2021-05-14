@@ -28,9 +28,16 @@
         
         class="img-fluid bg-cover text-center">
         <main>
-            <div id="board" style="border: 1px solid black;
+            <div id="board-container" style="border: 1px solid black;
             background: url(./static/boards/xiangqi_board.svg);
-            background-size: contain;"></div>
+            background-size: contain; background-position: center; justify-content: center;
+            align-items: center; display:flex; overflow:hidden; justify-content:space-between;">
+                <div id="left-buffer" style="margin-left: 0px; margin-right: 1px;"></div>
+                <div id="board" >
+                    <!--<div id="left-buffer" style="margin-left: 1px">-->
+                </div>
+                <div id="right-buffer" style="margin-left: 0px; margin-right: 0px;"></div>
+            </div>
             <!--Add in the buttons down here after
             getting the board working and everything-->
         </main>
