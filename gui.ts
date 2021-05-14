@@ -1,4 +1,4 @@
-import { BOARD_FILES, BOARD_RANKS, COLOR, PIECE } from "./src/game/board";
+import { BOARD_FILES, BOARD_RANKS, COLOR, PIECE, FILES } from "./src/game/board";
 import { Game } from "./src/game/game";
 import { humanPlayer } from "./src/players/humanPlayer";
 import { Player } from "./src/players/player";
@@ -10,11 +10,11 @@ var bootstrap = require('bootstrap');
 
 const pieces = 'static/pieces/';
 
-//Dimensions are all off. the Board is 900 width, 1200 height
-//At 10 rows, height is 560. If we add 4 rows, then it becomes 40 px
 const WIDTH = 45;
-const HEIGHT = 56;
-const PIECE_WIDTH = 41;
+const HEIGHT = 47.5;
+const PIECE_WIDTH = 42;
+
+const BUFFER_HEIGHT = 42.5;
 
 
 
@@ -22,33 +22,32 @@ function drawBoard(): void {
     var boardTable = '<table cellspacing=0><tbody>';
     
     let board = g.getBoard;
-    for (let r = 0; r < BOARD_RANKS; r++) {
+    for (let r = 1; r < BOARD_RANKS - 1; r++) {
         boardTable += '<tr>';
-        for (let f = 0; f < BOARD_FILES; f++) {
+        for (let f = 1; f <= FILES; f++) {
             let index = r * BOARD_FILES + f;
             
             let c = board.getColor(f, r);
-            if (c != COLOR.SENTINEL) {
-                let pieceImg: string = '';
-                if (c != COLOR.EMPTY) {
-                    pieceImg = '<img style="width:' + PIECE_WIDTH +'px" draggable="true" ';
-                    pieceImg += 'src="' + pieces + pieceSVG(board.getColor(f, r), board.getPiece(f, r)) +'"></img>';
-                    console.log(pieceImg);
-                }
-                boardTable += 
-                    '<td align="center" id="' + index + 
-                    '" height="' + HEIGHT + 'px" width="' + WIDTH + 'px" ' +
-                    'onclick="tapPiece(this.id)" ' +
-                    'ondragstart="dragPiece(event, this.id)" ' +
-                    'ondragover="dragOver(event, this.id)" ' +
-                    'ondrop="dropPiece(event, this.id)">';
+            
+            let pieceImg: string = '';
+            if (c != COLOR.SENTINEL && c != COLOR.EMPTY) {
+                pieceImg = '<img style="width:' + PIECE_WIDTH +'px" draggable="true" ';
+                pieceImg += 'src="' + pieces + pieceSVG(board.getColor(f, r), board.getPiece(f, r)) +'"></img>';
+                console.log(pieceImg);
+            }
+            boardTable += 
+                '<td align="center" id="' + index + 
+                '" height="' + (c == COLOR.SENTINEL ? BUFFER_HEIGHT : HEIGHT) + 'px" width="' + WIDTH + 'px" ' +
+                'onclick="tapPiece(this.id)" ' +
+                'ondragstart="dragPiece(event, this.id)" ' +
+                'ondragover="dragOver(event, this.id)" ' +
+                'ondrop="dropPiece(event, this.id)">';
 
-                if (c == COLOR.EMPTY) {
-                    boardTable += '<td>';
-                } else {
-                    boardTable += pieceImg;
-                    boardTable += '<td>';
-                }
+            if (c == COLOR.EMPTY || c == COLOR.SENTINEL) {
+                boardTable += '<td>';
+            } else {
+                boardTable += pieceImg;
+                boardTable += '<td>';
             }
             //we're using data cells to make the board
             //Add code to make svg pieces. This basically

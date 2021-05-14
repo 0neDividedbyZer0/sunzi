@@ -69,8 +69,8 @@ still counts as protected.)
  * (In implementation, they are labeled from 0)
  */
 
-const FILES: number = 9;
-const RANKS: number = 10;
+export const FILES: number = 9;
+export const RANKS: number = 10;
 
 export const BOARD_FILES: number = 11;
 export const BOARD_RANKS: number = 14;
