@@ -26,3 +26,11 @@ https://www.chessprogramming.org/
 5. Machine Learning AI (Muzero)
 6. Machine Learning classifier (of moves and integrate with humanlike AI to play more naturally)
 7. Trainer (use the classifier to teach and improve your play, maybe a PCA to see your style based on your games? Have it be able to hint moves, analyze best moves for that style)
+
+## Misc. Thoughts:
+1. Muzero has a policy and a value function. The policy function basically chooses the best move, the value function evaluates the value of the board/state. To implement the trainer, I think it's best to basically have a function that classifies each move according to its different styles, which would be complicated. Then to make a stylistic AI, should probably combine its evaluation with the preferred style of move to rank them and choose them.
+2. Encoding moves: like how certain chess programs classify moves as quiet moves, castles, etc, we could probably do the same with Xiangqi. Then it would be easy to simply weight these for styles?
+3. Can we come up with a list of common strategies? (and how the heck would we implement it?)
+
+## Bug List
+1. Game reduces the time after the third turn in a test.

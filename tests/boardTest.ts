@@ -445,6 +445,45 @@ describe('Board Tests', function() {
                 assert.equal(found, true);
             });
         });
+
+        describe('Legal Move Test 8', function () {
+            it('Test black pawns controllable after crossing river', function () {
+                let b = new Board();
+                b.add(COLOR.RED, PIECE.GENERAL, 5, 2);
+                b.add(COLOR.RED, PIECE.PAWN, 5, 6);
+                
+                b.add(COLOR.BLACK, PIECE.GENERAL, 5, 11);
+                b.add(COLOR.BLACK, PIECE.PAWN, 5, 7);
+                let m = b.legalMoves(COLOR.BLACK);
+                let testMove = new Move(b.blackPawns[0], 6 * BOARD_FILES + 5);
+                let found = false;
+                let moveToMake = new Move(-1, -1);
+                for (let i = 0; i < m.length; i++) {
+                    if (!found) {
+                        found = testMove.isEqual(m[i]);
+                        moveToMake = m[i];
+                    } else {
+                        break;
+                    }
+                }
+                assert.equal(found, true);
+
+                b.makeMove(moveToMake);
+                m = b.legalMoves(COLOR.RED);
+                testMove = new Move(b.blackPawns[0], 5 * BOARD_FILES + 5);
+                found = false;
+                
+                for (let i = 0; i < m.length; i++) {
+                    if (!found) {
+                        found = testMove.isEqual(m[i]);
+                    } else {
+                        break;
+                    }
+                }
+                console.log(m);
+                assert.equal(found, false);
+            });
+        });
     });
 
 });

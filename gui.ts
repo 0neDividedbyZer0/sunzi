@@ -87,6 +87,11 @@ function highlight(m: Move): void {
 
 function highlightMoves(index: number): void {
     let legalMoves = g.getLegalMoves();
+    //print(legalMoves);
+    console.log('Checking move 71->60');
+    console.log(g.getBoard.getPiece(5, 6));
+    console.log(g.getBoard.getColor(5, 6));
+    console.log(g.getBoard.redPawns);
     for (let i = 0; i < legalMoves.length; i++) {
         let m = legalMoves[i];
         if (m.initial == index) {
@@ -166,7 +171,8 @@ function dropPiece(event: Event, index: string): void {
 
 
 //Apparently red can move black pawns when they cross the river????
-//doesn't happen for black with red pawns.
+//Nevermind it happens for both
+//I've occasionally seen it with chariots too
 //the cannon bug came from the turn flipping somehow
 function clickPiece(index: string): void {
     /*if (!playerTurn) {
@@ -194,7 +200,7 @@ function clickPiece(index: string): void {
         }
         currTurn = g.getTurn;
         if (moveIndex >= 0) {
-            g.makeMove(move);  
+            g.makeMove(legalMoves[moveIndex]);  
         }
         setTimeout(drawBoard, 16); 
         clickLock = false;
@@ -262,6 +268,12 @@ function pieceSVG(c: COLOR, p: PIECE): string {
     }
     str += '.svg';
     return str;
+}
+
+function print(moves: Move[]) {
+    moves.forEach(m => {
+        console.log(m);
+    });
 }
 
 var g: Game = makeGame();
