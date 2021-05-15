@@ -1446,7 +1446,7 @@ export class Move {
     }
 
     public isEqual(other: Move): boolean {
-        return this.initial == other.initial && this.final == other.final;
+       return this.initial == other.initial && this.final == other.final;
     }
 
     public isCapture(): boolean {

@@ -21,8 +21,13 @@ export class humanPlayer extends Player {
         let time = g.timeLeftPretty(c);
         let index = await this.query(`Time: ${time[0]}:${time[1]}\n\n What move?\n\n` + moveOutput + '\n>');
         return legal_moves[Number(index)];
+
+        //We're gonna have a chooseMove that's for gui
+        
+        
     }
 
+    //For testing/ commandline stuff
     private query(question: string): Promise<string> {
         var prompt = require('readline').createInterface({
             input: process.stdin,
@@ -35,5 +40,7 @@ export class humanPlayer extends Player {
             });
         });
     }
+
+    
 
 }

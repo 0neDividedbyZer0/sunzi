@@ -1,5 +1,7 @@
+import { GuiPlayer } from "../players/GuiPlayer";
+import { humanPlayer } from "../players/humanPlayer";
 import { Player } from "../players/player"
-import { Board, COLOR, Move } from "./board";
+import { Board, BOARD_FILES, COLOR, Move, PIECE } from "./board";
 
 export const name = 'game'
 
@@ -68,6 +70,7 @@ export class Game {
             }
         }, 0);
 
+        //We need it so that the gameLoop is outside game and in the gui or something
         this.gameLoop = setInterval(() => {
             if (this.colorWonByTimeout != COLOR.EMPTY) {
                 console.log('\nGame is over');
@@ -257,6 +260,32 @@ export class Game {
 
     public get getBlack(): Player {
         return this.blackPlayer;
+    }
+
+    public getLegalMoves(): Move[] {
+        return this.board.legalMoves(this.turn);
+    }
+
+    //Funnel a move string into the correct player
+    public makeMove(m: Move): void {
+        if (this.turn == COLOR.RED) {
+            if (this.redPlayer instanceof GuiPlayer) {
+                let p = this.redPlayer as GuiPlayer;
+                p.receiveMove(m);
+            }
+        } else {
+            if (this.blackPlayer instanceof GuiPlayer) {
+                let p = this.blackPlayer as GuiPlayer;
+                p.receiveMove(m);
+            }
+        }
+    }
+
+    public hasPiece(index: number): boolean {
+        let f = index % BOARD_FILES;
+        let r = Math.floor(index / BOARD_FILES);
+        let p = this.board.getPiece(f, r);
+        return p != PIECE.SENTINEL && p != PIECE.EMPTY;
     }
     
 
