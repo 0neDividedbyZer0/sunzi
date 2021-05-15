@@ -422,6 +422,29 @@ describe('Board Tests', function() {
                 assert.equal(m.length, 44);
             });
         });
+
+        describe('Legal Move Test 7', function () {
+            it('Test Central Cannon glitch', function () {
+                let b = new Board();
+                b.add(COLOR.RED, PIECE.CANNON, 4, 6);
+                b.add(COLOR.RED, PIECE.GENERAL, 5, 2);
+                
+                b.add(COLOR.BLACK, PIECE.GENERAL, 5, 11);
+                b.add(COLOR.BLACK, PIECE.ADVISOR, 5, 10);
+                let m = b.legalMoves(COLOR.RED);
+                let testMove = new Move(b.redCannons[0], 6 * BOARD_FILES + 5);
+                let found = false;
+                for (let i = 0; i < m.length; i++) {
+                    if (!found) {
+                        found = testMove.isEqual(m[i]);
+                    } else {
+                        break;
+                    }
+                }
+                console.log(m);
+                assert.equal(found, true);
+            });
+        });
     });
 
 });

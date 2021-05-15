@@ -59,11 +59,6 @@ export function drawBoard(): void {
                 boardTable += pieceImg;
                 boardTable += '<td>';
             }
-            //we're using data cells to make the board
-            //Add code to make svg pieces. This basically
-            //Creates a big board where the background is the board svg
-            //So research bootstrap squares and stuff I guess
-            //draggable allows the square divs the pieces are on move
             if (flip) {
                 f = 10 - f;
                 r = BOARD_RANKS - 1 - r;
@@ -169,6 +164,10 @@ function dropPiece(event: Event, index: string): void {
     }       
 }
 
+
+//Apparently red can move black pawns when they cross the river????
+//doesn't happen for black with red pawns.
+//the cannon bug came from the turn flipping somehow
 function clickPiece(index: string): void {
     /*if (!playerTurn) {
         return;
