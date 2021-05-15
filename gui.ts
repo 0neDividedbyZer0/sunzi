@@ -145,7 +145,7 @@ function dropPiece(event: Event, index: string): void {
     }
     currTurn = g.getTurn;
     if (moveIndex >= 0) {
-        g.makeMove(move);  
+        g.makeMove(legalMoves[moveIndex]);  
     }
     setTimeout(drawBoard, 16); 
     clickLock = false;
