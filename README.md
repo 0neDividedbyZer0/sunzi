@@ -33,4 +33,4 @@ https://www.chessprogramming.org/
 3. Can we come up with a list of common strategies? (and how the heck would we implement it?)
 
 ## Bug List
-1. Game reduces the time after the third turn in a test.
+1. Game reduces the time after the third turn in a test. (It happens to both black and red, seemingly randomly?)

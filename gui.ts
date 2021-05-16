@@ -87,11 +87,6 @@ function highlight(m: Move): void {
 
 function highlightMoves(index: number): void {
     let legalMoves = g.getLegalMoves();
-    //print(legalMoves);
-    console.log('Checking move 71->60');
-    console.log(g.getBoard.getPiece(5, 6));
-    console.log(g.getBoard.getColor(5, 6));
-    console.log(g.getBoard.redPawns);
     for (let i = 0; i < legalMoves.length; i++) {
         let m = legalMoves[i];
         if (m.initial == index) {

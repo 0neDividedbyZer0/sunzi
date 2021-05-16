@@ -10,20 +10,22 @@ export const name = 'game'
 //Nice formatting of moves after a game etc.
 //Undo and redo functions
 
+const sToNs: number = 1000000000;
+
 export class Game {
     private redPlayer: Player;
     private blackPlayer: Player;
-    private redTime: number = 15 * 60 * 1000;
-    private blackTime: number = 15 * 60 * 1000;
-    private redPlus: number = 10 * 1000;
-    private blackPlus: number = 10 * 1000;
-    private currTime: number = 0;
+    private redTime: bigint = BigInt(15 * 60 * sToNs);
+    private blackTime: bigint = BigInt(15 * 60 * sToNs);
+    private redPlus: bigint = BigInt(10 * sToNs);
+    private blackPlus: bigint = BigInt(10 * sToNs);
+    private currTime: bigint = BigInt(0);
     private board: Board;
     private turn: COLOR;
     private lastTurn: COLOR = COLOR.EMPTY;
     private historyString: string;
-    private redTimer: number = 0;
-    private blackTimer: number = 0;
+    private redTimer: bigint = BigInt(0);
+    private blackTimer: bigint = BigInt(0);
     private clock: NodeJS.Timeout;
     private gameLoop: NodeJS.Timeout;
     public colorWonByTimeout: COLOR = COLOR.EMPTY;
@@ -32,10 +34,10 @@ export class Game {
             redPlus = 10, blackPlus = 10) {
         this.redPlayer = redPlayer;
         this.blackPlayer = blackPlayer;
-        this.redTime = redTime * 60 * 1000;
-        this.blackTime = blackTime * 60 * 1000;
-        this.redPlus = redPlus * 1000;
-        this.blackPlus = blackPlus * 1000;
+        this.redTime = BigInt(redTime * 60 * sToNs);
+        this.blackTime = BigInt(blackTime * 60 * sToNs);
+        this.redPlus = BigInt(redPlus * sToNs);
+        this.blackPlus = BigInt(blackPlus * sToNs);
         this.board = Board.startBoard();
         this.turn = COLOR.RED;
         this.historyString = '';
@@ -54,7 +56,7 @@ export class Game {
     }
 
     public start(): void {
-        this.currTime = new Date().getTime();
+        this.currTime = process.hrtime.bigint();
         //Is this even running?
         this.clock = setInterval(() => {
             //It seems to be terminating after one run
@@ -127,35 +129,28 @@ export class Game {
 
     public timeLeft(c: COLOR): number {
         if (c == COLOR.RED) {
-            return Math.floor(this.redTimer / (60 * 1000));
+            return Number(this.redTimer / BigInt(sToNs));
         } else {
-            return Math.floor(this.blackTimer / (60 * 1000));
+            return Number(this.blackTimer / BigInt(sToNs));
         }
     }
 
     public timeLeftPretty(c: COLOR): number[] {
         let min, sec;
-        if (c == COLOR.RED) {
-            min = Math.floor(this.redTimer / (60 * 1000));
-            sec = Math.floor( (this.redTimer % (60 * 1000)) / 1000);
-            return [min, sec];
-        } else {
-            min = Math.floor(this.blackTimer / (60 * 1000));
-            sec = Math.floor( (this.blackTimer % (60 * 1000)) / 1000);
-            return [min, sec];
-        }
+        let t = this.timeLeft(c);
+        min = Math.floor(t / 60);
+        sec = Math.floor(t % 60);
+        return [min, sec];
     }
 
     private updateTime() {
+        let timeToSet = process.hrtime.bigint();
         if (this.turn == COLOR.RED) {
-            let timeToSet = new Date().getTime();
             this.redTimer -= timeToSet - this.currTime;
-            this.currTime = timeToSet;
         } else {
-            let timeToSet = new Date().getTime();
             this.blackTimer -= timeToSet - this.currTime;
-            this.currTime = timeToSet;
         }
+        this.currTime = timeToSet;
     }
 
     public isTimedOut(): boolean {
@@ -168,20 +163,20 @@ export class Game {
 
     //In minutes
     public editRedTime(newRedTime: number): void {
-        this.redTime = newRedTime * 60 * 1000;
+        this.redTime = BigInt(newRedTime * 60 * sToNs);
     }
 
     public editBlackTime(newBlackTime: number): void {
-        this.blackTime = newBlackTime * 60 * 1000;
+        this.blackTime = BigInt(newBlackTime * 60 * sToNs);
     }
 
     //In seconds
     public editRedPlus(newRedPlus: number): void {
-        this.redPlus = newRedPlus * 1000;
+        this.redPlus = BigInt(newRedPlus * sToNs);
     }
 
     public editBlackPlus(newBlackPlus: number): void {
-        this.blackPlus = newBlackPlus * 1000;
+        this.blackPlus = BigInt(newBlackPlus * sToNs);
     }
 
     public interrupt(): void {
@@ -194,7 +189,7 @@ export class Game {
     }
 
     public startTime(): void {
-        this.currTime = new Date().getTime();
+        this.currTime = process.hrtime.bigint();
         this.clock = setInterval(() => {
             //It seems to be terminating after one run
             //Is this function getting put into the callback queue?
@@ -211,7 +206,7 @@ export class Game {
     }
 
     public restartTime(): void {
-        this.currTime = new Date().getTime();
+        this.currTime = process.hrtime.bigint();
         this.redTimer = this.redTime;
         this.blackTimer = this.blackTime;
         this.clock = setInterval(() => {
