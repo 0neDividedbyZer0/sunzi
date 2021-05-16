@@ -31,6 +31,6 @@ https://www.chessprogramming.org/
 1. Muzero has a policy and a value function. The policy function basically chooses the best move, the value function evaluates the value of the board/state. To implement the trainer, I think it's best to basically have a function that classifies each move according to its different styles, which would be complicated. Then to make a stylistic AI, should probably combine its evaluation with the preferred style of move to rank them and choose them.
 2. Encoding moves: like how certain chess programs classify moves as quiet moves, castles, etc, we could probably do the same with Xiangqi. Then it would be easy to simply weight these for styles?
 3. Can we come up with a list of common strategies? (and how the heck would we implement it?)
+4. Since MuZero is unsupervised, I don't know if we can apply the convolutional neural net to classifying styles. It's internal model might be meaningless.
 
 ## Bug List
-1. Game reduces the time after the third turn in a test. (It happens to both black and red, seemingly randomly?)

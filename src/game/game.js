@@ -1,76 +1,59 @@
-import { GuiPlayer } from "../players/GuiPlayer";
-import { humanPlayer } from "../players/humanPlayer";
-import { Player } from "../players/player"
-import { Board, BOARD_FILES, COLOR, Move, PIECE } from "./board";
-
-export const name = 'game'
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const GuiPlayer_1 = require("../players/GuiPlayer");
+const board_1 = require("./board");
+exports.name = 'game';
 //This is the implementation of the game itself
 //TODO: 3 move draw checking, 3 check rules, infinite time? Timer should start after first move
 //Nice formatting of moves after a game etc.
 //Undo and redo functions
-
 /**
- * Usage: you initialize a game. Then you do 
- * game.reset(); 
- * game.start(); 
+ * Usage: you initialize a game. Then you do
+ * game.reset();
+ * game.start();
  * await game.cleanupGame();
  * do stuff with game.getWinner();
  */
-
-const sToNs: number = 1000000000;
-
-export class Game {
-    private redPlayer: Player;
-    private blackPlayer: Player;
-    private redTime: bigint = BigInt(15 * 60 * sToNs);
-    private blackTime: bigint = BigInt(15 * 60 * sToNs);
-    private redPlus: bigint = BigInt(10 * sToNs);
-    private blackPlus: bigint = BigInt(10 * sToNs);
-    private currTime: bigint = BigInt(0);
-    private board: Board;
-    private turn: COLOR;
-    private lastTurn: COLOR = COLOR.EMPTY;
-    private historyString: string;
-    private redTimer: bigint = BigInt(0);
-    private blackTimer: bigint = BigInt(0);
-    private clock: NodeJS.Timeout;
-    private gameLoop: NodeJS.Timeout;
-    public colorWonByTimeout: COLOR = COLOR.EMPTY;
-    private gameFinishUnlock: (value: void | PromiseLike<void>) => void = () => {};
-    private gameFinishLock: Promise<void> = new Promise<void>((res) => {
-        this.gameFinishUnlock = res;
-    });
-    private winner: COLOR = COLOR.SENTINEL;
-
-    public constructor(redPlayer: Player, blackPlayer: Player, redTime:number = 15, blackTime:number = 15, 
-            redPlus = 10, blackPlus = 10) {
+const sToNs = 1000000000;
+class Game {
+    constructor(redPlayer, blackPlayer, redTime = 15, blackTime = 15, redPlus = 10, blackPlus = 10) {
+        this.redTime = BigInt(15 * 60 * sToNs);
+        this.blackTime = BigInt(15 * 60 * sToNs);
+        this.redPlus = BigInt(10 * sToNs);
+        this.blackPlus = BigInt(10 * sToNs);
+        this.currTime = BigInt(0);
+        this.lastTurn = board_1.COLOR.EMPTY;
+        this.redTimer = BigInt(0);
+        this.blackTimer = BigInt(0);
+        this.colorWonByTimeout = board_1.COLOR.EMPTY;
+        this.gameFinishUnlock = () => { };
+        this.gameFinishLock = new Promise((res) => {
+            this.gameFinishUnlock = res;
+        });
+        this.winner = board_1.COLOR.SENTINEL;
         this.redPlayer = redPlayer;
         this.blackPlayer = blackPlayer;
         this.redTime = BigInt(redTime * 60 * sToNs);
         this.blackTime = BigInt(blackTime * 60 * sToNs);
         this.redPlus = BigInt(redPlus * sToNs);
         this.blackPlus = BigInt(blackPlus * sToNs);
-        this.board = Board.startBoard();
-        this.turn = COLOR.RED;
+        this.board = board_1.Board.startBoard();
+        this.turn = board_1.COLOR.RED;
         this.historyString = '';
-        this.clock = setInterval(() => {0}, 0);
+        this.clock = setInterval(() => { 0; }, 0);
         clearInterval(this.clock);
-        this.gameLoop = setInterval(() => {0}, 0);
+        this.gameLoop = setInterval(() => { 0; }, 0);
         clearInterval(this.gameLoop);
     }
-
-    public setRedPlayer(p: Player): void {
+    setRedPlayer(p) {
         this.redPlayer = p;
     }
-
-    public setBlackPlayer(p: Player): void {
+    setBlackPlayer(p) {
         this.blackPlayer = p;
     }
-
-    public start(): void {
+    start() {
         this.currTime = process.hrtime.bigint();
-        this.gameFinishLock = new Promise<void>((res) => {
+        this.gameFinishLock = new Promise((res) => {
             this.gameFinishUnlock = res;
         });
         //Is this even running?
@@ -79,16 +62,16 @@ export class Game {
             //Is this function getting put into the callback queue?
             this.updateTime();
             if (this.isTimedOut()) {
-                if (this.turn  == COLOR.RED) {
-                    this.colorWonByTimeout = COLOR.BLACK;
-                } else {
-                    this.colorWonByTimeout = COLOR.RED;
+                if (this.turn == board_1.COLOR.RED) {
+                    this.colorWonByTimeout = board_1.COLOR.BLACK;
+                }
+                else {
+                    this.colorWonByTimeout = board_1.COLOR.RED;
                 }
                 this.checkGameFinished();
                 clearInterval(this.clock);
             }
         }, 0);
-
         //We need it so that the gameLoop is outside game and in the gui or something
         /*
         this.gameLoop = setInterval(() => {
@@ -116,214 +99,189 @@ export class Game {
             }
         }, 16); */
     }
-
     //Make async so it can time out properly?
-    public async play(): Promise<void> {
-        let move: Move;
-        if (this.turn == COLOR.RED) {
+    async play() {
+        let move;
+        if (this.turn == board_1.COLOR.RED) {
             move = await this.redPlayer.chooseMove(this, this.turn);
             this.redTimer += this.redPlus;
-            this.turn = COLOR.BLACK;
-        } else {
+            this.turn = board_1.COLOR.BLACK;
+        }
+        else {
             move = await this.blackPlayer.chooseMove(this, this.turn);
             this.blackTimer += this.blackPlus;
-            this.turn = COLOR.RED;
+            this.turn = board_1.COLOR.RED;
         }
         //Check timeout here to stop making moves
-        if (this.winner == COLOR.SENTINEL) {
+        if (this.winner == board_1.COLOR.SENTINEL) {
             this.checkGameFinished();
             this.board.makeMove(move);
         }
-
-        
     }
-
     //These crawl the game history. If there is a change, the 
     //history is deleted
-    public undo(): void {
-
+    undo() {
     }
-
-    public redo(): void {
-
+    redo() {
     }
-
-    public timeLeft(c: COLOR): number {
-        if (c == COLOR.RED) {
+    timeLeft(c) {
+        if (c == board_1.COLOR.RED) {
             return Number(this.redTimer / BigInt(sToNs));
-        } else {
+        }
+        else {
             return Number(this.blackTimer / BigInt(sToNs));
         }
     }
-
-    public timeLeftPretty(c: COLOR): number[] {
+    timeLeftPretty(c) {
         let min, sec;
         let t = this.timeLeft(c);
         min = Math.floor(t / 60);
         sec = Math.floor(t % 60);
         return [min, sec];
     }
-
-    private updateTime() {
+    updateTime() {
         let timeToSet = process.hrtime.bigint();
-        if (this.turn == COLOR.RED) {
+        if (this.turn == board_1.COLOR.RED) {
             this.redTimer -= timeToSet - this.currTime;
-        } else {
+        }
+        else {
             this.blackTimer -= timeToSet - this.currTime;
         }
         this.currTime = timeToSet;
     }
-
-    public isTimedOut(): boolean {
-        if (this.turn == COLOR.RED) {
+    isTimedOut() {
+        if (this.turn == board_1.COLOR.RED) {
             return this.redTimer <= 0;
-        } else {
+        }
+        else {
             return this.blackTimer <= 0;
         }
     }
-
     //In minutes
-    public editRedTime(newRedTime: number): void {
+    editRedTime(newRedTime) {
         this.redTime = BigInt(newRedTime * 60 * sToNs);
     }
-
-    public editBlackTime(newBlackTime: number): void {
+    editBlackTime(newBlackTime) {
         this.blackTime = BigInt(newBlackTime * 60 * sToNs);
     }
-
     //In seconds
-    public editRedPlus(newRedPlus: number): void {
+    editRedPlus(newRedPlus) {
         this.redPlus = BigInt(newRedPlus * sToNs);
     }
-
-    public editBlackPlus(newBlackPlus: number): void {
+    editBlackPlus(newBlackPlus) {
         this.blackPlus = BigInt(newBlackPlus * sToNs);
     }
-
-    public interrupt(): void {
+    interrupt() {
         clearInterval(this.gameLoop);
         clearInterval(this.clock);
     }
-
-    public stopTime(): void {
+    stopTime() {
         clearInterval(this.clock);
     }
-
-    public startTime(): void {
+    startTime() {
         this.currTime = process.hrtime.bigint();
         this.clock = setInterval(() => {
             //It seems to be terminating after one run
             //Is this function getting put into the callback queue?
             this.updateTime();
             if (this.isTimedOut()) {
-                if (this.turn  == COLOR.RED) {
-                    this.colorWonByTimeout = COLOR.BLACK;
-                } else {
-                    this.colorWonByTimeout = COLOR.RED;
+                if (this.turn == board_1.COLOR.RED) {
+                    this.colorWonByTimeout = board_1.COLOR.BLACK;
+                }
+                else {
+                    this.colorWonByTimeout = board_1.COLOR.RED;
                 }
                 clearInterval(this.clock);
             }
         }, 0);
     }
-
-    public restartTime(): void {
+    restartTime() {
         this.currTime = process.hrtime.bigint();
         this.redTimer = this.redTime;
         this.blackTimer = this.blackTime;
         this.clock = setInterval(() => {
             this.updateTime();
             if (this.isTimedOut()) {
-                if (this.turn  == COLOR.RED) {
-                    this.colorWonByTimeout = COLOR.BLACK;
-                } else {
-                    this.colorWonByTimeout = COLOR.RED;
+                if (this.turn == board_1.COLOR.RED) {
+                    this.colorWonByTimeout = board_1.COLOR.BLACK;
+                }
+                else {
+                    this.colorWonByTimeout = board_1.COLOR.RED;
                 }
                 clearInterval(this.clock);
             }
         }, 0);
     }
-
-    public reset(): void {
-        this.board = Board.startBoard();
-        this.turn = COLOR.RED;
+    reset() {
+        this.board = board_1.Board.startBoard();
+        this.turn = board_1.COLOR.RED;
         this.historyString = '';
         this.redTimer = this.redTime;
         this.blackTimer = this.blackTime;
-        this.colorWonByTimeout = COLOR.EMPTY;
-        this.lastTurn = COLOR.EMPTY;
-        this.winner = COLOR.SENTINEL;
+        this.colorWonByTimeout = board_1.COLOR.EMPTY;
+        this.lastTurn = board_1.COLOR.EMPTY;
+        this.winner = board_1.COLOR.SENTINEL;
     }
-
-    public isWon(): boolean {
+    isWon() {
         return this.board.isMated(this.turn);
     }
-
     //Print out WXF formatted game move history
-    public toString(): string {
+    toString() {
         return '';
     }
-
-    public get getBoard(): Board {
+    get getBoard() {
         return this.board;
     }
-
-    public get getTurn(): COLOR {
+    get getTurn() {
         return this.turn;
     }
-
-    public get getRed(): Player {
+    get getRed() {
         return this.redPlayer;
     }
-
-    public get getBlack(): Player {
+    get getBlack() {
         return this.blackPlayer;
     }
-
-    public getLegalMoves(): Move[] {
+    getLegalMoves() {
         return this.board.legalMoves(this.turn);
     }
-
     //Funnel a move string into the correct player
-    public makeMove(m: Move): void {
-        if (this.turn == COLOR.RED) {
-            if (this.redPlayer instanceof GuiPlayer) {
-                let p = this.redPlayer as GuiPlayer;
+    makeMove(m) {
+        if (this.turn == board_1.COLOR.RED) {
+            if (this.redPlayer instanceof GuiPlayer_1.GuiPlayer) {
+                let p = this.redPlayer;
                 p.receiveMove(m);
             }
-        } else {
-            if (this.blackPlayer instanceof GuiPlayer) {
-                let p = this.blackPlayer as GuiPlayer;
+        }
+        else {
+            if (this.blackPlayer instanceof GuiPlayer_1.GuiPlayer) {
+                let p = this.blackPlayer;
                 p.receiveMove(m);
             }
         }
     }
-
-    public hasPiece(index: number): boolean {
-        let f = index % BOARD_FILES;
-        let r = Math.floor(index / BOARD_FILES);
+    hasPiece(index) {
+        let f = index % board_1.BOARD_FILES;
+        let r = Math.floor(index / board_1.BOARD_FILES);
         let p = this.board.getPiece(f, r);
-        return p != PIECE.SENTINEL && p != PIECE.EMPTY;
+        return p != board_1.PIECE.SENTINEL && p != board_1.PIECE.EMPTY;
     }
-    
     //No longer need the game loop.
-    public async cleanupGame(): Promise<void> {
+    async cleanupGame() {
         await this.gameFinishLock;
         if (this.colorWonByTimeout) {
             this.winner = this.colorWonByTimeout;
-        } else if (this.isWon()) {
+        }
+        else if (this.isWon()) {
             this.winner = this.turn;
         }
     }
-
-    public getWinner(): COLOR {
+    getWinner() {
         return this.winner;
     }
-
-    public checkGameFinished(): void {
+    checkGameFinished() {
         if (this.isTimedOut() || this.isWon()) {
             this.gameFinishUnlock();
         }
     }
-
-    //Game Over method needs to check mate and three repetition
 }
+exports.Game = Game;
