@@ -27,7 +27,7 @@ async function runGame(redPlayer: Player = new humanPlayer(), blackPlayer: Playe
 describe('Game Tests', function() {
     this.timeout(0);
     it('Plays a Game', async function() {
-        runGame(new humanPlayer(), new humanPlayer(), 15, 15, 0, 0);
+        runGame(new humanPlayer(), new humanPlayer(), 1, 1, 0, 0);
         while (game.getWinner() == COLOR.SENTINEL) {
             await game.play();
         }

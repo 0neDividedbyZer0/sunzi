@@ -35,7 +35,6 @@ export class Game {
     private redTimer: bigint = BigInt(0);
     private blackTimer: bigint = BigInt(0);
     private clock: NodeJS.Timeout;
-    private gameLoop: NodeJS.Timeout;
     public colorWonByTimeout: COLOR = COLOR.EMPTY;
     private gameFinishUnlock: (value: void | PromiseLike<void>) => void = () => {};
     private gameFinishLock: Promise<void> = new Promise<void>((res) => {
@@ -56,8 +55,6 @@ export class Game {
         this.historyString = '';
         this.clock = setInterval(() => {0}, 0);
         clearInterval(this.clock);
-        this.gameLoop = setInterval(() => {0}, 0);
-        clearInterval(this.gameLoop);
     }
 
     public setRedPlayer(p: Player): void {
@@ -201,7 +198,6 @@ export class Game {
     }
 
     public interrupt(): void {
-        clearInterval(this.gameLoop);
         clearInterval(this.clock);
     }
 

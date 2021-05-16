@@ -279,6 +279,7 @@ drawBoard();
 
 g.reset();
 g.start();
+//await g.cleanupGame();
 
 
 
