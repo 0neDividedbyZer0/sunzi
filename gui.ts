@@ -197,7 +197,7 @@ function clickPiece(index: string): void {
         if (moveIndex >= 0) {
             g.makeMove(legalMoves[moveIndex]);  
         }
-        setTimeout(drawBoard, 16); 
+        setTimeout(drawBoard, 5); 
         clickLock = false;
         if (moveIndex >= 0 && g.hasPiece(val)) {
             document.getElementById(val.toString())!.style.backgroundColor = SELECTED_COLOR;
@@ -225,8 +225,27 @@ function clickPiece(index: string): void {
 
 
 function makeGame(redPlayer: Player = new GuiPlayer(), blackPlayer: Player = new GuiPlayer(),
-    redTime = 15, blackTime = 15, redPlus = 10, blackPlus = 10): Game {
+    redTime = 1, blackTime = 1, redPlus = 0, blackPlus = 0): Game {
     return new Game(redPlayer, blackPlayer, redTime, blackTime, redPlus, blackPlus);
+}
+
+async function initGame(game: Game): Promise<void> {
+    game.reset();
+    game.start();
+    await game.cleanupGame();
+    if (game.getWinner() == COLOR.RED) {
+        console.log('\n\nRed Won\n\n');
+    } else if (game.getWinner() == COLOR.BLACK) {
+        console.log('\n\nBlack Won\n\n');
+    } else if (game.getWinner() == COLOR.EMPTY) {
+        console.log('\n\nDraw\n\n')
+    }
+}
+
+async function runGame(game: Game): Promise<void> {
+    while (game.getWinner() == COLOR.SENTINEL) {
+        await game.play();
+    }
 }
 
 function pieceSVG(c: COLOR, p: PIECE): string {
@@ -277,9 +296,10 @@ var flip: boolean = true;
 
 drawBoard();
 
-g.reset();
-g.start();
-//await g.cleanupGame();
+initGame(g);
+runGame(g);
+
+
 
 
 
