@@ -9,7 +9,7 @@ export const name = 'humanPlayer';
 //input move
 
 export class humanPlayer extends Player {
-    
+    private inputMove: (arg0: string) => void = (arg0: string) => {};
 
     public async chooseMove(g: Game, c: COLOR): Promise<Move> {
         let b = g.getBoard;
@@ -21,23 +21,23 @@ export class humanPlayer extends Player {
         let time = g.timeLeftPretty(c);
         let index = await this.query(`Time: ${time[0]}:${time[1]}\n\n What move?\n\n` + moveOutput + '\n>');
         return legal_moves[Number(index)];
-
-        //We're gonna have a chooseMove that's for gui
-        
-        
     }
 
     //For testing/ commandline stuff
-    private query(question: string): Promise<string> {
+    private query(question: string): Promise<any> {
         var prompt = require('readline').createInterface({
             input: process.stdin,
             output: process.stdout
         });
-        return new Promise<string>((res) => {
+        return new Promise<string>((res, rej) => {
+            this.interrupt = rej;
             prompt.question(question, (ans:string) => {
                 prompt.close();
-                res(ans);
+                res(ans); 
             });
+        }).catch((rejected) => {
+            prompt.close();
+            return '0';
         });
     }
 

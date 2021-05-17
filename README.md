@@ -34,3 +34,4 @@ https://www.chessprogramming.org/
 4. Since MuZero is unsupervised, I don't know if we can apply the convolutional neural net to classifying styles. It's internal model might be meaningless.
 
 ## Bug List
+1. Refactor gui to have the game loop logic

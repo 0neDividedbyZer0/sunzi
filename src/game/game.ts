@@ -309,6 +309,12 @@ export class Game {
         } else if (this.isWon()) {
             this.winner = this.turn;
         }
+        if (this.turn == COLOR.RED) {
+            this.redPlayer.interrupt();
+        } else {
+            this.blackPlayer.interrupt();
+        }
+
     }
 
     public getWinner(): COLOR {

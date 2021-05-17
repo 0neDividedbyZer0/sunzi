@@ -8,12 +8,15 @@ export const name = 'GuiPlayer';
 //input move
 
 export class GuiPlayer extends Player {
-    private resolveMove: (arg0: Move) => void = ()=>{};
+    private resolveMove: (arg0: Move) => void = () => {};
     
 
     public async chooseMove(g: Game, c: COLOR): Promise<Move> {
-        return new Promise<Move>((res) => {
+        return new Promise<Move>((res, rej) => {
             this.resolveMove = res;
+            this.interruptMove = rej;
+        }).catch((rejection:any) => {
+            return new Move(-1, -1);
         });
     }
     
