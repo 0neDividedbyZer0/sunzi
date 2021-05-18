@@ -68,7 +68,24 @@ export function drawBoard(): void {
     }
     boardTable += '</tbody></table>';
     document.getElementById('board')!.innerHTML = boardTable;
+
+    updateClock();
     
+}
+
+//This needs to flip too
+function updateClock(): void {
+    let upper = document.getElementById('upper-clock');
+    let lower = document.getElementById('lower-clock');
+    let red = g.timeLeftPretty(COLOR.RED);
+    let black = g.timeLeftPretty(COLOR.BLACK);
+    if (flip) {
+        lower!.lastElementChild!.innerHTML = `${red[0]}:${red[1]}`;
+        upper!.lastElementChild!.innerHTML = `${black[0]}:${black[1]}`;
+    } else {
+        lower!.lastElementChild!.innerHTML = `${black[0]}:${black[1]}`;
+        upper!.lastElementChild!.innerHTML = `${red[0]}:${red[1]}`;
+    }
 }
 
 //We'll figure out how to make it highlight one square later
@@ -225,7 +242,7 @@ function clickPiece(index: string): void {
 
 
 function makeGame(redPlayer: Player = new GuiPlayer(), blackPlayer: Player = new GuiPlayer(),
-    redTime = 1, blackTime = 1, redPlus = 0, blackPlus = 0): Game {
+    redTime = 15, blackTime = 15, redPlus = 10, blackPlus = 10): Game {
     return new Game(redPlayer, blackPlayer, redTime, blackTime, redPlus, blackPlus);
 }
 
@@ -295,6 +312,8 @@ var g: Game = makeGame();
 var flip: boolean = true;
 
 drawBoard();
+
+setInterval(updateClock, 400);
 
 initGame(g);
 runGame(g);

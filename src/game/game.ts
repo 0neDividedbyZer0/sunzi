@@ -66,7 +66,6 @@ export class Game {
     }
 
     public start(): void {
-        this.currTime = process.hrtime.bigint();
         this.gameFinishLock = new Promise<void>((res) => {
             this.gameFinishUnlock = res;
         });
@@ -95,6 +94,7 @@ export class Game {
         }
 
         if (this.board.move_history.length == 2) {
+            this.currTime = process.hrtime.bigint();
             this.clock = setInterval(() => {
                 this.updateTime();
                 if (this.isTimedOut()) {
@@ -128,11 +128,11 @@ export class Game {
         }
     }
 
-    public timeLeftPretty(c: COLOR): number[] {
+    public timeLeftPretty(c: COLOR): string[] {
         let min, sec;
         let t = this.timeLeft(c);
-        min = Math.floor(t / 60);
-        sec = Math.floor(t % 60);
+        min = Math.floor(t / 60).toString();
+        sec = ('0' + Math.floor(t % 60)).slice(-2);
         return [min, sec];
     }
 
