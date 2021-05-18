@@ -70,48 +70,6 @@ export class Game {
         this.gameFinishLock = new Promise<void>((res) => {
             this.gameFinishUnlock = res;
         });
-        //Is this even running?
-        this.clock = setInterval(() => {
-            //It seems to be terminating after one run
-            //Is this function getting put into the callback queue?
-            this.updateTime();
-            if (this.isTimedOut()) {
-                if (this.turn  == COLOR.RED) {
-                    this.colorWonByTimeout = COLOR.BLACK;
-                } else {
-                    this.colorWonByTimeout = COLOR.RED;
-                }
-                this.checkGameFinished();
-                clearInterval(this.clock);
-            }
-        }, 0);
-
-        //We need it so that the gameLoop is outside game and in the gui or something
-        /*
-        this.gameLoop = setInterval(() => {
-            if (this.colorWonByTimeout != COLOR.EMPTY) {
-                console.log('\nGame is over');
-                if (this.colorWonByTimeout == COLOR.RED) {
-                    console.log('Red won');
-                } else {
-                    console.log('Black won');
-                }
-                clearInterval(this.gameLoop);
-                process.exit(0);
-            } else if (this.isGameOver()) {
-                console.log('\nGame is over');
-                if (this.getTurn == COLOR.RED) {
-                    console.log('Black won');
-                } else {
-                    console.log('Red won');
-                }
-                clearInterval(this.gameLoop);
-                process.exit(0);
-            } else if (this.lastTurn != this.getTurn) {
-                this.lastTurn = this.getTurn;
-                this.play();
-            }
-        }, 16); */
     }
 
     //Make async so it can time out properly?
@@ -119,11 +77,15 @@ export class Game {
         let move: Move;
         if (this.turn == COLOR.RED) {
             move = await this.redPlayer.chooseMove(this, this.turn);
-            this.redTimer += this.redPlus;
+            if (this.board.move_history.length >= 2) {
+                this.redTimer += this.redPlus;
+            }
             this.turn = COLOR.BLACK;
         } else {
             move = await this.blackPlayer.chooseMove(this, this.turn);
-            this.blackTimer += this.blackPlus;
+            if (this.board.move_history.length >= 2) {
+                this.blackTimer += this.blackPlus;
+            }
             this.turn = COLOR.RED;
         }
         //Check timeout here to stop making moves
@@ -132,7 +94,20 @@ export class Game {
             this.board.makeMove(move);
         }
 
-        
+        if (this.board.move_history.length == 2) {
+            this.clock = setInterval(() => {
+                this.updateTime();
+                if (this.isTimedOut()) {
+                    if (this.turn  == COLOR.RED) {
+                        this.colorWonByTimeout = COLOR.BLACK;
+                    } else {
+                        this.colorWonByTimeout = COLOR.RED;
+                    }
+                    this.checkGameFinished();
+                    clearInterval(this.clock);
+                }
+            }, 0);
+        }
     }
 
     //These crawl the game history. If there is a change, the 
