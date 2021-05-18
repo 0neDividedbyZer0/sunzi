@@ -88,6 +88,19 @@ function updateClock(): void {
     }
 }
 
+function declareWinner(c: COLOR): void {
+    let spacer = document.getElementById('clock-spacer');
+    let winner = '<div id="winner-div" style="color:rgba(245, 245, 245, 0.692);">';
+    if (c == COLOR.RED) {
+        winner = 'Red Won'
+    } else if (c == COLOR.BLACK) {
+        winner = 'Black Won'
+    } else if (c == COLOR.EMPTY) {
+        winner = 'Draw'
+    }
+    spacer!.innerHTML = winner + '</div>';
+}
+
 //We'll figure out how to make it highlight one square later
 // Basically for a capture, you need to use z-index and abolute positioning to stack the image on
 // top of the piece. Delete the created img element after though.
@@ -250,13 +263,7 @@ async function initGame(game: Game): Promise<void> {
     game.reset();
     game.start();
     await game.cleanupGame();
-    if (game.getWinner() == COLOR.RED) {
-        console.log('\n\nRed Won\n\n');
-    } else if (game.getWinner() == COLOR.BLACK) {
-        console.log('\n\nBlack Won\n\n');
-    } else if (game.getWinner() == COLOR.EMPTY) {
-        console.log('\n\nDraw\n\n')
-    }
+    declareWinner(game.getWinner());
 }
 
 async function runGame(game: Game): Promise<void> {

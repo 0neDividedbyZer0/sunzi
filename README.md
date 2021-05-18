@@ -37,8 +37,6 @@ https://www.chessprogramming.org/
 ## Bug List
 
 ## TODO:
-1. GUI: Implement clock graphics
-2. GUI: Implement win graphics
-3. GUI: Implement buttons (new game, undo, redo moves, draw, resign, edit game, edit position) (not all these need implementation immediately)
-4. Game: Change clock to initiate after first moves of both sides 
-5. Game: Draws and simple 3 move repetition (we are not implementing Asia rules anymore)
+1. GUI: Implement buttons (new game, undo, redo moves, draw, resign, edit game, edit position) (not all these need implementation immediately)
+2. Game: Change clock to initiate after first moves of both sides 
+3. Game: Draws and simple 3 move repetition (we are not implementing Asia rules anymore)

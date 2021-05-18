@@ -91,6 +91,7 @@ export class Game {
         if (this.winner == COLOR.SENTINEL) {
             this.checkGameFinished();
             this.board.makeMove(move);
+            this.checkGameFinished();
         }
 
         if (this.board.move_history.length == 2) {
@@ -104,6 +105,8 @@ export class Game {
                         this.colorWonByTimeout = COLOR.RED;
                     }
                     this.checkGameFinished();
+                    clearInterval(this.clock);
+                } else if (this.getWinner() != COLOR.SENTINEL) {
                     clearInterval(this.clock);
                 }
             }, 0);
@@ -193,6 +196,8 @@ export class Game {
                     this.colorWonByTimeout = COLOR.RED;
                 }
                 clearInterval(this.clock);
+            } else if (this.getWinner() != COLOR.SENTINEL) {
+                clearInterval(this.clock);
             }
         }, 0);
     }
@@ -209,6 +214,8 @@ export class Game {
                 } else {
                     this.colorWonByTimeout = COLOR.RED;
                 }
+                clearInterval(this.clock);
+            } else if (this.getWinner() != COLOR.SENTINEL) {
                 clearInterval(this.clock);
             }
         }, 0);
@@ -282,7 +289,11 @@ export class Game {
         if (this.colorWonByTimeout) {
             this.winner = this.colorWonByTimeout;
         } else if (this.isWon()) {
-            this.winner = this.turn;
+            if (this.turn == COLOR.RED) {
+                this.winner = COLOR.BLACK;
+            } else if (this.turn == COLOR.BLACK) {
+                this.winner = COLOR.RED;
+            }
         }
         if (this.turn == COLOR.RED) {
             this.redPlayer.interrupt();
