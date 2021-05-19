@@ -216,6 +216,7 @@ export class Board {
     public move_history: Move[] = [];
     private turnNum: number = -1;
     private curr_moves: Move[] = [];
+    //private dict: Record<COLOR, Record<PIECE, number[]>>;
 
     public static startBoard(): Board {
         let b = new Board();
@@ -260,6 +261,11 @@ export class Board {
         this.blackChariots = [];
         this.blackCannons = [];
         this.blackPawns = [];
+
+        /*this.dict = {
+            RED: {},
+            BLACK: {}
+        }*/
     }
 
     //Create moves for a pawn at INDEX
@@ -1416,6 +1422,10 @@ export class Board {
         return out;
     }
 
+    public numPieces() {
+        for 
+    }
+
     
 };
 
@@ -1451,6 +1461,10 @@ export class Move {
 
     public isCapture(): boolean {
         return this.captured != PIECE.EMPTY && this.captured != PIECE.SENTINEL;
+    }
+
+    public toString(): string {
+        return `${this.initial}->${this.final}`;
     }
 
     
