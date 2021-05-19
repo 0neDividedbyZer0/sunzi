@@ -38,7 +38,7 @@ https://www.chessprogramming.org/
 
 ## TODO:
 1. GUI: Implement buttons (new game, undo, redo moves, draw, resign, edit game, edit position) (not all these need implementation immediately)
-2. Game: Draws and simple 3 move repetition (we are not implementing Asia rules anymore) and refactor with dictionaries
+2. Game: Draws and simple 3 move repetition (we are not implementing Asia rules anymore)
 3. Alpha-Beta pruning tree search
 4. Opening Books (mergesort and trees, need a way of recording csv of move history,
 and reading from them. Then we need to play a bunch of lines of each opening)
