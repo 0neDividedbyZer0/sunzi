@@ -6,8 +6,7 @@ export const name = 'openingBook'
 //There's probably about 5000 total opening moves, as a safe upper limit, but we only
 //store half because of symmetry so about 2500. That's safely sortable, it's not
 //Worth hashing
-
-//Wrapper over an array because Javascript is stupid
+//TODO: implement a binaryinsert of some kind. Need mirroring and stuff
 
 
 
@@ -31,9 +30,6 @@ class TreeNode {
             return 0;
         }
     }
-
-   
-
     // If this > other => +, this < other => -, else 0
     /* 
         Lexicographic order
