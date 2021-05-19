@@ -2,64 +2,6 @@ export const name = 'board'
 
 //TODO: 3 move check-chase, 3 move repetition draw
 
-/* Asia rules for proper adjudication of mates and draws, TODO
-1) Checking is considers a worse offence than chasing another piece. 
-So if one side is perpetually checking, and the other is perpetually 
-chasing, the checking side loses. All chases are equal, though: if 
-one side perpetually chases a Rook, and the other a Pawn, it is draw.
-
-2) To make a forbidden perpetual chase, you must really chase the 
-same piece on every move of the repeat cycle. (And it does not matter 
-which piece does the chasing: two (or multiple) pieces taking turns 
-to chase one is still forbidden. ) Having a single non-forcing move 
-in the cycle ("one check, one idle", "one chase, one idle") 
-completely acquits you of chase charges. Also alternately chasing 
-two different pieces (including "one check, one chase") is allowed.
-
-3) A chase must be a _new_ attack on a piece. If you could already 
-capture piece A with piece B before move M, then being able to 
-capture A with B after M does not threaten anything new, and is 
-not a chase. E.g. moving a Rook along the attack ray is not 
-creating a new attack. (Checks, obviously, always are new.) Note 
-that one move can result in mutiple chases, both on multiple 
-targets, (e.g. forks) and by multiple perpetrators (e.g. 
-discovered attacks). They all must be judged separately.
-
-4) A newly created attack is in general only considered forcing 
-(i.e. a chase) if the target is not protected. If it can be 
-recaptured on the same square, the attack is not a chase. 
-(Note that the possibility to recapture might depend on how the 
-piece is captured, in case of multiple attackers, so this has 
-to be judged per (attacker, victim)-pair, and is not an 
-intrinsic property of the victim.) But there are some exceptions 
-that are declared either always a chase or never a chase, 
-irrespective of the protected status of the victim:
-- Attacks of Horse or Cannon on Rook are always a chase
-- Attacks on a Pawn that has not crossed the River are never a chase
-- Attacks by a Pawn or King are never a chase
-- Attacks on a King are of course always checks
-
-5) An attack on a piece is also not considered a chase if the piece 
-can capture its attacker (which must be of equal type) back. The 
-possibility for such pre-emptive self-defence is considered as good 
-as having a protector that can retaliate. Such attacks are called 
-"sacrifices" or "offers to exchange", not chases. Note that it does 
-not matter if you can pre-emptively capture the attacker with 
-another piece than the chased one, or if the chase victim can 
-capture a piece other than the one chasing it.
-
-6) In all cases only legal moves are taken under consideration. 
-Pseudo-legal captures that are not legal are to be completely 
-ignored. This applies to the attacks itself, to recaptures by 
-a protector, or to pre-emptive counter captures. On the other 
-hand, if the move is legal, does not have to be a good one. 
-Even if it gets you mated in one after making it, or loses 
-you heavy material, the move should be taken into account. 
-(E.g. when a piece is twice attacked, and only once 
-protected, recapturing might be suicidal, but the piece 
-still counts as protected.)
-*/
-
 /**
  * The board's absolute position is based on
  * red's orientation. Files are numbered 
@@ -216,7 +158,7 @@ export class Board {
     public move_history: Move[] = [];
     private turnNum: number = -1;
     private curr_moves: Move[] = [];
-    //private dict: Record<COLOR, Record<PIECE, number[]>>;
+    public dict: {[color: number]: {[piece: number]: number[]}} = {};
 
     public static startBoard(): Board {
         let b = new Board();
@@ -238,6 +180,22 @@ export class Board {
         b.blackChariots = Array.from(BLACK_CHARIOTS);
         b.blackCannons = Array.from(BLACK_CANNONS);
         b.blackPawns = Array.from(BLACK_PAWNS);
+
+        b.dict[COLOR.RED][PIECE.GENERAL] = b.redGenerals;
+        b.dict[COLOR.RED][PIECE.ADVISOR] = b.redAdvisors;
+        b.dict[COLOR.RED][PIECE.ELEPHANT] = b.redElephants;
+        b.dict[COLOR.RED][PIECE.HORSE] = b.redHorses;
+        b.dict[COLOR.RED][PIECE.CHARIOT] = b.redChariots;
+        b.dict[COLOR.RED][PIECE.CANNON] = b.redCannons;
+        b.dict[COLOR.RED][PIECE.PAWN] = b.redPawns;
+
+        b.dict[COLOR.BLACK][PIECE.GENERAL] = b.blackGenerals;
+        b.dict[COLOR.BLACK][PIECE.ADVISOR] = b.blackAdvisors;
+        b.dict[COLOR.BLACK][PIECE.ELEPHANT] = b.blackElephants;
+        b.dict[COLOR.BLACK][PIECE.HORSE] = b.blackHorses;
+        b.dict[COLOR.BLACK][PIECE.CHARIOT] = b.blackChariots;
+        b.dict[COLOR.BLACK][PIECE.CANNON] = b.blackCannons;
+        b.dict[COLOR.BLACK][PIECE.PAWN] = b.blackPawns;
 
         return b;
     }
@@ -262,10 +220,44 @@ export class Board {
         this.blackCannons = [];
         this.blackPawns = [];
 
-        /*this.dict = {
-            RED: {},
-            BLACK: {}
-        }*/
+        this.dict = {
+            1: {
+                1: [],
+                2: [],
+                3: [],
+                4: [],
+                5: [],
+                6: [],
+                7: [],
+            },
+            2: {
+                1: [],
+                2: [],
+                3: [],
+                4: [],
+                5: [],
+                6: [],
+                7: [],
+            }
+        }
+    
+        this.dict[COLOR.RED][PIECE.GENERAL] = this.redGenerals;
+        this.dict[COLOR.RED][PIECE.ADVISOR] = this.redAdvisors;
+        this.dict[COLOR.RED][PIECE.ELEPHANT] = this.redElephants;
+        this.dict[COLOR.RED][PIECE.HORSE] = this.redHorses;
+        this.dict[COLOR.RED][PIECE.CHARIOT] = this.redChariots;
+        this.dict[COLOR.RED][PIECE.CANNON] = this.redCannons;
+        this.dict[COLOR.RED][PIECE.PAWN] = this.redPawns;
+
+        this.dict[COLOR.BLACK][PIECE.GENERAL] = this.blackGenerals;
+        this.dict[COLOR.BLACK][PIECE.ADVISOR] = this.blackAdvisors;
+        this.dict[COLOR.BLACK][PIECE.ELEPHANT] = this.blackElephants;
+        this.dict[COLOR.BLACK][PIECE.HORSE] = this.blackHorses;
+        this.dict[COLOR.BLACK][PIECE.CHARIOT] = this.blackChariots;
+        this.dict[COLOR.BLACK][PIECE.CANNON] = this.blackCannons;
+        this.dict[COLOR.BLACK][PIECE.PAWN] = this.blackPawns;
+
+
     }
 
     //Create moves for a pawn at INDEX
@@ -916,50 +908,19 @@ export class Board {
 
     public generateMoves(c: COLOR): Move[] {
         var moves: Move[] = [];
+        
         if (c == COLOR.RED) {
-            this.redGenerals.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.redAdvisors.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.redElephants.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.redHorses.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.redChariots.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.redCannons.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.redPawns.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
+            for (let i: number = PIECE.GENERAL; i <= PIECE.PAWN; i++) {
+                this.dict[c][i].forEach(p => {
+                    moves = moves.concat(this.moves(p));
+                })
+            }
         } else if (c == COLOR.BLACK) {
-            this.blackGenerals.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.blackAdvisors.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.blackElephants.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.blackHorses.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.blackChariots.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.blackCannons.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
-            this.blackPawns.forEach(p => {
-                moves = moves.concat(this.moves(p));
-            });
+            for (let i: number = PIECE.GENERAL; i <= PIECE.PAWN; i++) {
+                this.dict[c][i].forEach(p => {
+                    moves = moves.concat(this.moves(p));
+                })
+            }
         } else {
             throw "Invalid color chosen";
         }
@@ -973,73 +934,8 @@ export class Board {
         let index;
         this.colors[final] = COLOR.EMPTY;
         this.pieces[final] = PIECE.EMPTY;
-        if (c == COLOR.BLACK) {
-            switch(p) {
-                case PIECE.GENERAL:
-                    index = this.blackGenerals.indexOf(final);
-                    this.blackGenerals.splice(index, 1);
-                    break;
-                case PIECE.ADVISOR:
-                    index = this.blackAdvisors.indexOf(final);
-                    this.blackAdvisors.splice(index, 1);
-                    break;
-                case PIECE.ELEPHANT:
-                    index = this.blackElephants.indexOf(final);
-                    this.blackElephants.splice(index, 1);
-                    break;
-                case PIECE.HORSE:
-                    index = this.blackHorses.indexOf(final);
-                    this.blackHorses.splice(index, 1);
-                    break;
-                case PIECE.CHARIOT:
-                    index = this.blackChariots.indexOf(final);
-                    this.blackChariots.splice(index, 1);
-                    break;
-                case PIECE.CANNON:
-                    index = this.blackCannons.indexOf(final);
-                    this.blackCannons.splice(index, 1);
-                    break;
-                case PIECE.PAWN:
-                    index = this.blackPawns.indexOf(final);
-                    this.blackPawns.splice(index, 1);
-                    break;
-                default:
-                    throw "Piece not present to remove";
-            }
-        } else if (c == COLOR.RED) {
-            switch(p) {
-                case PIECE.GENERAL:
-                    index = this.redGenerals.indexOf(final);
-                    this.redGenerals.splice(index, 1);
-                    break;
-                case PIECE.ADVISOR:
-                    index = this.redAdvisors.indexOf(final);
-                    this.redAdvisors.splice(index, 1);
-                    break;
-                case PIECE.ELEPHANT:
-                    index = this.redElephants.indexOf(final);
-                    this.redElephants.splice(index, 1);
-                    break;
-                case PIECE.HORSE:
-                    index = this.redHorses.indexOf(final);
-                    this.redHorses.splice(index, 1);
-                    break;
-                case PIECE.CHARIOT:
-                    index = this.redChariots.indexOf(final);
-                    this.redChariots.splice(index, 1);
-                    break;
-                case PIECE.CANNON:
-                    index = this.redCannons.indexOf(final);
-                    this.redCannons.splice(index, 1);
-                    break;
-                case PIECE.PAWN:
-                    index = this.redPawns.indexOf(final);
-                    this.redPawns.splice(index, 1);
-                    break;
-                default:
-                    throw "Piece not present to remove";
-            }
-        }
+        index = this.dict[c][p].indexOf(final);
+        this.dict[c][p].splice(index, 1);
     }
 
     //Check flying general
@@ -1172,6 +1068,22 @@ export class Board {
         b.blackPawns = Array.from(this.blackPawns);
 
         b.move_history = Array.from(this.move_history);
+
+        b.dict[COLOR.RED][PIECE.GENERAL] = b.redGenerals;
+        b.dict[COLOR.RED][PIECE.ADVISOR] = b.redAdvisors;
+        b.dict[COLOR.RED][PIECE.ELEPHANT] = b.redElephants;
+        b.dict[COLOR.RED][PIECE.HORSE] = b.redHorses;
+        b.dict[COLOR.RED][PIECE.CHARIOT] = b.redChariots;
+        b.dict[COLOR.RED][PIECE.CANNON] = b.redCannons;
+        b.dict[COLOR.RED][PIECE.PAWN] = b.redPawns;
+
+        b.dict[COLOR.BLACK][PIECE.GENERAL] = b.blackGenerals;
+        b.dict[COLOR.BLACK][PIECE.ADVISOR] = b.blackAdvisors;
+        b.dict[COLOR.BLACK][PIECE.ELEPHANT] = b.blackElephants;
+        b.dict[COLOR.BLACK][PIECE.HORSE] = b.blackHorses;
+        b.dict[COLOR.BLACK][PIECE.CHARIOT] = b.blackChariots;
+        b.dict[COLOR.BLACK][PIECE.CANNON] = b.blackCannons;
+        b.dict[COLOR.BLACK][PIECE.PAWN] = b.blackPawns;
 
         return b;
     }
@@ -1311,71 +1223,11 @@ export class Board {
      */
     public add(c: COLOR, p: PIECE, f: number, r: number): void {
         //TODO add error checking for out of bounds f and r 
-        if (c == COLOR.RED) {
-            let index = r * BOARD_FILES + f;
-            this.colors[index] = c;
-            this.pieces[index] = p;
-            switch (p) {
-                case PIECE.PAWN:
-                    this.redPawns.push(index);
-                    break;
-                case PIECE.GENERAL:
-                    this.redGenerals.push(index);
-                    break;
-                case PIECE.ADVISOR:
-                    this.redAdvisors.push(index);
-                    break;
-                case PIECE.ELEPHANT:
-                    this.redElephants.push(index);
-                    break;
-                case PIECE.HORSE:
-                    this.redHorses.push(index);
-                    break;
-                case PIECE.CHARIOT:
-                    this.redChariots.push(index);
-                    break;
-                case PIECE.CANNON:
-                    this.redCannons.push(index);
-                    break;
-                default:
-                    throw "Piece was invalid";
-            }
-            return;
-        } else if (c == COLOR.BLACK) {
-            let index = r * BOARD_FILES + f;
-            this.colors[index] = c;
-            this.pieces[index] = p;
-            switch (p) {
-                case PIECE.PAWN:
-                    this.blackPawns.push(index);
-                    break;
-                case PIECE.GENERAL:
-                    this.blackGenerals.push(index);
-                    break;
-                case PIECE.ADVISOR:
-                    this.blackAdvisors.push(index);
-                    break;
-                case PIECE.ELEPHANT:
-                    this.blackElephants.push(index);
-                    break;
-                case PIECE.HORSE:
-                    this.blackHorses.push(index);
-                    break;
-                case PIECE.CHARIOT:
-                    this.blackChariots.push(index);
-                    break;
-                case PIECE.CANNON:
-                    this.blackCannons.push(index);
-                    break;
-                default:
-                    throw "Piece was invalid";
-            }
-            return;
-        }
-        throw "Color is invalid";
+        let index = r * BOARD_FILES + f;
+        this.colors[index] = c;
+        this.pieces[index] = p;
+        this.dict[c][p].push(index);
     }
-
-    
 
     public toString(): string {
         let out = '';
@@ -1421,11 +1273,6 @@ export class Board {
         out = out + '\n';
         return out;
     }
-
-    public numPieces() {
-        for 
-    }
-
     
 };
 
