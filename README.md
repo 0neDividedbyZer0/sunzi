@@ -37,8 +37,9 @@ https://www.chessprogramming.org/
 ## Bug List
 
 ## TODO:
-1. GUI: Implement buttons (new game, undo, redo moves, draw, resign, edit game, edit position) (not all these need implementation immediately)
-2. Game: Draws and simple 3 move repetition (we are not implementing Asia rules anymore)
-3. Alpha-Beta pruning tree search
-4. Opening Books (mergesort and trees, need a way of recording csv of move history,
+1. GUI: Implement buttons (new game, undo, redo moves, draw, resign, edit game, edit position) (not all these need implementation immediately) (these will go in the menu) (new game, draw, resign are all necessary) (next would be undo and redo moves) (lastly would be edit game and edit position) (undo and redo and edit game, edit position would be buttons, the rest menu options)
+2. Game: Draws and simple 3 move repetition (we are not implementing Asia rules anymore) (move the comparable from Tree node to the board itself)
+3. Evaluation of position (need piece position boards, material point values from xqinenglish, heuristics on capturing I guess? Some important considerations is to have orthogonal evaluations, simpler lighter is better, and to be continuous and to be able to judge close positions better than completely different positions) (will likely do interpolation between endgame and middlegame) (space evaluation) (tempo bonus to help with score oscillation. Tempo is perhaps the most important factor in Xiangqi over even material)
+4. Alpha-Beta pruning tree search with null move heuristic (need quiescent search and iterative deepening)
+5. Opening Books (mergesort and trees, need a way of recording csv of move history,
 and reading from them. Then we need to play a bunch of lines of each opening)
