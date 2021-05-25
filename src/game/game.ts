@@ -222,6 +222,9 @@ export class Game {
     }
 
     public reset(): void {
+        if (this.winner != COLOR.SENTINEL) {
+            clearInterval(this.clock);
+        }
         this.board = Board.startBoard();
         this.turn = COLOR.RED;
         this.historyString = '';
@@ -230,6 +233,7 @@ export class Game {
         this.colorWonByTimeout = COLOR.EMPTY;
         this.lastTurn = COLOR.EMPTY;
         this.winner = COLOR.SENTINEL;
+        
     }
 
     public isWon(): boolean {
@@ -305,6 +309,20 @@ export class Game {
 
     public getWinner(): COLOR {
         return this.winner;
+    }
+
+    public draw(): void {
+        this.winner = COLOR.EMPTY;
+        this.checkGameFinished();
+    }
+
+    public resign(): void {
+        if (this.turn == COLOR.RED) {
+            this.winner = COLOR.BLACK;
+        } else {
+            this.winner = COLOR.RED;
+        }
+        this.checkGameFinished();
     }
 
     public checkGameFinished(): void {

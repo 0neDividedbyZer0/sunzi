@@ -1,6 +1,4 @@
-import { runGame } from "./src/game/gameRunner"
-
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 
 function createWindow () {
   // Create the browser window.
@@ -15,11 +13,33 @@ function createWindow () {
   // and load the index.html of the app.
   win.loadFile('board.html')
 
+  const appMenuBar = [
+    {
+      label: 'Action',
+      submenu: [
+        {label: 'Draw', click() {
+          win.webContents.send('DRAW', 'Draw');
+        }},
+        {label: 'Resign',click() {
+          win.webContents.send('RESIGN', 'Resign');
+        }},
+        {label: 'New Game', click() {
+          win.webContents.send('NEW-GAME', 'New Game');
+        }}
+      ]
+    }
+  ] 
+  
+  const menu = Menu.buildFromTemplate(appMenuBar)
+  Menu.setApplicationMenu(menu)
+
   // Open the DevTools.
   win.webContents.openDevTools()
 
   win.maximize()
 }
+
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -45,4 +65,4 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-//runGame()
+

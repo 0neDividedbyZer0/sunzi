@@ -4,6 +4,8 @@ import { GuiPlayer } from "./src/players/GuiPlayer";
 import { humanPlayer } from "./src/players/humanPlayer";
 import { MachinePlayer } from "./src/players/machinePlayer";
 import { Player } from "./src/players/player";
+const { ipcRenderer } = window.require('electron');
+
 
 var jquery = require('jquery');
 var bootstrap = require('bootstrap');
@@ -261,6 +263,7 @@ function makeGame(redPlayer: Player = new GuiPlayer(), blackPlayer: Player = new
 
 async function initGame(game: Game): Promise<void> {
     game.reset();
+    drawBoard();
     game.start();
     await game.cleanupGame();
     declareWinner(game.getWinner());
@@ -316,14 +319,32 @@ function print(moves: Move[]) {
 
 var g: Game = makeGame();
 
+function newGame() {
+    initGame(g);
+    runGame(g);
+}
+
 var flip: boolean = true;
 
 drawBoard();
 
 setInterval(updateClock, 400);
 
-initGame(g);
-runGame(g);
+ipcRenderer.on('NEW-GAME', () => {
+    newGame();
+})
+
+ipcRenderer.on('DRAW', () => {
+    g.draw();
+})
+
+ipcRenderer.on('RESIGN', () => {
+    g.resign();
+})
+
+newGame()
+
+
 
 
 
