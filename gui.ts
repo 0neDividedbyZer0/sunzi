@@ -103,6 +103,11 @@ function declareWinner(c: COLOR): void {
     spacer!.innerHTML = winner + '</div>';
 }
 
+function eraseWinner(): void {
+    let spacer = document.getElementById('clock-spacer');
+    spacer!.innerHTML = '';
+}
+
 //We'll figure out how to make it highlight one square later
 // Basically for a capture, you need to use z-index and abolute positioning to stack the image on
 // top of the piece. Delete the created img element after though.
@@ -320,6 +325,9 @@ function print(moves: Move[]) {
 var g: Game = makeGame();
 
 function newGame() {
+    g.stopTime();
+    g = makeGame();
+    eraseWinner();
     initGame(g);
     runGame(g);
 }
@@ -340,10 +348,11 @@ ipcRenderer.on('DRAW', () => {
 
 ipcRenderer.on('RESIGN', () => {
     g.resign();
+    
 })
 
-newGame()
-
+initGame(g);
+runGame(g);
 
 
 

@@ -76,13 +76,13 @@ export class Game {
         let move: Move;
         if (this.turn == COLOR.RED) {
             move = await this.redPlayer.chooseMove(this, this.turn);
-            if (this.board.move_history.length >= 2) {
+            if (this.board.move_history.length >= 2 && this.winner == COLOR.SENTINEL) {
                 this.redTimer += this.redPlus;
             }
             this.turn = COLOR.BLACK;
         } else {
             move = await this.blackPlayer.chooseMove(this, this.turn);
-            if (this.board.move_history.length >= 2) {
+            if (this.board.move_history.length >= 2 && this.winner == COLOR.SENTINEL) {
                 this.blackTimer += this.blackPlus;
             }
             this.turn = COLOR.RED;
@@ -106,7 +106,9 @@ export class Game {
                     }
                     this.checkGameFinished();
                     clearInterval(this.clock);
-                } else if (this.getWinner() != COLOR.SENTINEL) {
+                    return;
+                } 
+                if (this.getWinner() != COLOR.SENTINEL) {
                     clearInterval(this.clock);
                 }
             }, 0);
@@ -299,12 +301,12 @@ export class Game {
                 this.winner = COLOR.RED;
             }
         }
+        this.stopTime();
         if (this.turn == COLOR.RED) {
             this.redPlayer.interrupt();
         } else {
             this.blackPlayer.interrupt();
         }
-
     }
 
     public getWinner(): COLOR {
@@ -326,7 +328,7 @@ export class Game {
     }
 
     public checkGameFinished(): void {
-        if (this.isTimedOut() || this.isWon()) {
+        if (this.isTimedOut() || this.isWon() || this.winner != COLOR.SENTINEL) {
             this.gameFinishUnlock();
         }
     }
