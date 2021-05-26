@@ -242,6 +242,10 @@ export class Game {
         return this.board.isMated(this.turn);
     }
 
+    public isRepetition(): boolean {
+        return this.board.repeated();
+    }
+
     //Print out WXF formatted game move history
     public toString(): string {
         return '';
@@ -300,6 +304,8 @@ export class Game {
             } else if (this.turn == COLOR.BLACK) {
                 this.winner = COLOR.RED;
             }
+        } else if (this.isRepetition()) {
+            this.winner = COLOR.EMPTY;
         }
         this.stopTime();
         if (this.turn == COLOR.RED) {
@@ -328,7 +334,7 @@ export class Game {
     }
 
     public checkGameFinished(): void {
-        if (this.isTimedOut() || this.isWon() || this.winner != COLOR.SENTINEL) {
+        if (this.isTimedOut() || this.isWon() || this.isRepetition() || this.winner != COLOR.SENTINEL) {
             this.gameFinishUnlock();
         }
     }

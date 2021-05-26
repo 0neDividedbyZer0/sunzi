@@ -156,6 +156,7 @@ export class Board {
 
     //Even moves are red, odd is black
     public move_history: Move[] = [];
+    public board_history: Board[] = [];
     private turnNum: number = -1;
     private curr_moves: Move[] = [];
     public dict: {[color: number]: {[piece: number]: number[]}} = {};
@@ -959,6 +960,7 @@ export class Board {
     //what was captured
     public makeMove(m: Move): void {
         this.move_history.push(m);
+        this.board_history.push(this.copy());
         let p = this.pieces[m.final];
         let c = this.colors[m.final];
         if (m.isCapture()) {
@@ -977,6 +979,10 @@ export class Board {
         let m = this.move_history.pop();
         if (m === undefined) {
             throw "move history empty";
+        }
+        let b = this.board_history.pop();
+        if (b === undefined) {
+            throw "board history empty";
         }
         let p = this.pieces[m.final];
         let c = this.colors[m.final];
@@ -1042,6 +1048,53 @@ export class Board {
     public isMated(c: COLOR): boolean { 
         let moves = this.legalMoves(c);
         return moves.length == 0;
+    }
+
+    public repeated(): boolean {
+        if (this.board_history.length < 9) {
+            return false;
+        } else {
+            let index = this.board_history.length - 1;
+            if (this.board_history[index].comparator(this.board_history[index - 4]) == 0
+                && this.board_history[index - 4].comparator(this.board_history[index - 8]) == 0) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    private static indexToVal(input: number[]): number {
+        if (input.length == 2) {
+            return Math.min(1000 * input[0] + input[1], 1000 * input[1] + input[0]);
+        } else if (input.length == 1) {
+            return input[0];
+        } else {
+            return 0;
+        }
+    }
+
+    // If this > other => +, this < other => -, else 0
+    /* 
+        Lexicographic order
+    */
+    public comparator(other: Board): number {
+        //For each color and piece, we create a number
+        //If there are two pieces, do smaller * 1000 + larger, 
+        //If there is 1 piece, do that piece
+        //If there is no piece, do 0, should create a sequence of 14 numbers.
+        //Compare in lexicographic order
+        for (let i: number = COLOR.RED; i <= COLOR.BLACK; i++) {
+            for (let j: number = PIECE.GENERAL; j <= PIECE.PAWN; j++) {
+                let left = Board.indexToVal(this.dict[i][j]);
+                let right = Board.indexToVal(other.dict[i][j]);
+                if (left < right) {
+                    return -1;
+                } else if (left > right) {
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
 
 
