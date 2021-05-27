@@ -152,7 +152,8 @@ export class BruteForcePlayer extends MachinePlayer {
         //Replace timeout with a function that calculates the timeout
         //Wrap in async function that is rejectable
         //Need a way to stop the search 
-        await this.search(g.getBoard.copy(), 3, -Infinity, Infinity, g.getTurn, this.SENTINEL).then((val) => {
+        //Search is blocking
+        await this.search(g.getBoard.copy(), 5, -Infinity, Infinity, g.getTurn, this.SENTINEL).then((val) => {
             clearTimeout(timer);
             this.resolveMove(this.SENTINEL.tail!.head);
         }).catch((rejection: any) => {
@@ -226,7 +227,9 @@ export class BruteForcePlayer extends MachinePlayer {
                     move_seq_tail.tail = curr_tail;
                 }
                 b.makeMove(moves[i]);
-                val = Math.max(val, await this.search(b, depth - 1, alpha, beta, COLOR.BLACK, curr_tail));
+                val = Math.max(val, await this.search(b, depth - 1, alpha, beta, COLOR.BLACK, curr_tail).catch((rejection:any) => {
+                    throw rejection;
+                }));
                 if (val > alpha) {
                     move_seq_tail.tail = curr_tail;
                 }
@@ -247,7 +250,9 @@ export class BruteForcePlayer extends MachinePlayer {
                     move_seq_tail.tail = curr_tail;
                 }
                 b.makeMove(moves[i]);
-                val = Math.min(val, await this.search(b, depth - 1, alpha, beta, COLOR.RED, curr_tail));
+                val = Math.min(val, await this.search(b, depth - 1, alpha, beta, COLOR.RED, curr_tail).catch((rejection: any) => {
+                    throw rejection;
+                }));
                 if (val < beta) {
                     move_seq_tail.tail = curr_tail;
                 }
