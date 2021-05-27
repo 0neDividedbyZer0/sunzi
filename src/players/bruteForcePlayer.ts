@@ -1,4 +1,5 @@
-import { Board, COLOR, PIECE } from "../game/board";
+import { Board, COLOR, Move, PIECE } from "../game/board";
+import { Game } from "../game/game";
 import { MachinePlayer } from "./machinePlayer";
 
 export const name = 'BruteForcePlayer'; 
@@ -129,8 +130,8 @@ const PIECE_TABLES: {[color: number]: {[piece: number]: number[]}} = {
     }
 }
 
-const ALPHA_0 = 120 * 16 + 8940;
-const BETA_0 = -ALPHA_0;
+const BETA_0 = 1000000;//120 * 16 + 8940;
+const ALPHA_0 = -BETA_0;
 //Implementation of the alpha beta pruning stuff
 //Do alpha beta move reordering too
 //And general testing of AI stuff
@@ -138,7 +139,25 @@ const BETA_0 = -ALPHA_0;
 //Value boards
 //Programmable opening (will stop following if other player moves out of sequence)
 export class BruteForcePlayer extends MachinePlayer {
+    private SENTINEL: LinkedList = new LinkedList(new Move(-1, -1));
+
+    public async think(g: Game): Promise<void> {
+        await this.search(g.getBoard.copy(), 16, ALPHA_0, BETA_0, g.getTurn, this.SENTINEL);
+        this.resolveMove(this.SENTINEL.tail!.head);
+        //Use resolveMove for timeout and stuff
+    }
+
     private evaluate(b: Board): number {
+        if (b.repeated()) {
+            return 0;
+        }
+        if (b.isMated(COLOR.RED)) {
+            return -1000000;
+        }
+        if (b.isMated(COLOR.BLACK)) {
+            return 1000000;
+        }
+        
         let score = 0;
 
         //Material count
@@ -171,10 +190,57 @@ export class BruteForcePlayer extends MachinePlayer {
         return score;
     }
 
-    private search(b: Board, alpha: number, beta: number, c: COLOR): number {
-        for (let i = 0; i < b.legalMoves(c).length; i++) {
-            //
+    //Refactor to return promises
+    private async search(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList): Promise<number> {
+        if (depth == 0 || b.isMated(c) || b.repeated()) {
+            return this.evaluate(b);
         }
-        return 0;
+        if (c == COLOR.RED) {
+            let val = ALPHA_0;
+            let moves = b.legalMoves(c);
+            for (let i = 0; i < moves.length; i++) {
+                let curr_tail = new LinkedList(moves[i]);
+                b.makeMove(moves[i]);
+                val = Math.max(val, await this.search(b, depth - 1, alpha, beta, COLOR.BLACK, curr_tail));
+                if (val > alpha) {
+                    move_seq_tail.tail = curr_tail;
+                }
+                alpha = Math.max(val, alpha);
+                if (alpha >= beta) {
+                    b.undoMove();
+                    break;
+                }
+                b.undoMove();
+            }
+            return val;
+        } else {
+            let val = BETA_0;
+            let moves = b.legalMoves(c);
+            for (let i = 0; i < moves.length; i++) {
+                let curr_tail = new LinkedList(moves[i]);
+                b.makeMove(moves[i]);
+                val = Math.min(val, await this.search(b, depth - 1, alpha, beta, COLOR.RED, curr_tail));
+                if (val < beta) {
+                    move_seq_tail.tail = curr_tail;
+                }
+                beta = Math.min(val, beta);
+                if (alpha >= beta) {
+                    b.undoMove();
+                    break;
+                }
+                b.undoMove();
+            }
+            return val;
+        }
+    }
+}
+
+class LinkedList {
+    public head: Move;
+    public tail: LinkedList | undefined;
+
+    public constructor(head: Move, tail: LinkedList | undefined = undefined) {
+        this.head = head;
+        this.tail = tail;
     }
 }
