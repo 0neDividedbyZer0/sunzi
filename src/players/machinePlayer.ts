@@ -23,7 +23,7 @@ export class MachinePlayer extends Player {
         
     }
     
-    public async finishedThinking(): Promise<void> {
+    public interruptThinking(): void {
         
     }
 }
