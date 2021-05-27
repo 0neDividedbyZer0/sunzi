@@ -141,22 +141,25 @@ const ALPHA_0 = -BETA_0;
 export class BruteForcePlayer extends MachinePlayer {
     private SENTINEL: LinkedList = new LinkedList(new Move(-1, -1));
     //Should just force search to output a number;
-    private stopSearch: () => void = () => {};
+    private searchStopped: boolean = false;
 
     public async think(g: Game): Promise<void> {
-        let searchStopped = false;
+        this.searchStopped = false;
         let timer = setTimeout(() => {
-            searchStopped = true;
-            this.stopSearch();
-            this.resolveMove(this.SENTINEL.tail!.head);
-        }, 20000);//Replace timeout with a function that calculates the timeout
+            this.searchStopped = true;
+            console.log('time is up');
+        }, 5000);
+        //Replace timeout with a function that calculates the timeout
         //Wrap in async function that is rejectable
         //Need a way to stop the search 
-        await this.search(g.getBoard.copy(), 5, -Infinity, Infinity, g.getTurn, this.SENTINEL);
-        if (!searchStopped) {
+        await this.search(g.getBoard.copy(), 3, -Infinity, Infinity, g.getTurn, this.SENTINEL).then((val) => {
             clearTimeout(timer);
             this.resolveMove(this.SENTINEL.tail!.head);
-        }
+        }).catch((rejection: any) => {
+            this.resolveMove(this.SENTINEL.tail!.head);
+        });
+        
+            
         
     }
 
@@ -203,16 +206,14 @@ export class BruteForcePlayer extends MachinePlayer {
         return score;
     }
 
-    //Javascript's arrays are p good stacks
-    private async iterativelySearch(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList): Promise<number> {
-
-    }
-
     //Refactor to return promises
     //May need to change to iterative so I can create a promise that is rejectable
     //You have to actually use a stack to turn this iterative because DFS
     //The idea is you have to do a while on the stack until it's empty 
     private async search(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList): Promise<number> {
+        if (this.searchStopped) {
+            throw 'Search Stopped';
+        }
         if (depth == 0 || b.isMated(c) || b.repeated()) {
             return this.evaluate(b);
         }
@@ -270,4 +271,23 @@ class LinkedList {
         this.head = head;
         this.tail = tail;
     }
+}
+
+class SearchFrame {
+    public b: Board;
+    public depth: number;
+    public alpha: number;
+    public beta: number;
+    public c: COLOR;
+    public move_seq_tail: LinkedList;
+
+    constructor(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList) {
+        this.b = b;
+        this.depth = depth;
+        this.alpha = alpha;
+        this.beta = beta;
+        this.c = c;
+        this.move_seq_tail = move_seq_tail;
+    }
+
 }

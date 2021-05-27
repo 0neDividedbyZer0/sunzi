@@ -22,8 +22,4 @@ export class MachinePlayer extends Player {
         });
         
     }
-    
-    public interruptThinking(): void {
-        
-    }
 }

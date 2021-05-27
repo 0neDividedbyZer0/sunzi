@@ -206,7 +206,7 @@ function dropPiece(event: Event, index: string): void {
 //Nevermind it happens for both
 //I've occasionally seen it with chariots too
 //the cannon bug came from the turn flipping somehow
-function clickPiece(index: string): void {
+async function clickPiece(index: string): Promise<void> {
     /*if (!playerTurn) {
         return;
     }*/
@@ -245,6 +245,9 @@ function clickPiece(index: string): void {
             //cleanup for next turn
             if (currTurn == COLOR.RED && g.getBlack instanceof MachinePlayer) {
                 let p = g.getBlack as MachinePlayer;
+                await p.think(g).catch((rejection: any) => {
+                    //Handle timeouts lol
+                })
                 //playerTurn = false;
                 //p.think(); //IDK, probably need some gui wrapper function
                 //That kicks off the think function and redraws on a promise from the machine?

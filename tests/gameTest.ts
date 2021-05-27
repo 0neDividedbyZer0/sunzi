@@ -1,5 +1,6 @@
 import { COLOR } from "../src/game/board";
 import { Game } from "../src/game/game";
+import { BruteForcePlayer } from "../src/players/bruteForcePlayer";
 import { humanPlayer } from "../src/players/humanPlayer";
 import { Player } from "../src/players/player";
 
@@ -23,13 +24,18 @@ async function runGame(redPlayer: Player = new humanPlayer(), blackPlayer: Playe
     }
 }
 
-//WTF, there's a bug with time, basically 3rd move causes the minutes to be subtracted
 describe('Game Tests', function() {
     this.timeout(0);
     it('Plays a Game', async function() {
-        runGame(new humanPlayer(), new humanPlayer(), 1, 1, 0, 0);
+        let black = new BruteForcePlayer();
+        runGame(new humanPlayer(), black, 15, 15, 0, 0);
         while (game.getWinner() == COLOR.SENTINEL) {
-            await game.play();
+            if (game.getTurn == COLOR.BLACK) {
+                await Promise.all([game.play(), black.think(game)]);
+            } else {
+                await game.play();
+            }
+            
         }
         assert.equal(true, true);
     });

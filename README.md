@@ -36,6 +36,7 @@ https://www.chessprogramming.org/
 1. (TODO: fix bug where opposite player's time still progresses by like 1 second after finishing a game)
 
 ## TODO:
+0. GUI's functions with think probably need redoing
 1. Evaluation of position (heuristics on capturing I guess? Some important considerations is to have orthogonal evaluations, simpler lighter is better, and to be continuous and to be able to judge close positions better than completely different positions) (will likely do interpolation between endgame and middlegame) (space evaluation) (tempo bonus to help with score oscillation. Tempo is perhaps the most important factor in Xiangqi over even material)
 2. Alpha-Beta pruning tree search with null move heuristic (need quiescent search and iterative deepening)
 3. Opening Books (mergesort and trees, need a way of recording csv of move history,
