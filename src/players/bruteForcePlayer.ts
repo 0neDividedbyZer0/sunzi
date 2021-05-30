@@ -154,13 +154,11 @@ export class BruteForcePlayer extends MachinePlayer {
         //Wrap in async function that is rejectable
         //Need a way to stop the search 
         //Search is blocking
-        
-        await this.promiseSearch(g.getBoard.copy(), 1, -Infinity, Infinity, g.getTurn, this.SENTINEL).then((val) => {
+        await this.promiseSearch(g.getBoard.copy(), 2, -Infinity, Infinity, g.getTurn, this.SENTINEL).then((val) => {
             clearTimeout(timer);
-            this.resolveMove(this.SENTINEL.tail!.head);
+            this.resolveMove(this.getBestMove(g));
         }).catch((rejection: any) => {
-            console.log(this.SENTINEL.tail!.head.toString());
-            this.resolveMove(this.SENTINEL.tail!.head);
+            this.resolveMove(this.getBestMove(g));
         });
         
         
@@ -210,15 +208,17 @@ export class BruteForcePlayer extends MachinePlayer {
 
         return score;
     }
-    private promiseMoves(b: Board, c: COLOR): Promise<Move[]> {
-        return new Promise<Move[]>((res) => {
-            res(b.legalMoves(c));
-        })
-    }
 
     private promiseSearch(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList<Move>): Promise<number> {
         if (depth == 0 || b.isMated(COLOR.RED) || b.isMated(COLOR.BLACK || b.repeated())) {
             return Promise.resolve(this.evaluate(b));
+        }
+        let promiseMoves = () => {
+            return new Promise<Move[]>((res) => {
+                let randomMoves = b.legalMoves(c);
+                randomMoves.sort(() => .5 - Math.random());
+                res(randomMoves);
+            });
         }
         let val: number;
         let choose: { (arg0: number, arg1: number): number; (...values: number[]): number; (...values: number[]): number; };
@@ -246,7 +246,7 @@ export class BruteForcePlayer extends MachinePlayer {
                 beta = choose(v, beta);
             }
         }
-        return this.promiseMoves(b, c).then((moves) => {
+        return promiseMoves().then((moves) => {
             let loop = (i: number) : Promise<any> | number => {
                 if (alpha >= beta || i >= moves.length) {
                     return val;
@@ -334,6 +334,19 @@ export class BruteForcePlayer extends MachinePlayer {
                 b.undoMove();
             }
             return val;
+        }
+    }
+
+    public getBestMove(g: Game): Move {
+        if (this.SENTINEL.tail === undefined) {
+            let moves = g.getBoard.legalMoves(g.getTurn);
+            let index = Math.floor(Math.random() * moves.length);
+            console.log(moves[index].toString());
+            return moves[index];
+        } else {
+            //Right now it's returning wrong
+            console.log(this.SENTINEL.tail.head.toString());
+            return this.SENTINEL.tail.head;
         }
     }
 }

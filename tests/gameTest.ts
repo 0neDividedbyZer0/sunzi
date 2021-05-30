@@ -31,7 +31,9 @@ describe('Game Tests', function() {
         runGame(new humanPlayer(), black, 15, 15, 0, 0);
         while (game.getWinner() == COLOR.SENTINEL) {
             if (game.getTurn == COLOR.BLACK) {
-                await Promise.all([black.think(game), game.play()]);
+                console.log(game.getBoard.toString());
+                black.think(game);
+                await game.play();
             } else {
                 await game.play();
             }

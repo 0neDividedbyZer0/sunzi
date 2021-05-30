@@ -909,22 +909,12 @@ export class Board {
 
     public generateMoves(c: COLOR): Move[] {
         var moves: Move[] = [];
-        
-        if (c == COLOR.RED) {
-            for (let i: number = PIECE.GENERAL; i <= PIECE.PAWN; i++) {
-                this.dict[c][i].forEach(p => {
-                    moves = moves.concat(this.moves(p));
-                })
-            }
-        } else if (c == COLOR.BLACK) {
-            for (let i: number = PIECE.GENERAL; i <= PIECE.PAWN; i++) {
-                this.dict[c][i].forEach(p => {
-                    moves = moves.concat(this.moves(p));
-                })
-            }
-        } else {
-            throw "Invalid color chosen";
+        for (let i: number = PIECE.GENERAL; i <= PIECE.PAWN; i++) {
+            this.dict[c][i].forEach(p => {
+                moves = moves.concat(this.moves(p));
+            })
         }
+
         moves.forEach(m => {
             m.captured = this.pieces[m.final];
         });
@@ -941,16 +931,17 @@ export class Board {
 
     //Check flying general
     public legalMoves(c: COLOR): Move[] {
-        if (this.turnNum != this.move_history.length) {
-            this.curr_moves = [];
-            let moves = this.generateMoves(c);
-            moves.forEach(m => {
-                if (!this.generalAttacked(m)) {
-                    this.curr_moves.push(m);
-                }
-            });
-            this.turnNum = this.move_history.length;
-        }
+        //If turnNum is equal, then it won't calculate
+        //if (this.turnNum != this.move_history.length) {
+        this.curr_moves = [];
+        let moves = this.generateMoves(c);
+        moves.forEach(m => {
+            if (!this.generalAttacked(m)) {
+                this.curr_moves.push(m);
+            }
+        });
+        this.turnNum = this.move_history.length;
+        //}
         return this.curr_moves;
     }
 
