@@ -139,12 +139,13 @@ const ALPHA_0 = -BETA_0;
 //Value boards
 //Programmable opening (will stop following if other player moves out of sequence)
 export class BruteForcePlayer extends MachinePlayer {
-    private SENTINEL: LinkedList = new LinkedList(new Move(-1, -1));
+    private SENTINEL: LinkedList<Move> = new LinkedList(new Move(-1, -1));
     //Should just force search to output a number;
     private searchStopped: boolean = false;
 
     public async think(g: Game): Promise<void> {
         this.searchStopped = false;
+        console.log('started timing')
         let timer = setTimeout(() => {
             this.searchStopped = true;
             console.log('time is up');
@@ -153,12 +154,15 @@ export class BruteForcePlayer extends MachinePlayer {
         //Wrap in async function that is rejectable
         //Need a way to stop the search 
         //Search is blocking
-        await this.search(g.getBoard.copy(), 5, -Infinity, Infinity, g.getTurn, this.SENTINEL).then((val) => {
+        
+        await this.promiseSearch(g.getBoard.copy(), 1, -Infinity, Infinity, g.getTurn, this.SENTINEL).then((val) => {
             clearTimeout(timer);
             this.resolveMove(this.SENTINEL.tail!.head);
         }).catch((rejection: any) => {
+            console.log(this.SENTINEL.tail!.head.toString());
             this.resolveMove(this.SENTINEL.tail!.head);
         });
+        
         
             
         
@@ -206,16 +210,86 @@ export class BruteForcePlayer extends MachinePlayer {
 
         return score;
     }
+    private promiseMoves(b: Board, c: COLOR): Promise<Move[]> {
+        return new Promise<Move[]>((res) => {
+            res(b.legalMoves(c));
+        })
+    }
 
+    private promiseSearch(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList<Move>): Promise<number> {
+        if (depth == 0 || b.isMated(COLOR.RED) || b.isMated(COLOR.BLACK || b.repeated())) {
+            return Promise.resolve(this.evaluate(b));
+        }
+        let val: number;
+        let choose: { (arg0: number, arg1: number): number; (...values: number[]): number; (...values: number[]): number; };
+        let nextColor: COLOR;
+        let compareGreeks: { (arg0: number, arg1: number, arg2: number): any; (v: number, alpha: number, beta: number): boolean; (v: number, alpha: number, beta: number): boolean; };
+        let setNewGreeks: { (arg0: number): void; (v: number): void; (v: number): void; };
+        if (c == COLOR.RED) {
+            val = -Infinity;
+            choose = Math.max;
+            nextColor = COLOR.BLACK;
+            compareGreeks = (v: number, alpha: number, beta: number) => {
+                return v > alpha;
+            }
+            setNewGreeks = (v: number) => {
+                alpha = choose(v, alpha);
+            }
+        } else {
+            val = Infinity;
+            choose = Math.min;
+            nextColor = COLOR.RED;
+            compareGreeks = (v: number, alpha: number, beta: number) => {
+                return v < beta;
+            }
+            setNewGreeks = (v: number) => {
+                beta = choose(v, beta);
+            }
+        }
+        return this.promiseMoves(b, c).then((moves) => {
+            let loop = (i: number) : Promise<any> | number => {
+                if (alpha >= beta || i >= moves.length) {
+                    return val;
+                } else {
+                    let curr_tail = new LinkedList(moves[i]);
+                    if (i == 0) {
+                        move_seq_tail.tail = curr_tail;
+                    }
+                    let copy = b.copy();
+                    copy.makeMove(moves[i]);
+                    return this.promiseSearch(copy, depth - 1, alpha, beta, nextColor, curr_tail).then((result) => {
+                        val = choose(val, result);
+                        if (compareGreeks(val, alpha, beta)) {
+                            move_seq_tail.tail = curr_tail;
+                        }
+                        setNewGreeks(val);
+                    }).then(loop.bind(null, i + 1));
+                }
+            }
+            return loop(0);
+        });
+
+    }
+
+    private iterativelySearch(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList<Move>): number {
+        let stack: SearchFrame[] = [new SearchFrame(b, depth, alpha, beta, c, move_seq_tail)];
+        if (depth == 0 || b.isMated(COLOR.RED) || b.isMated(COLOR.BLACK || b.repeated())) {
+            //return BruteForcePlayer.evaluate(b);
+        }
+        //Need up and down cases in the loop for going up and down game tree
+        while (true) {
+
+        }
+    }
     //Refactor to return promises
     //May need to change to iterative so I can create a promise that is rejectable
     //You have to actually use a stack to turn this iterative because DFS
     //The idea is you have to do a while on the stack until it's empty 
-    private async search(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList): Promise<number> {
+    private async search(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList<Move>): Promise<number> {
         if (this.searchStopped) {
             throw 'Search Stopped';
         }
-        if (depth == 0 || b.isMated(c) || b.repeated()) {
+        if (depth == 0 || b.isMated(COLOR.RED) || b.isMated(COLOR.BLACK) || b.repeated()) {
             return this.evaluate(b);
         }
         if (c == COLOR.RED) {
@@ -227,9 +301,7 @@ export class BruteForcePlayer extends MachinePlayer {
                     move_seq_tail.tail = curr_tail;
                 }
                 b.makeMove(moves[i]);
-                val = Math.max(val, await this.search(b, depth - 1, alpha, beta, COLOR.BLACK, curr_tail).catch((rejection:any) => {
-                    throw rejection;
-                }));
+                val = Math.max(val, await (await new Promise<Promise<number>> ((res) => {res(this.search(b, depth - 1, alpha, beta, COLOR.BLACK, curr_tail))})));
                 if (val > alpha) {
                     move_seq_tail.tail = curr_tail;
                 }
@@ -250,9 +322,7 @@ export class BruteForcePlayer extends MachinePlayer {
                     move_seq_tail.tail = curr_tail;
                 }
                 b.makeMove(moves[i]);
-                val = Math.min(val, await this.search(b, depth - 1, alpha, beta, COLOR.RED, curr_tail).catch((rejection: any) => {
-                    throw rejection;
-                }));
+                val = Math.min(val, await (await new Promise<Promise<number>> ((res) => {res(this.search(b, depth - 1, alpha, beta, COLOR.RED, curr_tail))})));
                 if (val < beta) {
                     move_seq_tail.tail = curr_tail;
                 }
@@ -268,11 +338,11 @@ export class BruteForcePlayer extends MachinePlayer {
     }
 }
 
-class LinkedList {
+class LinkedList<Type> {
     public head: Move;
-    public tail: LinkedList | undefined;
+    public tail: LinkedList<Type> | undefined;
 
-    public constructor(head: Move, tail: LinkedList | undefined = undefined) {
+    public constructor(head: Move, tail: LinkedList<Type> | undefined = undefined) {
         this.head = head;
         this.tail = tail;
     }
@@ -284,9 +354,9 @@ class SearchFrame {
     public alpha: number;
     public beta: number;
     public c: COLOR;
-    public move_seq_tail: LinkedList;
+    public move_seq_tail: LinkedList<Move>;
 
-    constructor(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList) {
+    constructor(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList<Move>) {
         this.b = b;
         this.depth = depth;
         this.alpha = alpha;
