@@ -34,11 +34,11 @@ https://www.chessprogramming.org/
 
 ## Bug List
 1. (TODO: fix bug where opposite player's time still progresses by like 1 second after finishing a game)
-2. Fix blocking search. 3 ways of doing it that I see: iterative version of alphabeta (basically a grand loop, and you create your stack, but you have to keep track of the level of depth in the stack to inherit proper alpha beta values)
-(edit: promise based recursions depend on the chain being made synchronously. However, since we are doing a tree that might not be generated entirely, this requires asynchronous creation, so it is not possible/very difficult to get right)
+2. Basically, the search function  will always block as it constantly creates promises. We need it to go in a separate worker thread or do a child process
 3. Fix the legalmove generator's clamping
 
 ## TODO:
+-1. Refactor code with worker threads
 0. GUI's functions with think probably need redoing
 1. Evaluation of position (heuristics on capturing I guess? Some important considerations is to have orthogonal evaluations, simpler lighter is better, and to be continuous and to be able to judge close positions better than completely different positions) (will likely do interpolation between endgame and middlegame) (space evaluation) (tempo bonus to help with score oscillation. Tempo is perhaps the most important factor in Xiangqi over even material)
 2. Alpha-Beta pruning tree search with null move heuristic (need quiescent search and iterative deepening)

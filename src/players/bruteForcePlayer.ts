@@ -1,6 +1,7 @@
 import { Board, COLOR, Move, PIECE } from "../game/board";
 import { Game } from "../game/game";
-import { MachinePlayer } from "./machinePlayer";
+import { MachinePlayer } from "./machinePlayer";4
+import {Worker} from 'worker_threads';
 
 export const name = 'BruteForcePlayer'; 
 
@@ -138,28 +139,39 @@ const ALPHA_0 = -BETA_0;
 //Opening books
 //Value boards
 //Programmable opening (will stop following if other player moves out of sequence)
+//spawn a worker thread and call it to do the alpha beta search
+
 export class BruteForcePlayer extends MachinePlayer {
     private SENTINEL: LinkedList<Move> = new LinkedList(new Move(-1, -1));
     //Should just force search to output a number;
     private searchStopped: boolean = false;
+    private worker;
+
+
+    public constructor() {
+        super();
+        this.worker = new Worker('search.ts');
+        //Create worker thread and maintain it 
+    }
 
     public async think(g: Game): Promise<void> {
         this.searchStopped = false;
         console.log('started timing')
         let timer = setTimeout(() => {
             this.searchStopped = true;
+            //this.worker.
             console.log('time is up');
         }, 5000);
         //Replace timeout with a function that calculates the timeout
         //Wrap in async function that is rejectable
         //Need a way to stop the search 
         //Search is blocking
-        await this.promiseSearch(g.getBoard.copy(), 2, -Infinity, Infinity, g.getTurn, this.SENTINEL).then((val) => {
+        /*await this.promiseSearch(g.getBoard.copy(), 2, -Infinity, Infinity, g.getTurn, this.SENTINEL).then((val) => {
             clearTimeout(timer);
             this.resolveMove(this.getBestMove(g));
         }).catch((rejection: any) => {
             this.resolveMove(this.getBestMove(g));
-        });
+        });*/
         
         
             
