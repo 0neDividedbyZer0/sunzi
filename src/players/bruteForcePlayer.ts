@@ -151,6 +151,10 @@ export class BruteForcePlayer extends MachinePlayer {
     public constructor() {
         super();
         this.worker = new Worker('search.ts');
+
+        this.worker.on("message", result => {
+            this.resolveMove(result.move as Move);
+        })
         //Create worker thread and maintain it 
     }
 
@@ -159,9 +163,9 @@ export class BruteForcePlayer extends MachinePlayer {
         console.log('started timing')
         let timer = setTimeout(() => {
             this.searchStopped = true;
-            //this.worker.
             console.log('time is up');
         }, 5000);
+        
         //Replace timeout with a function that calculates the timeout
         //Wrap in async function that is rejectable
         //Need a way to stop the search 

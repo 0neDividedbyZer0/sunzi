@@ -184,6 +184,7 @@ function evaluate(b: Board): number {
 }
 
 function search(b: Board, depth: number, alpha: number, beta: number, c: COLOR, move_seq_tail: LinkedList<Move>): number {
+    
     if (depth == 0 || b.isMated(COLOR.RED) || b.isMated(COLOR.BLACK) || b.repeated()) {
         return evaluate(b);
     }
@@ -232,9 +233,14 @@ function search(b: Board, depth: number, alpha: number, beta: number, c: COLOR, 
     }
 }
 
-
+var bestMove: LinkedList<Move> = new LinkedList(new Move(-1, -1));
+var cancelSearch;
 //Use atomics/shared memory to store boolean to stop search
 parentPort!.on("message", data => {
-    let move_seq: LinkedList<Move> = new LinkedList(new Move(-1, -1));
-    parentPort!.postMessage({val: search(data.b, 3, -Infinity, Infinity, data.c, move_seq), move: move_seq})
+    bestMove = new LinkedList(new Move(-1, -1));
+    search(data.b, 3, -Infinity, Infinity, data.c, bestMove);
+})
+
+parentPort!.on("get move", () => {
+    parentPort!.postMessage({move: bestMove.tail!.head});
 })
